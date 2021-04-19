@@ -5,8 +5,7 @@ from sqlalchemy import Date, DateTime
 
 
 # 데이터 목록 베이스
-class DataListBase(BaseModel):
-    data_list_type: str
-    data_list_name: str
-    data_list_url: str
-    stock_code: str
+class UserBase(BaseModel):
+    email: str
+    password: str
+    name: str
