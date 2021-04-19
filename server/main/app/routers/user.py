@@ -1,15 +1,22 @@
+# 표준 라이브러리
+from os import path
+from sys import path as pth
 from typing import Optional
 
-from fastapi import APIRouter, Form
+# 서드 파티 라이브러리
+from fastapi import APIRouter, Depends, Form
+
+# 로컬 라이브러리
+pth.append(path.dirname(path.abspath(path.dirname(__file__))))
+from database import models, schemas
+from dependency import get_db
+from sqlalchemy.orm import Session
+
 
 router = APIRouter()
 
 
-@router.get("/", tags=["user"], description="회원관리")
-def read_root():
-    return {"Hello": "World"}
-
-
-@router.post("/items", tags=["user"], description="회원관리")
-def read_item(item_id: int = Form(...), item_name: str = Form(...)):
-    return {"item_id": item_id}
+@router.post("/signup", tags=["user"], description="회원가입")
+def signup(data: schemas.UserBase, db: Session = Depends(get_db)):
+    
+    return {"data": data}
