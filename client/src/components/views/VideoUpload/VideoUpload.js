@@ -1,11 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function VideoUpload() {
-    return (
-        <div>
-            VideoUpload
-        </div>
-    )
+    return <div>VideoUpload</div>;
 }
 
-export default VideoUpload
+export default VideoUpload;

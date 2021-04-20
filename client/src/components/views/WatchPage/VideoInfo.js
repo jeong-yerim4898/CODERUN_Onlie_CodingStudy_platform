@@ -1,11 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function VideoInfo() {
-    return (
-        <div>
-            VideoInfo
-        </div>
-    )
+    return <div>VideoInfo</div>;
 }
 
-export default VideoInfo
+export default VideoInfo;

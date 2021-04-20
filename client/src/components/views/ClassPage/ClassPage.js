@@ -1,11 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function ClassPage() {
-    return (
-        <div>
-            ClassPage
-        </div>
-    )
+    return <div>ClassPage</div>;
 }
 
-export default ClassPage
+export default ClassPage;
