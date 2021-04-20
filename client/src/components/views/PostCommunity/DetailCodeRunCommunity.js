@@ -1,11 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function DetailCodeRunCommunity() {
-    return (
-        <div>
-            DetailCodeRunCommunity
-        </div>
-    )
+    return <div>DetailCodeRunCommunity</div>;
 }
 
-export default DetailCodeRunCommunity
+export default DetailCodeRunCommunity;

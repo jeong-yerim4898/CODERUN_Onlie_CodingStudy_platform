@@ -1,11 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function CommunityPage() {
-    return (
-        <div>
-            CommunityPage
-        </div>
-    )
+    return <div>CommunityPage</div>;
 }
 
-export default CommunityPage
+export default CommunityPage;

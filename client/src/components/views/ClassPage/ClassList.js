@@ -1,11 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function ClassList() {
-    return (
-        <div>
-            ClassList
-        </div>
-    )
+    return <div>ClassList</div>;
 }
 
-export default ClassList
+export default ClassList;
