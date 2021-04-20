@@ -3,14 +3,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-#로컬 라이브러리
+# 로컬 라이브러리
 from database import database, models
 from routers.user import router as user_router
 
 models.Base.metadata.create_all(bind=database.engine)
 app = FastAPI()
 
-origins = ['*']
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
