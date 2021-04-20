@@ -23,3 +23,14 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+
+class VideoBase(BaseModel):
+    title: str
+    content: Optional[str] = None
+    language_tag_id: Optional[int] = None
+    subject_user_tag_id: Optional[int] = None
+
+class VideoCommentBase(BaseModel):
+    video_id: int
+    content: str

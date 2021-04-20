@@ -10,12 +10,12 @@ from fastapi import APIRouter, Depends, Form, HTTPException, Header
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from sqlalchemy.orm import Session
 
 # 로컬 라이브러리
 pth.append(path.dirname(path.abspath(path.dirname(__file__))))
 from database import models, schemas
 from dependency import get_db
-from sqlalchemy.orm import Session
 
 
 router = APIRouter()
@@ -104,9 +104,3 @@ def login(data: schemas.LoginBase, db: Session = Depends(get_db)):
         return {"user": return_user, "token": jwt_token}
     else:
         raise HTTPException(status_code=401, detail="유저가 유효하지 않습니다.")
-
-
-@router.get("/token", tags=["user"], description="token test")
-def read_users_me(token: Optional[str] = Header(None), db: Session = Depends(get_db)):
-    current_user = get_current_user(token, db)
-    return "jwt-token authorized"
