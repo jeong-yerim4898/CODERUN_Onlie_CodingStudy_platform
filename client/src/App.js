@@ -1,5 +1,6 @@
 // import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import AccountPage from './components/views/Accounts/AccountPage';
@@ -9,7 +10,7 @@ import CommunityPage from './components/views/CommunityPage/CommunityPage';
 import Footer from './components/views/Footer/Footer';
 import MainPage from './components/views/MainPage/MainPage';
 import MyPage from './components/views/MyPage/MyPage';
-import Navbar from './components/views/Navbar/Navbar';
+import NavBar from './components/views/Navbar/NavBar';
 import DetailCodeRunCommunity from './components/views/PostCommunity/DetailCodeRunCommunity';
 import PostCommunity from './components/views/PostCommunity/PostCommunity';
 import VideoUpload from './components/views/VideoUpload/VideoUpload';
@@ -20,7 +21,7 @@ import WatchPage from './components/views/WatchPage/WatchPage';
 function App() {
     return (
         <BrowserRouter>
-            {/* <NavBar></NavBar> */}
+            <NavBar></NavBar>
             <Switch>
                 <Route exact path="/" component={MainPage}></Route>
                 <Route exact path="/account" component={AccountPage}></Route>
