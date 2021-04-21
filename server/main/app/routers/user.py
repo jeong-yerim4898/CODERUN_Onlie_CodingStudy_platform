@@ -76,7 +76,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 
-@router.post("/signup", tags=["user"], description="회원가입")
+@router.post("/api/signup", tags=["user"], description="회원가입")
 def signup(data: schemas.UserBase, db: Session = Depends(get_db)):
     u_data = models.User(
         email=data.email, password=get_password_hash(data.password), name=data.name
@@ -87,7 +87,7 @@ def signup(data: schemas.UserBase, db: Session = Depends(get_db)):
     return {"data": u_data}
 
 
-@router.post("/login", tags=["user"], description="로그인")
+@router.post("/api/login", tags=["user"], description="로그인")
 def login(data: schemas.LoginBase, db: Session = Depends(get_db)):
     current_user = db.query(models.User).filter(models.User.email == data.email).first()
     if verify_password(data.password, current_user.password):

@@ -46,3 +46,15 @@ class VideoCommentBase(BaseModel):
 class VideoCommentUpdateBase(BaseModel):
     id: int
     content: str
+class BoardBase(BaseModel):
+    title: str
+    content: Optional[str] = None
+
+
+class BoardCommentBase(BaseModel):
+    board_id: int
+    content: Optional[str] = None
+
+
+class BoardSelectBase(BaseModel):
+    board_comment_id: int
