@@ -28,9 +28,7 @@ function App() {
                 <Route exact path="/login" component={LoginPage}></Route>
                 <Route exact path="/classlist" component={ClassList}></Route>
 
-                <Route
-                    render={() => <div className="error">에러 페이지</div>}
-                />
+                <Route render={() => <div className="error">에러 페이지</div>} />
             </Switch>
             {/* <Footer></Footer> */}
         </BrowserRouter>
