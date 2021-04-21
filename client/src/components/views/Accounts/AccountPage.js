@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './AccountPage.css';
 
 function LoginPage() {
-    const [HashPassword, setHashPassword] = useState('');
     const [HashPasswordConfirm, setHashPasswordConfirm] = useState('');
     const [Password, setPassword] = useState('');
     const [PasswordConfirm, setPasswordConfirm] = useState('');
@@ -24,23 +23,32 @@ function LoginPage() {
     };
 
     const passwordConfirmHandler = event => {
+        const pwconfirm = document.getElementById('passwordConfirm');
         let pw = event.currentTarget.value;
+        setPasswordConfirm(pw);
         const sha = require('sha256');
-        setHashPasswordConfirm(sha(pw));
         if (Password === pw) {
             setHashPasswordConfirm(sha(pw));
-            console.log(HashPasswordConfirm);
+            pwconfirm.style.backgroundColor = '#eee';
+        } else {
+            console.log('not same');
+            pwconfirm.style.backgroundColor = '#ffdcdc';
         }
     };
 
+    const postSignup = event => {
+        console.log(HashPasswordConfirm);
+    };
+
     const ValidEmail = event => {
+        const email = document.getElementById('email');
         let asValue = event.currentTarget.value;
         let regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         if (regExp.test(asValue) === true) {
-            console.log('pass');
+            email.style.backgroundColor = '#eee';
             setEmail(asValue);
         } else {
-            console.log('no');
+            email.style.backgroundColor = '#ffdcdc';
         }
     };
 
@@ -52,17 +60,24 @@ function LoginPage() {
                         <h1>Create Account</h1>
 
                         <div style={{ display: 'flex', width: '100%' }}>
-                            <input type="email" placeholder="Email" onChange={ValidEmail} />
+                            <input
+                                id="email"
+                                type="email"
+                                placeholder="Email"
+                                onChange={ValidEmail}
+                            />
                             <button id="check-btn">확인</button>
                         </div>
                         <input type="text" placeholder="Nickname" />
                         <input type="password" placeholder="Password" onChange={passwordHandler} />
                         <input
+                            id="passwordConfirm"
                             type="password"
                             placeholder="PasswordConfirm"
                             onChange={passwordConfirmHandler}
                         />
-                        <button>Sign Up</button>
+
+                        <button onClick={postSignup}>Sign Up</button>
                     </form>
                 </div>
                 <div class="form-container sign-in-container">
