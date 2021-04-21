@@ -1,7 +1,11 @@
 import React from 'react';
 
 function ClassPage() {
-    return <div>ClassPage</div>;
+    return (
+        <div>
+            <h1>ClassPage</h1>
+        </div>
+    );
 }
 
 export default ClassPage;
