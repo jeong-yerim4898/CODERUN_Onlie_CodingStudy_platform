@@ -24,6 +24,7 @@ function App() {
             <Switch>
                 <Route exact path="/" component={MainPage}></Route>
                 <Route exact path="/account" component={AccountPage}></Route>
+                <Route exact path="/class" component={ClassPage}></Route>
                 <Route exact path="/classlist" component={ClassList}></Route>
 
                 {/* <Route
