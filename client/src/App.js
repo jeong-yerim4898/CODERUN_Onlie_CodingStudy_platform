@@ -27,6 +27,7 @@ function App() {
                 <Route exact path="/account" component={AccountPage}></Route>
                 <Route exact path="/class" component={ClassPage}></Route>
                 <Route exact path="/classlist" component={ClassList}></Route>
+                <Route exact path="/community" component={CommunityPage}></Route>
 
                 {/* <Route
                     render={() => <div className="error">에러 페이지</div>}
