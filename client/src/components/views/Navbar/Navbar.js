@@ -5,10 +5,9 @@ function NavBar() {
     return (
         <div>
             <Navbar fixed="top" bg="dark" variant="dark">
-                <Navbar.Brand href="#home">CODE:RUN</Navbar.Brand>
+                <Navbar.Brand href="/">CODE:RUN</Navbar.Brand>
                 <Nav className="mr-auto">
-                    <Nav.Link href="#home">Home</Nav.Link>
-                    <Nav.Link href="#features">Features</Nav.Link>
+                    <Nav.Link href="/class">클래스</Nav.Link>
                     <Nav.Link href="#pricing">Pricing</Nav.Link>
                 </Nav>
                 <Form inline>
