@@ -8,7 +8,7 @@ function NavBar() {
                 <Navbar.Brand href="/">CODE:RUN</Navbar.Brand>
                 <Nav className="mr-auto">
                     <Nav.Link href="/class">클래스</Nav.Link>
-                    <Nav.Link href="#pricing">Pricing</Nav.Link>
+                    <Nav.Link href="/community">커뮤니티</Nav.Link>
                 </Nav>
                 <Form inline>
                     <FormControl type="text" placeholder="Search" className="mr-sm-2" />
