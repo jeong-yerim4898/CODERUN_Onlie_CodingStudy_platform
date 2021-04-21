@@ -84,7 +84,7 @@ class VideoListData(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     video_id = Column(Integer, ForeignKey("video.id", ondelete='CASCADE'))
-    video_list_id = Column(Integer, ForeignKey("video.id", ondelete='CASCADE'))
+    video_list_id = Column(Integer, ForeignKey("video_list.id", ondelete='CASCADE'))
 
 
 # Language Tag

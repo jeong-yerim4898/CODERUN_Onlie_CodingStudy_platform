@@ -29,8 +29,20 @@ class VideoBase(BaseModel):
     title: str
     content: Optional[str] = None
     language_tag_id: Optional[int] = None
-    subject_user_tag_id: Optional[int] = None
+
+
+class VideoUpdateBase(BaseModel):
+    id: int
+    title: str
+    content: Optional[str] = None
+    language_tag_id: Optional[int] = None
+
 
 class VideoCommentBase(BaseModel):
     video_id: int
+    content: str
+
+
+class VideoCommentUpdateBase(BaseModel):
+    id: int
     content: str
