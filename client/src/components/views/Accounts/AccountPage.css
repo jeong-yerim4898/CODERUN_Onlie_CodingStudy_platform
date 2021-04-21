@@ -92,11 +92,12 @@
 
 .account-body input {
 	background-color: #eee;
-	border: none;
+	border :none;
 	padding: 12px 15px;
 	margin: 8px 0;
 	width: 100%;
 }
+
 
 .container {
 	background-color: #fff;
