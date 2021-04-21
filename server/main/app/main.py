@@ -7,6 +7,7 @@ import uvicorn
 from database import database, models
 from routers.user import router as user_router
 from routers.video import router as video_router
+from routers.board import router as board_router
 
 models.Base.metadata.create_all(bind=database.engine)
 app = FastAPI()
@@ -23,6 +24,7 @@ app.add_middleware(
 
 app.include_router(user_router)
 app.include_router(video_router)
+app.include_router(board_router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)
