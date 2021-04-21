@@ -2,8 +2,7 @@
 import './App.css';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import LoginPage from './components/views/Accounts/LoginPage';
-import SignupPage from './components/views/Accounts/SignupPage';
+import AccountPage from './components/views/Accounts/AccountPage';
 import ClassList from './components/views/ClassPage/ClassList';
 import ClassPage from './components/views/ClassPage/ClassPage';
 import CommunityPage from './components/views/CommunityPage/CommunityPage';
@@ -24,8 +23,7 @@ function App() {
             {/* <NavBar></NavBar> */}
             <Switch>
                 <Route exact path="/" component={MainPage}></Route>
-                <Route exact path="/signup" component={SignupPage}></Route>
-                <Route exact path="/login" component={LoginPage}></Route>
+                <Route exact path="/account" component={AccountPage}></Route>
                 <Route exact path="/classlist" component={ClassList}></Route>
 
                 {/* <Route
