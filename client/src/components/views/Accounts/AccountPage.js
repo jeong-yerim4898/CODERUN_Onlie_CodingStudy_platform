@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import './AccountPage.css';
+import { signupUser, loginUser } from '_api/User';
 
 function LoginPage() {
     const [HashPasswordConfirm, setHashPasswordConfirm] = useState('');
     const [Password, setPassword] = useState('');
+    const [Loginpw, setLoginpw] = useState('');
+    const [LoginEmail, setLoginEmail] = useState('');
     const [PasswordConfirm, setPasswordConfirm] = useState('');
     const [Email, setEmail] = useState('');
     const [Nickname, setNickname] = useState('');
@@ -17,6 +20,12 @@ function LoginPage() {
             }
         }
     };
+
+    const NicknameHandler = event => {
+        console.log(event.currentTarget.value);
+        setNickname(event.currentTarget.value);
+    };
+
     const passwordHandler = event => {
         let pw = event.currentTarget.value;
         setPassword(pw);
@@ -36,8 +45,19 @@ function LoginPage() {
         }
     };
 
-    const postSignup = event => {
-        console.log(HashPasswordConfirm);
+    const postSignup = () => {
+        const body = { email: Email, password: HashPasswordConfirm, name: Nickname };
+        console.log(body);
+        signupUser(body)
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
+    };
+
+    const postLogin = () => {
+        const body = { email: LoginEmail, password: Loginpw };
+        loginUser(body)
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
     };
 
     const ValidEmail = event => {
@@ -50,6 +70,16 @@ function LoginPage() {
         } else {
             email.style.backgroundColor = '#ffdcdc';
         }
+    };
+
+    const loginPassword = event => {
+        let pw = event.currentTarget.value;
+        const sha = require('sha256');
+        setLoginpw(sha(pw));
+    };
+
+    const loginEmail = event => {
+        setLoginEmail(event.currentTarget.value);
     };
 
     return (
@@ -68,7 +98,7 @@ function LoginPage() {
                             />
                             <button id="check-btn">확인</button>
                         </div>
-                        <input type="text" placeholder="Nickname" />
+                        <input type="text" placeholder="Nickname" onChange={NicknameHandler} />
                         <input type="password" placeholder="Password" onChange={passwordHandler} />
                         <input
                             id="passwordConfirm"
@@ -84,10 +114,15 @@ function LoginPage() {
                     <form action="#">
                         <h1>Sign in</h1>
 
-                        <input type="email" placeholder="Email" />
-                        <input type="password" placeholder="Password" />
+                        <input type="email" placeholder="Email" onChange={loginEmail} />
+                        <input
+                            id="login_pw"
+                            type="password"
+                            placeholder="Password"
+                            onChange={loginPassword}
+                        />
                         <a href="#">비밀번호 찾고 싶어?</a>
-                        <button>Sign In</button>
+                        <button onClick={postLogin}>Sign In</button>
                     </form>
                 </div>
                 <div class="overlay-container">
