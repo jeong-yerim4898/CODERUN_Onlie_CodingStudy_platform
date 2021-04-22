@@ -12,9 +12,10 @@ from sqlalchemy.orm import sessionmaker
 load_dotenv(verbose=True)
 DB_USER = getenv("DB_USER")
 DB_NAME = getenv("DB_NAME")
+DB_URL = getenv("DB_URL")
 
 # 숨겨진 키로 DB 연결
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://" + DB_USER + "@localhost:3306/" + DB_NAME
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://" + DB_USER + DB_URL + DB_NAME
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
