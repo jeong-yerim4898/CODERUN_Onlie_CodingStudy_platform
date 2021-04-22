@@ -1,5 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 function NavBar() {
     return (
@@ -12,7 +14,9 @@ function NavBar() {
                 </Nav>
                 <Form inline>
                     <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                    <Button variant="outline-info">Search</Button>
+                    <Button variant="outline-info">
+                        <FontAwesomeIcon icon={faSearch} className="search" />
+                    </Button>
                 </Form>
             </Navbar>
         </div>
