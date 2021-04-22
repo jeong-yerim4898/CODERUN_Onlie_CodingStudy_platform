@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import './AccountPage.css';
-import { signupUser, loginUser } from '_api/User';
 
-function LoginPage() {
+import { loginUser, signupUser } from '_actions/user_actions';
+import { useDispatch } from 'react-redux';
+
+function LoginPage(props) {
+    const dispatch = useDispatch();
     const [HashPasswordConfirm, setHashPasswordConfirm] = useState('');
     const [Password, setPassword] = useState('');
     const [Loginpw, setLoginpw] = useState('');
@@ -47,17 +50,29 @@ function LoginPage() {
 
     const postSignup = () => {
         const body = { email: Email, password: HashPasswordConfirm, name: Nickname };
-        console.log(body);
-        signupUser(body)
-            .then(res => console.log(res))
+        dispatch(signupUser(body))
+            .then(res => {
+                if (res.payload.profile === undefined) {
+                    window.location.replace('/account');
+                } else {
+                    alert('회원가입에 실패했습니다. ㅠㅠ');
+                }
+            })
             .catch(err => console.log(err));
     };
 
     const postLogin = () => {
         const body = { email: LoginEmail, password: Loginpw };
-        loginUser(body)
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
+        dispatch(loginUser(body))
+            .then(res => {
+                if (res.payload.token !== null) {
+                    window.localStorage.setItem('token', res.payload.token);
+                    props.history.push('/');
+                } else {
+                    alert('아이디/ 비밀번호가 맞지않아요.');
+                }
+            })
+            .catch(err => alert('로그인에 실패했습니다. ㅠㅠ'));
     };
 
     const ValidEmail = event => {
