@@ -25,6 +25,10 @@ function NavBar() {
                 <Button variant="outline-info">
                     <FontAwesomeIcon icon={faPlus} className="uploadvideo" />
                 </Button>
+                {/* 로그인/회원가입 버튼 */}
+                <Button href="/account" variant="info">
+                    LogIn
+                </Button>
             </Navbar>
         </div>
     );
