@@ -104,3 +104,11 @@ def login(data: schemas.LoginBase, db: Session = Depends(get_db)):
         return {"user": return_user, "token": jwt_token}
     else:
         raise HTTPException(status_code=401, detail="유저가 유효하지 않습니다.")
+
+
+@router.get("/api/emailcheck/{email}", tags=["user"], description="이메일 가입 중복 체크")
+def check_email(email: str, db: Session = Depends(get_db)):
+    e_mail = db.query(models.User).filter(models.User.email == email).first()
+    if e_mail:
+        raise HTTPException(status_code=400, detail="이메일이 존재합니다.")
+    return {"data": email}
