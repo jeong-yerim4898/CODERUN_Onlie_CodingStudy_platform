@@ -26,6 +26,7 @@ function App() {
                 <Route exact path="/" component={MainPage}></Route>
                 <Route exact path="/account" component={AccountPage}></Route>
                 <Route exact path="/class" component={ClassPage}></Route>
+                <Route exact path="/watch/:id" component={WatchPage}></Route>
                 <Route exact path="/classlist" component={ClassList}></Route>
                 <Route exact path="/community" component={CommunityPage}></Route>
 

@@ -2,13 +2,73 @@ import React from 'react';
 import './ClassPage.css';
 import 'antd/dist/antd.css';
 import { Row, Col, Menu } from 'antd';
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, MailOutlined } from '@ant-design/icons';
 import ClassList from './ClassList';
 
 function ClassPage() {
+    const AlgoSubjects = [
+        {
+            _id: 1,
+            name: '자료구조',
+        },
+        {
+            _id: 2,
+            name: 'DFS',
+        },
+        {
+            _id: 3,
+            name: 'BFS',
+        },
+        {
+            _id: 4,
+            name: '그래프',
+        },
+        {
+            _id: 5,
+            name: '정수론',
+        },
+        {
+            _id: 6,
+            name: '난수발생',
+        },
+    ];
+
+    const CsSubjects = [
+        {
+            _id: 1,
+            name: '계산이론',
+        },
+        {
+            _id: 2,
+            name: '컴파일러',
+        },
+        {
+            _id: 3,
+            name: '분산처리',
+        },
+        {
+            _id: 4,
+            name: '컴퓨터 구조',
+        },
+        {
+            _id: 5,
+            name: '인공지능',
+        },
+        {
+            _id: 6,
+            name: '통신',
+        },
+    ];
+
+    const Algos = AlgoSubjects.map((subject, index) => {
+        return <Menu.Item key={index}>{subject.name}</Menu.Item>;
+    });
+    const Css = CsSubjects.map((subject, index) => {
+        return <Menu.Item key={index}>{subject.name}</Menu.Item>;
+    });
     const { SubMenu } = Menu;
     return (
-        <div>
+        <div className="pageboard">
             <Row>
                 <Col className="colpage" span={4}>
                     <Menu
@@ -18,29 +78,19 @@ function ClassPage() {
                         defaultOpenKeys={['sub1']}
                         mode="inline"
                     >
-                        <SubMenu key="sub1" icon={<MailOutlined />} title="Navigation One">
-                            <Menu.ItemGroup key="g1" title="Item 1">
-                                <Menu.Item key="1">Option 1</Menu.Item>
-                                <Menu.Item key="2">Option 2</Menu.Item>
-                            </Menu.ItemGroup>
-                            <Menu.ItemGroup key="g2" title="Item 2">
-                                <Menu.Item key="3">Option 3</Menu.Item>
-                                <Menu.Item key="4">Option 4</Menu.Item>
-                            </Menu.ItemGroup>
+                        <SubMenu key="sub1" icon={<MailOutlined />} title="Algorithm">
+                            {Algos}
                         </SubMenu>
-                        <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Navigation Two">
-                            <Menu.Item key="5">Option 5</Menu.Item>
-                            <Menu.Item key="6">Option 6</Menu.Item>
-                            <SubMenu key="sub3" title="Submenu">
-                                <Menu.Item key="7">Option 7</Menu.Item>
-                                <Menu.Item key="8">Option 8</Menu.Item>
-                            </SubMenu>
-                        </SubMenu>
-                        <SubMenu key="sub4" icon={<SettingOutlined />} title="Navigation Three">
-                            <Menu.Item key="9">Option 9</Menu.Item>
-                            <Menu.Item key="10">Option 10</Menu.Item>
-                            <Menu.Item key="11">Option 11</Menu.Item>
-                            <Menu.Item key="12">Option 12</Menu.Item>
+                    </Menu>
+                    <Menu
+                        // onClick={this.handleClick}
+                        style={{ width: 256 }}
+                        defaultSelectedKeys={['1']}
+                        defaultOpenKeys={['sub1']}
+                        mode="inline"
+                    >
+                        <SubMenu key="sub1" icon={<AppstoreOutlined />} title="Computer Science">
+                            {Css}
                         </SubMenu>
                     </Menu>
                 </Col>
