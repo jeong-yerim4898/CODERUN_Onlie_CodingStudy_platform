@@ -19,6 +19,7 @@ class User(Base):
     name = Column(String(20), index=True, nullable=False)
     profile = Column(String(256))
     password = Column(String(64), nullable=False)
+    active = Column(Boolean, default=False)
     join_date = Column(DateTime(timezone=True), server_default=func.now())
 
     video = relationship("Video", backref="user", passive_deletes=True)

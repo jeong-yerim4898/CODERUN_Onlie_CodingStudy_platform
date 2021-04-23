@@ -21,10 +21,6 @@ class Token(BaseModel):
     token_type: str
 
 
-class TokenData(BaseModel):
-    username: Optional[str] = None
-
-
 class VideoBase(BaseModel):
     title: str
     content: Optional[str] = None
@@ -46,6 +42,8 @@ class VideoCommentBase(BaseModel):
 class VideoCommentUpdateBase(BaseModel):
     id: int
     content: str
+
+
 class BoardBase(BaseModel):
     title: str
     content: Optional[str] = None
