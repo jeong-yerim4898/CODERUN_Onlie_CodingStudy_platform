@@ -5,8 +5,56 @@ from sqlalchemy import Date, DateTime
 
 
 # 데이터 목록 베이스
-class DataListBase(BaseModel):
-    data_list_type: str
-    data_list_name: str
-    data_list_url: str
-    stock_code: str
+class UserBase(BaseModel):
+    email: str
+    password: str
+    name: str
+
+
+class LoginBase(BaseModel):
+    email: str
+    password: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+
+
+class VideoBase(BaseModel):
+    title: str
+    content: Optional[str] = None
+    language_tag_id: Optional[int] = None
+
+
+class VideoUpdateBase(BaseModel):
+    id: int
+    title: str
+    content: Optional[str] = None
+    language_tag_id: Optional[int] = None
+
+
+class VideoCommentBase(BaseModel):
+    video_id: int
+    content: str
+
+
+class VideoCommentUpdateBase(BaseModel):
+    id: int
+    content: str
+class BoardBase(BaseModel):
+    title: str
+    content: Optional[str] = None
+
+
+class BoardCommentBase(BaseModel):
+    board_id: int
+    content: Optional[str] = None
+
+
+class BoardSelectBase(BaseModel):
+    board_comment_id: int
