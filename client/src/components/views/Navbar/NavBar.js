@@ -6,9 +6,9 @@ import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 function NavBar() {
     return (
         <div>
-            <Navbar fixed="top" bg="dark" variant="dark">
+            <Navbar fixed="top" variant="dark" className="Nav">
                 {/* 로고 */}
-                <Navbar.Brand href="/">CODE:RUN</Navbar.Brand>
+                <Navbar.Brand href="/">코드런</Navbar.Brand>
                 {/* 탭 */}
                 <Nav className="mr-auto">
                     <Nav.Link href="/class">클래스</Nav.Link>
