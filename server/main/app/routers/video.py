@@ -17,18 +17,16 @@ from routers.user import get_current_user
 router = APIRouter()
 
 
-@router.get("/api/video/detail/{id}", tags=["video"], description="동영상 디테일 보기")
+@router.get("/api/video/detail/{video_id}", tags=["video"], description="동영상 디테일 보기")
 def get_video_detail(
-    id: int,
+    video_id: int,
     token: Optional[str] = Header(None),
     db: Session = Depends(get_db),
 ):
     get_current_user(token, db)
-    v_data = (
-        db.query(models.Video)
-        .filter(models.Video.id == id)
-        .first()
-    )
+    v_data = db.query(models.Video).filter(models.Video.id == video_id).first()
+    if not v_data:
+        raise HTTPException(status_code=404, detail="No content")
     return {"data": v_data}
 
 
@@ -38,8 +36,10 @@ def get_video_page(
     db: Session = Depends(get_db),
 ):
     v_data = (
-        db.query(models.Video.title, models.Video.id).offset(count*10).limit(10).all()
+        db.query(models.Video.title, models.Video.id).offset(count * 10).limit(10).all()
     )
+    if not v_data:
+        raise HTTPException(status_code=404, detail="No content")
     return {"data": v_data}
 
 
@@ -54,7 +54,7 @@ def post_video(
         user_id=current_user.id,
         title=data.title,
         content=data.content,
-        language_tag_id=data.language_tag_id
+        language_tag_id=data.language_tag_id,
     )
     db.add(v_data)
     db.commit()
@@ -69,13 +69,11 @@ def update_video(
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
-    v_data = (
-        db.query(models.Video)
-        .filter(models.Video.id == data.id)
-        .first()
-    )
+    v_data = db.query(models.Video).filter(models.Video.id == data.video_id).first()
+    if not v_data:
+        raise HTTPException(status_code=404, detail="No content")
     if current_user.id != v_data.user_id:
-        raise HTTPException(status_code=401, detail="유저가 유효하지 않습니다.")
+        raise HTTPException(status_code=401, detail="Incorrect user")
     v_data.title = data.title
     v_data.content = data.content
     v_data.language_tag_id = data.language_tag_id
@@ -84,25 +82,27 @@ def update_video(
     return {"data": v_data}
 
 
-@router.delete("/api/video/delete/{id}", tags=["video"], description="동영상 게시물 삭제")
+@router.delete("/api/video/delete/{video_id}", tags=["video"], description="동영상 게시물 삭제")
 def delete_video(
-    id: int,
+    video_id: int,
     token: Optional[str] = Header(None),
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
-    v_data = (
-        db.query(models.Video)
-        .filter(models.Video.id == id)
-        .first()
-    )
+    v_data = db.query(models.Video).filter(models.Video.id == video_id).first()
     if not v_data:
-        raise HTTPException(status_code=404, detail="데이터가 존재하지 않습니다.")
+        raise HTTPException(status_code=404, detail="No content")
     if current_user.id != v_data.user_id:
-        raise HTTPException(status_code=401, detail="유저가 유효하지 않습니다.")
+        raise HTTPException(status_code=401, detail="Incorrect user")
     db.delete(v_data)
     db.commit()
-    return {"delete": id}
+    return {"delete": video_id}
+
+
+def check_video(id, db):
+    check = db.query(models.Video).filter(models.Video.id == id).first()
+    if not check:
+        raise HTTPException(status_code=404, detail="No content")
 
 
 @router.get("/api/video/comment/{video_id}", tags=["video"], description="동영상 댓글 보기")
@@ -117,6 +117,8 @@ def get_video_comment(
         .filter(models.VideoComment.video_id == video_id)
         .all()
     )
+    if not vc_data:
+        raise HTTPException(status_code=404, detail="No content")
     return {"data": vc_data}
 
 
@@ -127,10 +129,9 @@ def post_video_comment(
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
+    check_video(data.video_id, db)
     vc_data = models.VideoComment(
-        user_id=current_user.id,
-        video_id=data.video_id,
-        content=data.content
+        user_id=current_user.id, video_id=data.video_id, content=data.content
     )
     db.add(vc_data)
     db.commit()
@@ -139,7 +140,7 @@ def post_video_comment(
 
 
 @router.put("/api/video/comment/update", tags=["video"], description="동영상 댓글 수정")
-def put_video_comment(
+def update_video_comment(
     data: schemas.VideoCommentUpdateBase,
     token: Optional[str] = Header(None),
     db: Session = Depends(get_db),
@@ -147,33 +148,39 @@ def put_video_comment(
     current_user = get_current_user(token, db)
     vc_data = (
         db.query(models.VideoComment)
-        .filter(models.VideoComment.id == data.id)
+        .filter(models.VideoComment.id == data.video_comment_id)
         .first()
     )
+    if not vc_data:
+        raise HTTPException(status_code=404, detail="No content")
     if current_user.id != vc_data.user_id:
-        raise HTTPException(status_code=401, detail="유저가 유효하지 않습니다.")
+        raise HTTPException(status_code=401, detail="Incorrect user")
     vc_data.content = data.content
     db.commit()
     db.refresh(vc_data)
     return {"data": vc_data}
 
 
-@router.delete("/api/video/comment/delete/{id}", tags=["video"], description="동영상 댓글 삭제")
+@router.delete(
+    "/api/video/comment/delete/{video_comment_id}",
+    tags=["video"],
+    description="동영상 댓글 삭제",
+)
 def delete_video_comment(
-    id: int,
+    video_comment_id: int,
     token: Optional[str] = Header(None),
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
     vc_data = (
         db.query(models.VideoComment)
-        .filter(models.VideoComment.id == id)
+        .filter(models.VideoComment.id == video_comment_id)
         .first()
     )
     if not vc_data:
-        raise HTTPException(status_code=404, detail="데이터가 존재하지 않습니다.")
+        raise HTTPException(status_code=404, detail="No content")
     if current_user.id != vc_data.user_id:
-        raise HTTPException(status_code=401, detail="유저가 유효하지 않습니다.")
+        raise HTTPException(status_code=401, detail="Incorrect user")
     db.delete(vc_data)
     db.commit()
-    return {"delete": id}
+    return {"delete": video_comment_id}

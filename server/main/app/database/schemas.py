@@ -28,7 +28,7 @@ class VideoBase(BaseModel):
 
 
 class VideoUpdateBase(BaseModel):
-    id: int
+    video_id: int
     title: str
     content: Optional[str] = None
     language_tag_id: Optional[int] = None
@@ -40,7 +40,7 @@ class VideoCommentBase(BaseModel):
 
 
 class VideoCommentUpdateBase(BaseModel):
-    id: int
+    video_comment_id: int
     content: str
 
 

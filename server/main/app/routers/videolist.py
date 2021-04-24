@@ -23,7 +23,13 @@ def get_video_list(
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
-    videolist = db.query(models.VideoList).filter(models.VideoList.user_id == current_user.id).all()
+    videolist = (
+        db.query(models.VideoList)
+        .filter(models.VideoList.user_id == current_user.id)
+        .all()
+    )
+    if not videolist:
+        raise HTTPException(status_code=404, detail="No content")
     return {"data": videolist}
 
 
@@ -34,10 +40,7 @@ def create_video_list(
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
-    vl_data = models.VideoList(
-        user_id=current_user.id,
-        title=title
-    )
+    vl_data = models.VideoList(user_id=current_user.id, title=title)
     db.add(vl_data)
     db.commit()
     db.refresh(vl_data)
@@ -46,41 +49,120 @@ def create_video_list(
 
 @router.put("/api/videolist/update", tags=["video list"], description="비디오리스트 타이틀 수정")
 def update_video_list(
-    id: int = Form(...),
+    video_list_id: int = Form(...),
     title: str = Form(...),
     token: Optional[str] = Header(None),
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
     vl_data = (
-        db.query(models.VideoList)
-        .filter(models.VideoList.id == id)
-        .first()
+        db.query(models.VideoList).filter(models.VideoList.id == video_list_id).first()
     )
+    if not vl_data:
+        raise HTTPException(status_code=404, detail="No content")
     if current_user.id != vl_data.user_id:
-        raise HTTPException(status_code=401, detail="유저가 유효하지 않습니다.")
+        raise HTTPException(status_code=401, detail="Incorrect user")
     vl_data.title = title
     db.commit()
     db.refresh(vl_data)
     return {"data": vl_data}
 
 
-@router.delete("/api/videolist/delete/{id}", tags=["video list"], description="비디오리스트 삭제")
+@router.delete(
+    "/api/videolist/delete/{video_list_id}",
+    tags=["video list"],
+    description="비디오리스트 삭제",
+)
 def delete_video_list(
-    id: int,
+    video_list_id: int,
     token: Optional[str] = Header(None),
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
     vl_data = (
+        db.query(models.VideoList).filter(models.VideoList.id == video_list_id).first()
+    )
+    if not vl_data:
+        raise HTTPException(status_code=404, detail="No content")
+    if current_user.id != vl_data.user_id:
+        raise HTTPException(status_code=401, detail="Incorrect user")
+    db.delete(vl_data)
+    db.commit()
+    return {"delete": video_list_id}
+
+
+def check_videolist(user_id, id, db):
+    check = (
         db.query(models.VideoList)
+        .filter(models.VideoList.user_id == user_id)
         .filter(models.VideoList.id == id)
         .first()
     )
-    if not vl_data:
-        raise HTTPException(status_code=404, detail="데이터가 존재하지 않습니다.")
-    if current_user.id != vl_data.user_id:
-        raise HTTPException(status_code=401, detail="유저가 유효하지 않습니다.")
-    db.delete(vl_data)
+    if not check:
+        raise HTTPException(status_code=404, detail="Incorrect route")
+
+
+@router.get(
+    "/api/videolist/detail/{video_list_id}",
+    tags=["video list"],
+    description="비디오리스트의 비디오 확인",
+)
+def get_video_list_data(
+    video_list_id: int,
+    token: Optional[str] = Header(None),
+    db: Session = Depends(get_db),
+):
+    current_user = get_current_user(token, db)
+    check_videolist(current_user.id, video_list_id, db)
+    videolistdata = (
+        db.query(models.VideoListData.video_id, models.VideoListData.id)
+        .filter(models.VideoListData.video_list_id == video_list_id)
+        .all()
+    )
+    if not videolistdata:
+        raise HTTPException(status_code=404, detail="No content")
+    return {"data": videolistdata}
+
+
+@router.post(
+    "/api/videolist/detail/create", tags=["video list"], description="비디오리스트에 비디오 추가"
+)
+def create_video_list_data(
+    video_list_id: int = Form(...),
+    video_id: int = Form(...),
+    token: Optional[str] = Header(None),
+    db: Session = Depends(get_db),
+):
+    current_user = get_current_user(token, db)
+    check_videolist(current_user.id, video_list_id, db)
+    if not db.query(models.Video).filter(models.Video.id == video_id).first():
+        raise HTTPException(status_code=404, detail="No content")
+    vld_data = models.VideoListData(video_list_id=video_list_id, video_id=video_id)
+    db.add(vld_data)
     db.commit()
-    return {"delete": id}
+    db.refresh(vld_data)
+    return {"data": vld_data}
+
+
+@router.delete(
+    "/api/videolist/detail/delete/{video_list_data_id}",
+    tags=["video list"],
+    description="비디오리스트의 비디오 삭제",
+)
+def delete_video_list_data(
+    video_list_data_id: int,
+    token: Optional[str] = Header(None),
+    db: Session = Depends(get_db),
+):
+    current_user = get_current_user(token, db)
+    vld_data = (
+        db.query(models.VideoListData)
+        .filter(models.VideoListData.id == video_list_data_id)
+        .first()
+    )
+    if not vld_data:
+        raise HTTPException(status_code=404, detail="No content")
+    check_videolist(current_user.id, vld_data.video_list_id, db)
+    db.delete(vld_data)
+    db.commit()
+    return {"delete": video_list_data_id}
