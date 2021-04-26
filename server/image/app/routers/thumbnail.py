@@ -28,7 +28,7 @@ def get_thumbnail(
         open(f"{parent_route}/assets/thumbnail/thumbnail_{video_id}.png")
         return FileResponse(f"{parent_route}/assets/thumbnail/thumbnail_{video_id}.png")
     except:
-        raise HTTPException(status_code=404, detail="No content")
+        return FileResponse(f"{parent_route}/assets/thumbnail/thumbnail_default.png")
 
 
 @router.post("/image/thumbnail/create/{video_id}", tags=["thumbnail"], description="썸네일 저장")

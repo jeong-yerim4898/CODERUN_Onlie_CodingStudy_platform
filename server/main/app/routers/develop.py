@@ -142,3 +142,53 @@ def get_video_detail(
         return {"data": db.query(models.BoardComment).all()}
 
     raise HTTPException(status_code=400, detail="해당 테이블이 없습니다.")
+
+
+@router.get("/api/develop/create/tag/language/{pw}", tags=["develop"], description="언어 태그 초기데이터 생성")
+def create_language_init_tags(pw: str, db: Session = Depends(get_db)):
+    languages = ["C/C++", "Java", "JavaScript", "Python", "기타"]
+    languages.sort()
+    cnt = 0
+    for i in range(len(languages)):
+        if db.query(models.LanguageTag).filter(models.LanguageTag.language_name == languages[i]).first():
+            cnt += 1
+        else:
+            lt_data = models.LanguageTag(language_name = languages[i])
+            db.add(lt_data)
+            db.commit()
+    if cnt == len(languages):
+        return {"data": "Already initialization"}
+    return {"data": f"Add {len(languages) - cnt} languages in Language Tag Table"}
+
+
+@router.get("/api/develop/create/tag/algorithm/{pw}", tags=["develop"], description="알고리즘 태그 초기데이터 생성")
+def create_algorithm_init_tags(pw: str, db: Session = Depends(get_db)):
+    algorithms = ["그리디", "구현", "완전탐색", "수학", "그래프", "다이나믹프로그래밍", "이분탐색", "분할정복"]
+    algorithms.sort()
+    cnt = 0
+    for i in range(len(algorithms)):
+        if db.query(models.AlgorithmTag).filter(models.AlgorithmTag.algorithm_name == algorithms[i]).first():
+            cnt += 1
+        else:
+            at_data = models.AlgorithmTag(algorithm_name = algorithms[i])
+            db.add(at_data)
+            db.commit()
+    if cnt == len(algorithms):
+        return {"data": "Already initialization"}
+    return {"data": f"Add {len(algorithms) - cnt} algorithms in Algorithm Tag Table"}
+
+
+@router.get("/api/develop/create/tag/cs/{pw}", tags=["develop"], description="CS 태그 초기데이터 생성")
+def create_cs_init_tags(pw: str, db: Session = Depends(get_db)):
+    cses = ["네트워크", "데이터베이스", "알고리즘", "운영체제", "자료구조", "컴퓨터구조", "기타"]
+    cnt = 0
+    for i in range(len(cses)):
+        if db.query(models.SubjectTag).filter(models.SubjectTag.subject_name == cses[i]).first():
+            cnt += 1
+        else:
+            ct_data = models.SubjectTag(subject_name = cses[i])
+            db.add(ct_data)
+            db.commit()
+    if cnt == len(cses):
+        return {"data": "Already initialization"}
+    return {"data": f"Add {len(cses) - cnt} CS in Subject Tag Table"}
