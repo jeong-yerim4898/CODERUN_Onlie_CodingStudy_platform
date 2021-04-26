@@ -5,11 +5,11 @@ import uvicorn
 
 # 로컬 라이브러리
 from database import database, models
+from routers.board import router as board_router
+from routers.develop import router as develop_router
 from routers.user import router as user_router
 from routers.video import router as video_router
 from routers.videolist import router as videolist_router
-from routers.board import router as board_router
-from routers.develop import router as develop_router
 
 models.Base.metadata.create_all(bind=database.engine)
 app = FastAPI()
