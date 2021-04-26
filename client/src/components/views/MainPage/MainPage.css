@@ -6,34 +6,56 @@
 
 
 .bannervd {
-  z-index: 1;
   position: absolute;
   background: #232a34;
 }
 
 
 .bannerment {
-  z-index: 2;
+  display: grid;
+  z-index: 1;
+  height: 600px;
   width: 100%;
-  position: absolute;
-  padding: 8px 24px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 300px;
+  justify-content: center;
+  /* max-width: 540px; */
 }
 
 
-.bannertext {
+.bannertitle {
   color: #fff;
   font-size: 48px;
-  text-align: center;
+  line-height: 48px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  margin-bottom: 16px;
+}
 
-  @media screen and (max-width: 768px) {
-    font-size: 40px;
-  }
 
-  @media screen and (max-width: 480px) {
-    font-size: 32px;
-  }
+.bannersubtitle {
+  color: #fff;
+  font-size: 42px;
+  line-height: 1.1;
+  font-weight: 600;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+
+.GetStartedBtn {
+  width: 150px;
+  height: 50px;
+  margin-top: 16px;
+  border-radius: 30px;
+  background: #01bf71;
+  color: #fff;
+  font-size: 20px;
+  outline: none;
+  border: none;
+  cursor: pointer;
 }

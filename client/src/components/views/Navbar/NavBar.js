@@ -1,34 +1,58 @@
 import React from 'react';
-import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
+import { Navbar, Nav, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import './NavBar.css';
+import NavBarSearch from './NavBarSearch.js';
 
 function NavBar() {
     return (
-        <div>
-            <Navbar fixed="top" variant="dark" className="Nav">
+        <div className="Nav">
+            <Navbar
+                fixed="top"
+                collapseOnSelect
+                expand="lg"
+                variant="dark"
+                className="NavContainer"
+            >
                 {/* 로고 */}
-                <Navbar.Brand href="/">코드런</Navbar.Brand>
-                {/* 탭 */}
-                <Nav className="mr-auto">
-                    <Nav.Link href="/class">클래스</Nav.Link>
-                    <Nav.Link href="/community">커뮤니티</Nav.Link>
-                </Nav>
-                {/* 검색창 */}
-                <Form inline>
-                    <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                    <Button variant="outline-info">
-                        <FontAwesomeIcon icon={faSearch} className="search" />
-                    </Button>
-                </Form>
-                {/* 동영상업로드 버튼 */}
-                <Button variant="outline-info">
-                    <FontAwesomeIcon icon={faPlus} className="uploadvideo" />
-                </Button>
-                {/* 로그인/회원가입 버튼 */}
-                <Button href="/account" variant="info">
-                    LogIn
-                </Button>
+                <Navbar.Brand href="/" className="NavLogo">
+                    코드런
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Collapse id="responsive-navbar-nav" className="sidebar">
+                    <Nav className="NavMenu">
+                        {/* 탭 */}
+                        <Nav.Item className="NavItem">
+                            <Nav.Link href="/class" className="NavLink">
+                                클래스
+                            </Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item className="NavItem">
+                            <Nav.Link href="/community" className="NavLink">
+                                커뮤니티
+                            </Nav.Link>
+                        </Nav.Item>
+                    </Nav>
+                    <Nav className="NavMenu">
+                        {/* 검색창 */}
+                        <Nav.Item className="NavItem">
+                            <NavBarSearch />
+                        </Nav.Item>
+                        {/* 동영상업로드 버튼 */}
+                        <Nav.Item className="NavItem">
+                            <Button variant="outline-info">
+                                <FontAwesomeIcon icon={faPlus} className="NavVideoBtn" />
+                            </Button>
+                        </Nav.Item>
+                        {/* 로그인/회원가입 버튼 */}
+                        <Nav.Item className="NavItem">
+                            <a href="/account">
+                                <button className="Nav-AccountBtn">LogIn</button>
+                            </a>
+                        </Nav.Item>
+                    </Nav>
+                </Navbar.Collapse>
             </Navbar>
         </div>
     );
