@@ -37,7 +37,7 @@ function App() {
                     render={() => <div className="error">에러 페이지</div>}
                 /> */}
             </Switch>
-            {/* <Footer></Footer> */}
+            <Footer></Footer>
         </BrowserRouter>
     );
 }
