@@ -28,6 +28,7 @@ function LanguageBox(props) {
                 <Button
                     // onClick={handleToggle(value.id)}
                     // checked={Checked.indexOf(value._id) === -1 ? false : true}
+                    style={{ margin: 5 }}
                     type="primary"
                 >
                     <span>{value.name}</span>
