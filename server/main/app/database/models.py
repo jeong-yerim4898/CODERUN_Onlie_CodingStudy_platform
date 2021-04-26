@@ -39,6 +39,7 @@ class Video(Base):
     title = Column(String(100), index=True, nullable=False)
     content = Column(Text)
     language_tag_id = Column(Integer, ForeignKey("language_tag.id", ondelete='CASCADE'))
+    thumbnail = Column(String(256))
     created_date = Column(DateTime(timezone=True), server_default=func.now())
     updated_date = Column(DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now())
 
@@ -114,6 +115,25 @@ class SubjectUserTag(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     subject_tag_id = Column(Integer, ForeignKey("subject_tag.id", ondelete='CASCADE'))
+    video_id = Column(Integer, ForeignKey("video.id", ondelete='CASCADE'))
+
+
+# Algorithm Tag
+class AlgorithmTag(Base):
+    __tablename__ = "algorithm_tag"
+
+    id = Column(Integer, primary_key=True, index=True)
+    algorithm_name = Column(String(50), nullable=False)
+
+    algorithm_user_tag = relationship("AlgorithmUserTag", backref="algorithm_tag", passive_deletes=True)
+
+
+# Subjcet User Tag
+class AlgorithmUserTag(Base):
+    __tablename__ = "algorithm_user_tag"
+
+    id = Column(Integer, primary_key=True, index=True)
+    algorithm_tag_id = Column(Integer, ForeignKey("algorithm_tag.id", ondelete='CASCADE'))
     video_id = Column(Integer, ForeignKey("video.id", ondelete='CASCADE'))
 
 
