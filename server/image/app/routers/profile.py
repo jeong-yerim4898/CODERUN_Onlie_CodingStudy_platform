@@ -28,7 +28,7 @@ def get_profile(
         open(f"{parent_route}/assets/profile/profile_{user_id}.png")
         return FileResponse(f"{parent_route}/assets/profile/profile_{user_id}.png")
     except:
-        raise HTTPException(status_code=404, detail="No content")
+        return FileResponse(f"{parent_route}/assets/profile/profile_default.png")
 
 
 @router.post("/image/profile/create/{user_id}", tags=["profile"], description="프로필 저장")

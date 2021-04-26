@@ -21,6 +21,7 @@ class User(Base):
     password = Column(String(64), nullable=False)
     active = Column(Boolean, default=False)
     join_date = Column(DateTime(timezone=True), server_default=func.now())
+    security_count = Column(Integer, default=0)
 
     video = relationship("Video", backref="user", passive_deletes=True)
     video_comment = relationship("VideoComment", backref="user", passive_deletes=True)
@@ -41,7 +42,7 @@ class Video(Base):
     language_tag_id = Column(Integer, ForeignKey("language_tag.id", ondelete='CASCADE'))
     thumbnail = Column(String(256))
     created_date = Column(DateTime(timezone=True), server_default=func.now())
-    updated_date = Column(DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now())
+    updated_date = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
     video_comment = relationship("VideoComment", backref="video", passive_deletes=True)
     like = relationship("Like", backref="video", passive_deletes=True)
@@ -57,7 +58,7 @@ class VideoComment(Base):
     video_id = Column(Integer, ForeignKey("video.id", ondelete='CASCADE'))
     content = Column(Text)
     created_date = Column(DateTime(timezone=True), server_default=func.now())
-    updated_date = Column(DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now())
+    updated_date = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
 
 # 동영상 좋아요
@@ -147,7 +148,7 @@ class Board(Base):
     content = Column(Text, nullable=False)
     select = Column(Boolean, default=False)
     created_date = Column(DateTime(timezone=True), server_default=func.now())
-    updated_date = Column(DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now())
+    updated_date = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
     board_comment = relationship("BoardComment", backref="board", passive_deletes=True)
 
@@ -162,4 +163,4 @@ class BoardComment(Base):
     content = Column(Text, nullable=False)
     select = Column(Boolean, default=False)
     created_date = Column(DateTime(timezone=True), server_default=func.now())
-    updated_date = Column(DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now())
+    updated_date = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())

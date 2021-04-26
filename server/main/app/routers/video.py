@@ -59,6 +59,9 @@ def post_video(
     db.add(v_data)
     db.commit()
     db.refresh(v_data)
+    v_data.thumbnail = f"https://k4d102.p.ssafy.io/image/thumbnail/{v_data.id}"
+    db.commit()
+    db.refresh(v_data)
     return {"data": v_data}
 
 
