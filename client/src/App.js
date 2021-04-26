@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import AccountPage from './components/views/Accounts/AccountPage';
+import AccountSuccess from './components/views/Accounts/AccountSuccess';
 import ClassList from './components/views/ClassPage/ClassList';
 import ClassPage from './components/views/ClassPage/ClassPage';
 import CommunityPage from './components/views/CommunityPage/CommunityPage';
@@ -25,6 +26,8 @@ function App() {
             <Switch>
                 <Route exact path="/" component={MainPage}></Route>
                 <Route exact path="/account" component={AccountPage}></Route>
+
+                <Route exact path="/account/success" component={AccountSuccess}></Route>
                 <Route exact path="/class" component={ClassPage}></Route>
                 <Route exact path="/watch/:id" component={WatchPage}></Route>
                 <Route exact path="/classlist" component={ClassList}></Route>
