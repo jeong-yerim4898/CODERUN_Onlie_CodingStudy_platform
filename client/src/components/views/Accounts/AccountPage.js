@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import './AccountPage.css';
+import { Modal } from 'antd';
+import { useSelector } from 'react-redux';
 
 import { loginUser, signupUser } from '_actions/user_actions';
+import { redirectEmail, checkEmail } from '_api/User';
 import { useDispatch } from 'react-redux';
 
 function LoginPage(props) {
+    let user = useSelector(state => state.user);
     const dispatch = useDispatch();
     const [HashPasswordConfirm, setHashPasswordConfirm] = useState('');
     const [Password, setPassword] = useState('');
@@ -13,6 +17,10 @@ function LoginPage(props) {
     const [PasswordConfirm, setPasswordConfirm] = useState('');
     const [Email, setEmail] = useState('');
     const [Nickname, setNickname] = useState('');
+    const [Visible, setVisible] = useState(false);
+    const [ConfirmLoading, setConfirmLoading] = useState(false);
+    const [ModalText, setModalText] = useState('이메일 인증을 진행해주세요.');
+
     const accountclick = event => {
         const container = document.getElementById('container');
         if (event.type === 'click') {
@@ -34,6 +42,13 @@ function LoginPage(props) {
         setPassword(pw);
     };
 
+    const OverlapEmail = () => {
+        console.log(Email);
+        checkEmail(Email)
+            .then(res => console.log(res.data))
+            .catch(err => alert('email이 중복되요'));
+    };
+
     const passwordConfirmHandler = event => {
         const pwconfirm = document.getElementById('passwordConfirm');
         let pw = event.currentTarget.value;
@@ -53,7 +68,7 @@ function LoginPage(props) {
         dispatch(signupUser(body))
             .then(res => {
                 if (res.payload.profile === undefined) {
-                    window.location.replace('/account');
+                    setVisible(true);
                 } else {
                     alert('회원가입에 실패했습니다. ㅠㅠ');
                 }
@@ -65,14 +80,15 @@ function LoginPage(props) {
         const body = { email: LoginEmail, password: Loginpw };
         dispatch(loginUser(body))
             .then(res => {
-                if (res.payload.token !== null) {
+                if (res.payload.user.active === false) {
+                    setModalText('이메일 인증이 안된거 같아요 ㅠㅠ');
+                    setVisible(true);
+                } else if (res.payload.token !== null) {
                     window.localStorage.setItem('token', res.payload.token);
                     props.history.push('/');
-                } else {
-                    alert('아이디/ 비밀번호가 맞지않아요.');
-                }
+                } else alert('아이디 / 비밀번호를 다시 확인해주세요.');
             })
-            .catch(err => alert('로그인에 실패했습니다. ㅠㅠ'));
+            .catch(err => alert('다시 회원가입해줭 ㅠㅠ'));
     };
 
     const ValidEmail = event => {
@@ -97,8 +113,48 @@ function LoginPage(props) {
         setLoginEmail(event.currentTarget.value);
     };
 
+    const handleOk = () => {
+        setConfirmLoading(true);
+
+        setTimeout(() => {
+            setVisible(false);
+            setConfirmLoading(false);
+        }, 2000);
+        window.location.reload();
+    };
+
+    const handleCancel = () => {
+        setVisible(false);
+    };
+
+    const sendEmail = event => {
+        console.log(Email === '');
+        if (Email === '') {
+            redirectEmail(LoginEmail)
+                .then(res => console.log(res))
+                .catch(err => console.log(err));
+        } else {
+            redirectEmail(Email)
+                .then(res => console.log(res))
+                .catch(err => console.log(err));
+        }
+    };
+
     return (
         <div className="account-body">
+            <Modal
+                visible={Visible}
+                onOk={handleOk}
+                confirmLoading={ConfirmLoading}
+                onCancel={handleCancel}
+                style={{ textAlign: 'center' }}
+            >
+                <p style={{ fontSize: '25px', fontWeight: 'bold' }}>{ModalText}</p>
+                <p>인증메일을 받지 못하셨나요?</p>
+                <button class="modal_button" onClick={sendEmail}>
+                    인증메일 요청
+                </button>
+            </Modal>
             <div className="container" id="container">
                 <div className="form-container sign-up-container">
                     <form action="#">
@@ -111,7 +167,9 @@ function LoginPage(props) {
                                 placeholder="Email"
                                 onChange={ValidEmail}
                             />
-                            <button id="check-btn">확인</button>
+                            <button id="check-btn" onClick={OverlapEmail}>
+                                중복확인
+                            </button>
                         </div>
                         <input type="text" placeholder="Nickname" onChange={NicknameHandler} />
                         <input type="password" placeholder="Password" onChange={passwordHandler} />
@@ -156,6 +214,7 @@ function LoginPage(props) {
                                 처음이지?
                             </h1>
                             <p>너의 상세한 정보가 궁금해</p>
+
                             <button className="ghost" id="signUp" onClick={accountclick}>
                                 Sign Up
                             </button>
