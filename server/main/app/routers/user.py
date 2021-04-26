@@ -99,8 +99,6 @@ def login(data: schemas.LoginBase, db: Session = Depends(get_db)):
     current_user = db.query(models.User).filter(models.User.email == data.email).first()
     validate_email(data.email)
     validate_password(data.password)
-    if not current_user.active:
-        raise HTTPException(status_code=401, detail="Verify your e-mail first")
     if verify_password(data.password, current_user.password):
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         jwt_token = create_access_token(
@@ -117,6 +115,19 @@ def check_duplicate_email(email: str, db: Session = Depends(get_db)):
     if e_mail:
         raise HTTPException(status_code=400, detail="Duplicated e-mail")
     return {"data": email}
+
+
+@router.get("/api/emailconfirm/message/{email}", tags=["user"], description="인증 메일 다시 보내기")
+def resend_confirm_email(
+    email: str, background_tasks: BackgroundTasks, db: Session = Depends(get_db)
+):
+    u_data = db.query(models.User).filter(models.User.email == email).first()
+    if not u_data:
+        raise HTTPException(status_code=404, detail="No content(user)")
+    if u_data.active:
+        raise HTTPException(status_code=400, detail="Already verified")
+    background_tasks.add_task(confirm_email, to_email=email)
+    return {"data": "success"}
 
 
 def confirm_email(to_email: str):
@@ -162,4 +173,3 @@ def redirect_site(email: str, db: Session = Depends(get_db)):
         u_data.active = True
         db.commit()
         return RedirectResponse("https://k4d102.p.ssafy.io/account/success")
-    return RedirectResponse("https://k4d102.p.ssafy.io/account/fail")

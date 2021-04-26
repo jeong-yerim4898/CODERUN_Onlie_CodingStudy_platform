@@ -30,13 +30,13 @@ def get_video_detail(
     return {"data": v_data}
 
 
-@router.get("/api/video/page/{count}", tags=["video"], description="동영상 10개씩 리스트로 보기")
+@router.get("/api/video/page/{count}", tags=["video"], description="동영상 12개씩 리스트로 보기")
 def get_video_page(
     count: int,
     db: Session = Depends(get_db),
 ):
     v_data = (
-        db.query(models.Video.title, models.Video.id).offset(count * 10).limit(10).all()
+        db.query(models.Video.title, models.Video.id).offset(count * 12).limit(12).all()
     )
     if not v_data:
         raise HTTPException(status_code=404, detail="No content")
