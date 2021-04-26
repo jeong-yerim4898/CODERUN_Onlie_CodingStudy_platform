@@ -8,55 +8,67 @@ import ClassList from './ClassList';
 function ClassPage() {
     const AlgoSubjects = [
         {
-            _id: 1,
-            name: '자료구조',
+            id: 1,
+            name: '그리디',
         },
         {
-            _id: 2,
-            name: 'DFS',
+            id: 2,
+            name: '구현',
         },
         {
-            _id: 3,
-            name: 'BFS',
+            id: 3,
+            name: 'DFS/ BFS',
         },
         {
-            _id: 4,
+            id: 4,
+            name: '정렬',
+        },
+        {
+            id: 5,
+            name: '이진탐색',
+        },
+        {
+            id: 6,
+            name: 'DP',
+        },
+        {
+            id: 7,
             name: '그래프',
         },
         {
-            _id: 5,
-            name: '정수론',
-        },
-        {
-            _id: 6,
-            name: '난수발생',
+            id: 8,
+            name: '최단경로',
         },
     ];
 
     const CsSubjects = [
         {
-            _id: 1,
-            name: '계산이론',
+            id: 1,
+            name: '자료구조',
         },
         {
-            _id: 2,
-            name: '컴파일러',
+            id: 2,
+            name: '알고리즘',
         },
         {
-            _id: 3,
-            name: '분산처리',
+            id: 3,
+            name: '데이터베이스',
         },
         {
-            _id: 4,
-            name: '컴퓨터 구조',
+            id: 4,
+            name: '네트워크',
         },
         {
-            _id: 5,
-            name: '인공지능',
+            id: 5,
+            name: 'OS',
         },
         {
-            _id: 6,
-            name: '통신',
+            id: 6,
+            name: '컴퓨터구조',
+        },
+        {
+            id: 7,
+            name: '기타',
         },
     ];
 
@@ -64,7 +76,7 @@ function ClassPage() {
         return <Menu.Item key={index}>{subject.name}</Menu.Item>;
     });
     const Css = CsSubjects.map((subject, index) => {
-        return <Menu.Item key={index}>{subject.name}</Menu.Item>;
+        return <Menu.Item key={index + 8}>{subject.name}</Menu.Item>;
     });
     const { SubMenu } = Menu;
     return (
@@ -81,15 +93,7 @@ function ClassPage() {
                         <SubMenu key="sub1" icon={<MailOutlined />} title="Algorithm">
                             {Algos}
                         </SubMenu>
-                    </Menu>
-                    <Menu
-                        // onClick={this.handleClick}
-                        style={{ width: 256 }}
-                        defaultSelectedKeys={['1']}
-                        defaultOpenKeys={['sub1']}
-                        mode="inline"
-                    >
-                        <SubMenu key="sub1" icon={<AppstoreOutlined />} title="Computer Science">
+                        <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Computer Science">
                             {Css}
                         </SubMenu>
                     </Menu>

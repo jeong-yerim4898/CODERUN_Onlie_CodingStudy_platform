@@ -15,6 +15,10 @@ const languages = [
         id: 4,
         name: 'JavaScript',
     },
+    {
+        id: 4,
+        name: '기타',
+    },
 ];
 
 export { languages };
