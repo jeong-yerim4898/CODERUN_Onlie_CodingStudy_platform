@@ -1,12 +1,14 @@
 # 표준 라이브러리
 from datetime import datetime, timedelta
+from hashlib import sha256
 from os import path, getenv
 from sys import path as pth
 from typing import Optional
+from random import choice
 
 # 서드 파티 라이브러리
 from dotenv import load_dotenv
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException
 from fastapi.responses import RedirectResponse
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -111,6 +113,48 @@ def login(data: schemas.LoginBase, db: Session = Depends(get_db)):
             return {"user": current_user, "token": jwt_token}
         return {"user": current_user}
     raise HTTPException(status_code=401, detail="Incorrect user")
+
+
+@router.post("/api/newpassword", tags=["user"], description="비밀번호 찾기 -> 새 비밀번호 주기")
+def get_new_password(
+    background_tasks: BackgroundTasks,
+    user_id: int = Form(...),
+    email: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    u_data = db.query(models.User).filter(models.User.email == email).first()
+    random_arr = [chr(i) for i in range(64, 91)]
+    random_arr += [chr(i) for i in range(97, 123)]
+    random_arr += [str(i) for i in range(10)]
+    random_arr += [chr(i) for i in range(35, 39)]
+    random_arr += ["!"]
+    print(random_arr)
+    if u_data.id == user_id:
+        s = ""
+        for _ in range(12):
+            s += choice(random_arr)
+        background_tasks.add_task(send_new_password, to_email=email, temp_pw=s)
+        res = sha256(s.encode()).hexdigest()
+        pw = get_password_hash(res)
+        u_data.password = pw
+        db.commit()
+        return {"send": "success"}
+    raise HTTPException(status_code=400, detail="Incorrect route")
+
+
+def send_new_password(to_email: str, temp_pw: str):
+    pw = jwt.decode(PW, SECRET_KEY, algorithms=[ALGORITHM])["pw"]
+    yag = yagmail.SMTP(SENDER, pw)
+    to = to_email
+    subject = "CODE:RUN 임시 비밀번호"
+    body = ""
+    html = f"""
+    <h1>안녕하세요 CODE:RUN입니다.</h1>
+    <h3>회원님의 임시 비밀번호는 {temp_pw} 입니다.</h3>
+    """
+    img = ""
+    yag.send(to=to, subject=subject, contents=[body, html, img])
+    return {"send": "success"}
 
 
 @router.get("/api/emailcheck/{email}", tags=["user"], description="이메일 가입 중복 체크")
