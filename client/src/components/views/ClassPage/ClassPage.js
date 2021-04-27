@@ -1,83 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
 import './ClassPage.css';
 import 'antd/dist/antd.css';
-import { Row, Col, Menu } from 'antd';
+
+import { getAlgoTag, getCsTag } from '_api/Class.js';
+
+import { Row, Col, Menu, Button } from 'antd';
 import { AppstoreOutlined, MailOutlined } from '@ant-design/icons';
 import ClassList from './ClassList';
 
 function ClassPage() {
-    const AlgoSubjects = [
-        {
-            id: 1,
-            name: '그리디',
-        },
-        {
-            id: 2,
-            name: '구현',
-        },
-        {
-            id: 3,
-            name: 'DFS/ BFS',
-        },
-        {
-            id: 4,
-            name: '정렬',
-        },
-        {
-            id: 5,
-            name: '이진탐색',
-        },
-        {
-            id: 6,
-            name: 'DP',
-        },
-        {
-            id: 7,
-            name: '그래프',
-        },
-        {
-            id: 8,
-            name: '최단경로',
-        },
-    ];
+    const [Algos, setAlgos] = useState([]);
+    const [Css, setCss] = useState([]);
 
-    const CsSubjects = [
-        {
-            id: 1,
-            name: '자료구조',
-        },
-        {
-            id: 2,
-            name: '알고리즘',
-        },
-        {
-            id: 3,
-            name: '데이터베이스',
-        },
-        {
-            id: 4,
-            name: '네트워크',
-        },
-        {
-            id: 5,
-            name: 'OS',
-        },
-        {
-            id: 6,
-            name: '컴퓨터구조',
-        },
-        {
-            id: 7,
-            name: '기타',
-        },
-    ];
+    useEffect(() => {
+        getAlgoTag().then(res => {
+            console.log('algo', res.data.data);
+            const algoTag = res.data.data;
+            // console.log(languageTag);
+            setAlgos(algoTag);
+        });
+        getCsTag().then(res => {
+            console.log('cs', res.data.data);
+            const csTag = res.data.data;
+            // console.log(languageTag);
+            setCss(csTag);
+        });
+    }, []);
+    const renderAlgo = Algos.map((Algo, index) => {
+        return <Menu.Item key={index}>{Algo.algorithm_name}</Menu.Item>;
+    });
+    const renderCs = Css.map((Cs, index) => {
+        return <Menu.Item key={index + Algos.length}>{Cs.subject_name}</Menu.Item>;
+    });
 
-    const Algos = AlgoSubjects.map((subject, index) => {
-        return <Menu.Item key={index}>{subject.name}</Menu.Item>;
-    });
-    const Css = CsSubjects.map((subject, index) => {
-        return <Menu.Item key={index + 8}>{subject.name}</Menu.Item>;
-    });
     const { SubMenu } = Menu;
     return (
         <div className="pageboard">
@@ -91,10 +47,10 @@ function ClassPage() {
                         mode="inline"
                     >
                         <SubMenu key="sub1" icon={<MailOutlined />} title="Algorithm">
-                            {Algos}
+                            {renderAlgo}
                         </SubMenu>
                         <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Computer Science">
-                            {Css}
+                            {renderCs}
                         </SubMenu>
                     </Menu>
                 </Col>
