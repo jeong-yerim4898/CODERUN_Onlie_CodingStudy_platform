@@ -120,8 +120,6 @@ def get_video_comment(
         .filter(models.VideoComment.video_id == video_id)
         .all()
     )
-    if not vc_data:
-        raise HTTPException(status_code=404, detail="No content")
     return {"data": vc_data}
 
 

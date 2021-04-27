@@ -137,7 +137,7 @@ def get_video_detail(
     if table == "subject_user_tag":
         return {"data": db.query(models.SubjectUserTag).all()}
     if table == "board":
-        return {"data": db.query(models.board).all()}
+        return {"data": db.query(models.Board).all()}
     if table == "board_comment":
         return {"data": db.query(models.BoardComment).all()}
 
