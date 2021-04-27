@@ -1,7 +1,9 @@
 // import logo from './logo.svg';
+import React, { Suspense } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
+import Auth from 'hoc/auth';
 
 import AccountPage from './components/views/Accounts/AccountPage';
 import AccountSuccess from './components/views/Accounts/AccountSuccess';
@@ -21,24 +23,25 @@ import WatchPage from './components/views/WatchPage/WatchPage';
 
 function App() {
     return (
-        <BrowserRouter>
-            <NavBar></NavBar>
-            <Switch>
-                <Route exact path="/" component={MainPage}></Route>
-                <Route exact path="/account" component={AccountPage}></Route>
+        <Suspense fallback={<div>Loading...</div>}>
+            <BrowserRouter>
+                <>
+                    <NavBar></NavBar>
+                    <Route exact path="/account" component={AccountPage}></Route>
+                    <Route exact path="/" component={Auth(MainPage, null)}></Route>
+                    {/* <Route exact path="/account" component={AccountPage}></Route> */}
+                    <Route exact path="/account/success" component={AccountSuccess}></Route>
+                    <Route exact path="/class" component={Auth(ClassPage, null)}></Route>
+                    <Route exact path="/watch/:id" component={Auth(WatchPage, true)}></Route>
 
-                <Route exact path="/account/success" component={AccountSuccess}></Route>
-                <Route exact path="/class" component={ClassPage}></Route>
-                <Route exact path="/watch/:id" component={WatchPage}></Route>
-                <Route exact path="/classlist" component={ClassList}></Route>
-                <Route exact path="/community" component={CommunityPage}></Route>
-
-                {/* <Route
+                    {/* <Route
                     render={() => <div className="error">에러 페이지</div>}
                 /> */}
-            </Switch>
-            <Footer></Footer>
-        </BrowserRouter>
+
+                    <Footer></Footer>
+                </>
+            </BrowserRouter>
+        </Suspense>
     );
 }
 
