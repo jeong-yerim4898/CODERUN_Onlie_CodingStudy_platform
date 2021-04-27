@@ -56,3 +56,14 @@ class BoardCommentBase(BaseModel):
 
 class BoardSelectBase(BaseModel):
     board_comment_id: int
+
+
+class BoardUpdateBase(BaseModel):
+    board_id: int
+    title: str
+    content: Optional[str] = None
+
+
+class BoardCommentUpdateBase(BaseModel):
+    board_comment_id: int
+    content: Optional[str] = None

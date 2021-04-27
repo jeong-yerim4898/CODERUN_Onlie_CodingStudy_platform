@@ -35,8 +35,56 @@ def post_board(
     return {"data": board_data}
 
 
+@router.get("/api/board/detail/{board_id}", tags=["board"], description="게시판 글 조회(DETAIL)")
+def get_board_detail(
+    board_id: int,
+    token: Optional[str] = Header(None),
+    db: Session = Depends(get_db),
+):
+    # get_current_user(token, db)
+    board_data = db.query(models.Board).filter(models.Board.id == board_id).first()
+    if not board_data:
+        raise HTTPException(status_code=404, detail="No content")
+    return {"data": board_data}
 
-@router.post("/api/board/comment", tags=["board"], description="게시판 답변 글 작성")
+
+@router.put("/api/board/update", tags=["board"], description="게시판 글 수정(UPDATE)")
+def update_board(
+    data: schemas.BoardUpdateBase,
+    token: Optional[str] = Header(None),
+    db: Session = Depends(get_db),
+):
+    current_user = get_current_user(token, db)
+    board_data = db.query(models.Board).filter(models.Board.id == data.board_id).first()
+    if not board_data:
+        raise HTTPException(status_code=404, detail="No content")
+    if current_user.id != board_data.user_id:
+        raise HTTPException(status_code=401, detail="Incorrect user")
+    board_data.title = data.title
+    board_data.content = data.content
+    db.commit()
+    db.refresh(board_data)
+    return {"data": board_data}
+
+
+@router.delete("/api/board/delete/{board_id}", tags=["board"], description="게시판 글 삭제(DELETE))")
+def delete_board(
+    board_id: int,
+    token: Optional[str] = Header(None),
+    db: Session = Depends(get_db),
+):
+    current_user = get_current_user(token, db)
+    board_data = db.query(models.Board).filter(models.Board.id == board_id).first()
+    if not board_data:
+        raise HTTPException(status_code=404, detail="No content")
+    if current_user.id != board_data.user_id:
+        raise HTTPException(status_code=401, detail="Incorrect user")
+    db.delete(board_data)
+    db.commit()
+    return {"delete": board_id}
+
+
+@router.post("/api/board/comment", tags=["board"], description="게시판 답변 글 작성(CREATE)")
 def post_board_comment(
     data: schemas.BoardCommentBase,
     token: Optional[str] = Header(None),
@@ -52,6 +100,56 @@ def post_board_comment(
     db.commit()
     db.refresh(board_comment_data)
     return {"data": board_comment_data}
+
+
+@router.get("/api/board/comment/{board_id}", tags=["board"], description="게시판 답변 글 조회(READ)")
+def get_board_comment(
+    board_id: int,
+    token: Optional[str] = Header(None),
+    db: Session = Depends(get_db)
+):
+    get_current_user(token, db)
+    bc_data = (
+        db.query(models.BoardComment)
+        .filter(models.BoardComment.board_id == board_id)
+        .all()
+    )
+    return {"data": bc_data}
+
+
+@router.put("/api/board/comment/update", tags=["board"], description="게시판 답변 글 수정(UPDATE)")
+def update_board_comment(
+    data: schemas.BoardCommentUpdateBase,
+    token: Optional[str] = Header(None),
+    db: Session = Depends(get_db),
+):
+    current_user = get_current_user(token, db)
+    board_comment_data = db.query(models.BoardComment).filter(models.BoardComment.id == data.board_comment_id).first()
+    if not board_comment_data:
+        raise HTTPException(status_code=404, detail="No content")
+    if current_user.id != board_comment_data.user_id:
+        raise HTTPException(status_code=401, detail="Incorrect user")
+    board_comment_data.content = data.content
+    db.commit()
+    db.refresh(board_comment_data)
+    return {"data": board_comment_data}
+
+
+@router.delete("/api/board/comment/delete/{board_comment_id}", tags=["board"], description="게시판 답변 글 삭제(DELETE))")
+def delete_board_comment(
+    board_comment_id: int,
+    token: Optional[str] = Header(None),
+    db: Session = Depends(get_db),
+):
+    current_user = get_current_user(token, db)
+    board_comment_data = db.query(models.BoardComment).filter(models.BoardComment.id == board_comment_id).first()
+    if not board_comment_data:
+        raise HTTPException(status_code=404, detail="No content")
+    if current_user.id != board_comment_data.user_id:
+        raise HTTPException(status_code=401, detail="Incorrect user")
+    db.delete(board_comment_data)
+    db.commit()
+    return {"delete": board_comment_id}
 
 
 @router.put("/api/board/comment/select", tags=["board"], description="게시판 답변 채택")
