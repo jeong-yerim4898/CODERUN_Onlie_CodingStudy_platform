@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Space, Input, Card, Row, Col } from 'antd';
 import './ClassList.css';
 import LanguageBox from './Sections/LanguageBox';
-import { languages } from './Sections/Languages';
 
 function ClassList() {
     const [Filters, setFilters] = useState({
@@ -101,28 +100,6 @@ function ClassList() {
         );
     });
 
-    const showFilteredResults = filters => {
-        let body = {
-            skip: 0,
-            // limit: Limit,
-            filters: filters,
-        };
-
-        // getProducts(body);
-        setSkip(0);
-    };
-
-    const handleFilters = (filters, category) => {
-        const newFilters = { ...Filters };
-
-        newFilters[category] = filters;
-
-        console.log('filters', filters);
-
-        showFilteredResults(newFilters);
-        setFilters(newFilters);
-    };
-
     return (
         <div>
             <Space size={2}>
@@ -134,10 +111,7 @@ function ClassList() {
                     style={{ margin: 5 }}
                     // onSearch={onSearch}
                 />
-                <LanguageBox
-                    list={languages}
-                    handleFilters={filters => handleFilters(filters, 'languages')}
-                />
+                <LanguageBox />
             </Space>
             <Row className="board">{renderCards}</Row>
         </div>
