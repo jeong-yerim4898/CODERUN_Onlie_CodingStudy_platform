@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
+import storage from 'redux-persist/lib/storage';
+
 import user from './user_reducer';
 import { LOGOUT_USER } from '../_actions/types';
-import storage from 'redux-persist/lib/storage';
 
 const appReducer = combineReducers({
     //user

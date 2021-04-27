@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import './AccountPage.css';
 import { Modal } from 'antd';
-import { useSelector } from 'react-redux';
 
 import { loginUser, signupUser } from '_actions/user_actions';
 import { redirectEmail, checkEmail } from '_api/User';
 import { useDispatch } from 'react-redux';
+import a from './Section/emailcheck.svg';
 
 function LoginPage(props) {
-    let user = useSelector(state => state.user);
     const dispatch = useDispatch();
     const [HashPasswordConfirm, setHashPasswordConfirm] = useState('');
     const [Password, setPassword] = useState('');
@@ -42,10 +41,10 @@ function LoginPage(props) {
         setPassword(pw);
     };
 
-    const OverlapEmail = () => {
-        console.log(Email);
+    const OverlapEmail = event => {
+        event.preventDefault();
         checkEmail(Email)
-            .then(res => console.log(res.data))
+            .then(res => alert('email 쌉가능'))
             .catch(err => alert('email이 중복되요'));
     };
 
@@ -63,7 +62,8 @@ function LoginPage(props) {
         }
     };
 
-    const postSignup = () => {
+    const postSignup = event => {
+        event.preventDefault();
         const body = { email: Email, password: HashPasswordConfirm, name: Nickname };
         dispatch(signupUser(body))
             .then(res => {
@@ -76,17 +76,19 @@ function LoginPage(props) {
             .catch(err => console.log(err));
     };
 
-    const postLogin = () => {
+    const postLogin = event => {
+        event.preventDefault();
+        console.log('여기가지');
         const body = { email: LoginEmail, password: Loginpw };
         dispatch(loginUser(body))
             .then(res => {
                 if (res.payload.user.active === false) {
                     setModalText('이메일 인증이 안된거 같아요 ㅠㅠ');
                     setVisible(true);
-                } else if (res.payload.token !== null) {
+                } else {
                     window.localStorage.setItem('token', res.payload.token);
                     props.history.push('/');
-                } else alert('아이디 / 비밀번호를 다시 확인해주세요.');
+                }
             })
             .catch(err => alert('다시 회원가입해줭 ㅠㅠ'));
     };
