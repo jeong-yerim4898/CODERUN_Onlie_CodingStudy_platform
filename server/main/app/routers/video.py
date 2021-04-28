@@ -27,6 +27,8 @@ def get_video_detail(
     v_data = db.query(models.Video).filter(models.Video.id == video_id).first()
     if not v_data:
         raise HTTPException(status_code=404, detail="No content")
+    v_data.subject_user_tag
+    v_data.algorithm_user_tag
     return {"data": v_data}
 
 
@@ -36,8 +38,18 @@ def get_video_page(
     db: Session = Depends(get_db),
 ):
     v_data = (
-        db.query(models.Video.title, models.Video.id).offset(count * 12).limit(12).all()
+        db.query(models.Video)
+        .offset(count * 12)
+        .limit(12)
+        .all()
     )
+    for i in range(len(v_data)):
+        v_data[i].subject_user_tag
+        v_data[i].algorithm_user_tag
+        del v_data[i].content
+        del v_data[i].created_date
+        del v_data[i].updated_date
+    
     if not v_data:
         raise HTTPException(status_code=404, detail="No content")
     return {"data": v_data}
@@ -59,10 +71,23 @@ def post_video(
     db.add(v_data)
     db.commit()
     db.refresh(v_data)
-    v_data.thumbnail = f"https://k4d102.p.ssafy.io/image/thumbnail/{v_data.id}"
-    db.commit()
-    db.refresh(v_data)
-    return {"data": v_data}
+    try:
+        for i in data.algorithm_tag_ids:
+            sut_data = models.AlgorithmUserTag(video_id=v_data.id, algorithm_tag_id=i)
+            db.add(sut_data)
+        for i in data.subject_tag_ids:
+            aut_data = models.SubjectUserTag(video_id=v_data.id, subject_tag_id=i)
+            db.add(aut_data)
+        v_data.thumbnail = f"https://k4d102.p.ssafy.io/image/thumbnail/{v_data.id}"
+        db.commit()
+        db.refresh(v_data)
+        v_data.subject_user_tag
+        v_data.algorithm_user_tag
+        return {"data": v_data}
+    except:
+        db.delete(v_data)
+        db.commit()
+    raise HTTPException(status_code=422, detail="Unprocessable entity")
 
 
 @router.put("/api/video/update", tags=["video"], description="동영상 게시물 수정")
@@ -80,9 +105,22 @@ def update_video(
     v_data.title = data.title
     v_data.content = data.content
     v_data.language_tag_id = data.language_tag_id
-    db.commit()
-    db.refresh(v_data)
-    return {"data": v_data}
+    try:
+        v_data.subject_user_tag = []
+        v_data.algorithm_user_tag = []
+        for i in data.algorithm_tag_ids:
+            sut_data = models.AlgorithmUserTag(video_id=v_data.id, algorithm_tag_id=i)
+            db.add(sut_data)
+        for i in data.subject_tag_ids:
+            aut_data = models.SubjectUserTag(video_id=v_data.id, subject_tag_id=i)
+            db.add(aut_data)
+        db.commit()
+        db.refresh(v_data)
+        v_data.subject_user_tag
+        v_data.algorithm_user_tag
+        return {"data": v_data}
+    except:
+        raise HTTPException(status_code=422, detail="Unprocessable entity")
 
 
 @router.delete("/api/video/delete/{video_id}", tags=["video"], description="동영상 게시물 삭제")
