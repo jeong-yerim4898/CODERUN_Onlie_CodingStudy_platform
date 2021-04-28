@@ -27,6 +27,6 @@ def get_algorithm_tag(db: Session = Depends(get_db)):
     return {"data": db.query(models.AlgorithmTag).all()}
 
 
-@router.get("/api/tag/cs", tags=["tag"], description="CS 태그 리스트 확인")
+@router.get("/api/tag/subject", tags=["tag"], description="CS 태그 리스트 확인")
 def get_subject_tag(db: Session = Depends(get_db)):
     return {"data": db.query(models.SubjectTag).all()}

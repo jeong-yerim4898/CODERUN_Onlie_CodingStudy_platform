@@ -25,6 +25,8 @@ class VideoBase(BaseModel):
     title: str
     content: Optional[str] = None
     language_tag_id: Optional[int] = None
+    algorithm_tag_ids: Optional[list] = []
+    subject_tag_ids: Optional[list] = []
 
 
 class VideoUpdateBase(BaseModel):
@@ -32,6 +34,8 @@ class VideoUpdateBase(BaseModel):
     title: str
     content: Optional[str] = None
     language_tag_id: Optional[int] = None
+    algorithm_tag_ids: Optional[list] = []
+    subject_tag_ids: Optional[list] = []
 
 
 class VideoCommentBase(BaseModel):

@@ -118,39 +118,36 @@ def login(data: schemas.LoginBase, db: Session = Depends(get_db)):
 @router.post("/api/newpassword", tags=["user"], description="비밀번호 찾기 -> 새 비밀번호 주기")
 def get_new_password(
     background_tasks: BackgroundTasks,
-    user_id: int = Form(...),
     email: str = Form(...),
     db: Session = Depends(get_db),
 ):
     u_data = db.query(models.User).filter(models.User.email == email).first()
+    if not u_data:
+        raise HTTPException(status_code=404, detail="No user")
     random_arr = [chr(i) for i in range(64, 91)]
     random_arr += [chr(i) for i in range(97, 123)]
     random_arr += [str(i) for i in range(10)]
     random_arr += [chr(i) for i in range(35, 39)]
     random_arr += ["!"]
-    print(random_arr)
-    if u_data.id == user_id:
-        s = ""
-        for _ in range(12):
-            s += choice(random_arr)
-        background_tasks.add_task(send_new_password, to_email=email, temp_pw=s)
-        res = sha256(s.encode()).hexdigest()
-        pw = get_password_hash(res)
-        u_data.password = pw
-        db.commit()
-        return {"send": "success"}
-    raise HTTPException(status_code=400, detail="Incorrect route")
+    s = ""
+    for _ in range(12):
+        s += choice(random_arr)
+    background_tasks.add_task(send_new_password, to_email=email, temp_pw=s, user_id=u_data.id)
+    return {"send": "success"}
 
 
-def send_new_password(to_email: str, temp_pw: str):
+def send_new_password(to_email: str, temp_pw: str, user_id: int):
     pw = jwt.decode(PW, SECRET_KEY, algorithms=[ALGORITHM])["pw"]
+    res = sha256(temp_pw.encode()).hexdigest()
     yag = yagmail.SMTP(SENDER, pw)
     to = to_email
     subject = "CODE:RUN 임시 비밀번호"
     body = ""
     html = f"""
     <h1>안녕하세요 CODE:RUN입니다.</h1>
-    <h3>회원님의 임시 비밀번호는 {temp_pw} 입니다.</h3>
+    <h3>회원님의 임시 비밀번호는 {temp_pw} 입니다. </h3>
+    <h3>밑의 버튼을 누르면 회원님의 비밀번호가 임시 비밀번호로 변경됩니다.</h3>
+    <a href="https://k4d102.p.ssafy.io/api/newpassword/redirect/{to_email}/{user_id}/{res}"> 비밀번호 변경 </a>
     """
     img = ""
     yag.send(to=to, subject=subject, contents=[body, html, img])
@@ -230,4 +227,20 @@ def redirect_site(email: str, user_id: int, db: Session = Depends(get_db)):
             u_data.active = True
             db.commit()
             return RedirectResponse("https://k4d102.p.ssafy.io/account/success")
+    raise HTTPException(status_code=400, detail="Incorrect route")
+
+
+@router.get(
+    "/api/newpassword/redirect/{email}/{user_id}/{tmp_pw}",
+    tags=["user"],
+    description="변경 후 페이지 리다이렉트",
+)
+def redirect_site_pw(email: str, user_id: int, tmp_pw: str, db: Session = Depends(get_db)):
+    u_data = db.query(models.User).filter(models.User.email == email).first()
+    if u_data:
+        if u_data.id == user_id:
+            pw = get_password_hash(tmp_pw)
+            u_data.password = pw
+            db.commit()
+            return RedirectResponse("https://k4d102.p.ssafy.io/account")
     raise HTTPException(status_code=400, detail="Incorrect route")

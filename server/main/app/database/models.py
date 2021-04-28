@@ -17,7 +17,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(320), unique=True, index=True, nullable=False)
     name = Column(String(20), index=True, nullable=False)
-    profile = Column(String(256))
+    profile = Column(String(256), default="https://k4d102.p.ssafy.io/image/profile/0")
     password = Column(String(64), nullable=False)
     active = Column(Boolean, default=False)
     join_date = Column(DateTime(timezone=True), server_default=func.now())
@@ -40,7 +40,7 @@ class Video(Base):
     title = Column(String(100), index=True, nullable=False)
     content = Column(Text)
     language_tag_id = Column(Integer, ForeignKey("language_tag.id", ondelete='CASCADE'))
-    thumbnail = Column(String(256))
+    thumbnail = Column(String(256), default="https://k4d102.p.ssafy.io/image/thumbnail/0")
     created_date = Column(DateTime(timezone=True), server_default=func.now())
     updated_date = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
@@ -48,6 +48,7 @@ class Video(Base):
     like = relationship("Like", backref="video", passive_deletes=True)
     video_list_data = relationship("VideoListData", backref="video", passive_deletes=True)
     subject_user_tag = relationship("SubjectUserTag", backref="video", passive_deletes=True)
+    algorithm_user_tag = relationship("AlgorithmUserTag", backref="video", passive_deletes=True)
 
 # 동영상 댓글
 class VideoComment(Base):

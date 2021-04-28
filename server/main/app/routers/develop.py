@@ -136,6 +136,10 @@ def get_video_detail(
         return {"data": db.query(models.SubjectTag).all()}
     if table == "subject_user_tag":
         return {"data": db.query(models.SubjectUserTag).all()}
+    if table == "algorithm_tag":
+        return {"data": db.query(models.AlgorithmTag).all()}
+    if table == "algorithm_user_tag":
+        return {"data": db.query(models.AlgorithmUserTag).all()}
     if table == "board":
         return {"data": db.query(models.Board).all()}
     if table == "board_comment":
@@ -178,7 +182,7 @@ def create_algorithm_init_tags(pw: str, db: Session = Depends(get_db)):
     return {"data": f"Add {len(algorithms) - cnt} algorithms in Algorithm Tag Table"}
 
 
-@router.get("/api/develop/create/tag/cs/{pw}", tags=["develop"], description="CS 태그 초기데이터 생성")
+@router.get("/api/develop/create/tag/subject/{pw}", tags=["develop"], description="CS 태그 초기데이터 생성")
 def create_cs_init_tags(pw: str, db: Session = Depends(get_db)):
     cses = ["네트워크", "데이터베이스", "알고리즘", "운영체제", "자료구조", "컴퓨터구조", "기타"]
     cnt = 0
