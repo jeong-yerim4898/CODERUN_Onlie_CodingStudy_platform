@@ -8,7 +8,7 @@ from random import choice
 
 # 서드 파티 라이브러리
 from dotenv import load_dotenv
-from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, Form, Header, HTTPException
 from fastapi.responses import RedirectResponse
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -132,7 +132,9 @@ def get_new_password(
     s = ""
     for _ in range(12):
         s += choice(random_arr)
-    background_tasks.add_task(send_new_password, to_email=email, temp_pw=s, user_id=u_data.id)
+    background_tasks.add_task(
+        send_new_password, to_email=email, temp_pw=s, user_id=u_data.id
+    )
     return {"send": "success"}
 
 
@@ -235,7 +237,9 @@ def redirect_site(email: str, user_id: int, db: Session = Depends(get_db)):
     tags=["user"],
     description="변경 후 페이지 리다이렉트",
 )
-def redirect_site_pw(email: str, user_id: int, tmp_pw: str, db: Session = Depends(get_db)):
+def redirect_site_pw(
+    email: str, user_id: int, tmp_pw: str, db: Session = Depends(get_db)
+):
     u_data = db.query(models.User).filter(models.User.email == email).first()
     if u_data:
         if u_data.id == user_id:
@@ -244,3 +248,38 @@ def redirect_site_pw(email: str, user_id: int, tmp_pw: str, db: Session = Depend
             db.commit()
             return RedirectResponse("https://k4d102.p.ssafy.io/account")
     raise HTTPException(status_code=400, detail="Incorrect route")
+
+
+@router.get("/api/user/data/{user_id}", tags=["user"], description="유저 상세 정보 조회")
+def get_user_data(
+    user_id: int, token: Optional[str] = Header(None), db: Session = Depends(get_db)
+):
+    get_current_user(token, db)
+    u_data = db.query(models.User).filter(models.User.id == user_id).first()
+    if u_data:
+        del u_data.password
+        del u_data.security_count
+        del u_data.active
+        return {"data": u_data}
+    raise HTTPException(status_code=404, detail="No content")
+
+
+@router.put("/api/user/data/update", tags=["user"], description="유저 정보 수정")
+def update_user_data(
+    data: schemas.UserUpdateBase, token: Optional[str] = Header(None), db: Session = Depends(get_db)
+):
+    current_user = get_current_user(token, db)
+    u_data = db.query(models.User).filter(models.User.id == current_user.id).first()
+    if u_data:
+        if data.password:
+            pw = get_password_hash(data.password)
+            u_data.password = pw
+        if data.name:
+            u_data.name = data.name
+        db.commit()
+        db.refresh(u_data)
+        del u_data.password
+        del u_data.security_count
+        del u_data.active
+        return {"data": u_data}
+    raise HTTPException(status_code=404, detail="No content")
