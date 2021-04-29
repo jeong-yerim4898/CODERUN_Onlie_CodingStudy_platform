@@ -40,7 +40,7 @@ function App() {
                     <Route exact path="/" component={Auth(MainPage, null)}></Route>
                     <Route exact path="/account/success" component={AccountSuccess}></Route>
                     <Route exact path="/class" component={Auth(ClassPage, null)}></Route>
-                    <Route exact path="/profile" component={Auth(MyPage, true)}></Route>
+                    <Route exact path="/profile/:user_id" component={Auth(MyPage, true)}></Route>
                     <Route exact path="/community" component={Auth(CommunityPage, null)}></Route>
                     <Route
                         exact

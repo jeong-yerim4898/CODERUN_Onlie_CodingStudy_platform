@@ -87,7 +87,8 @@ function LoginPage(props) {
                     setVisible(true);
                 } else {
                     window.localStorage.setItem('token', res.payload.token);
-                    props.history.push('/');
+                    window.location.replace('/');
+                    // props.history.push('/');
                 }
             })
             .catch(err => alert('다시 회원가입해줭 ㅠㅠ'));
