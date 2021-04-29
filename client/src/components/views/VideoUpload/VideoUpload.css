@@ -1,10 +1,13 @@
+.hidden {
+	display: none;
+}
 
 @media (min-width: 1024px) {
 	.page {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
 		grid-template-areas:
-			"  video-preview    progress    progress "
+			"  video-preview    video-content    video-tag "
 			"  video-preview    video-content   video-tag  "
 			"  video-preview    video-content   video-tag "
 			"  video-preview    video-content   video-tag ";
@@ -13,17 +16,15 @@
 		grid-area:video-preview;
     margin:2rem 2rem 4rem 2rem; /*위 오른쪽 아래 왼쪽*/
 	}
-	.progress {
-		grid-area: progress;
-    margin:2rem 2rem 4rem 2rem; /*위 오른쪽 아래 왼쪽*/
-	}
+	
 	.video-content {
     margin-top:5rem;
 		grid-area: video-content;
 	}
 	.video-tag {
 		grid-area: video-tag;
-    padding:1rem
+    padding:1rem;
+		margin-top:4rem;
 	}
 
 }

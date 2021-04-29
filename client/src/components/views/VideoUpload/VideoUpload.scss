@@ -21,12 +21,12 @@ videotag-container{
   appearance: none;
   background-color: $button-bg;
   color: $button-text-color;
-  border-radius: 4px;
+  border-radius: 20px;
   border: none;
   cursor: pointer;
   position: relative;
   transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
-  box-shadow: 0 2px 20px #009b5d;
+  box-shadow: 0 2px 10px #009b5d;
   
   &:focus {
     outline: 0;
@@ -92,6 +92,9 @@ videotag-container{
       animation: bottomBubbles ease-in-out 0.75s forwards;
     }
   }
+}
+.bubbly-button-select {
+  background-color: grey
 }
 
 
