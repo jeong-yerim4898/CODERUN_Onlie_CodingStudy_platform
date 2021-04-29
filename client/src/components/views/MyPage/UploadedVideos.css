@@ -1,0 +1,18 @@
+.uploadedvideo {
+  text-align: center;
+  justify-content: center;
+}
+
+
+.colcard {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+
+.board {
+  display: flex;
+  justify-content: start;
+  margin-left: 80px;
+}

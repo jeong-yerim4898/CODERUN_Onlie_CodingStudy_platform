@@ -4,7 +4,6 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Auth from 'hoc/auth';
-
 import AccountPage from './components/views/Accounts/AccountPage';
 import AccountSuccess from './components/views/Accounts/AccountSuccess';
 import ClassList from './components/views/ClassPage/ClassList';
