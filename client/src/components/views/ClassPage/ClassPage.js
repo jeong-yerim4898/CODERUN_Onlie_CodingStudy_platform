@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './ClassPage.css';
 import 'antd/dist/antd.css';
 
-import { getAlgoTag, getCsTag } from '_api/Class.js';
+import { fetchCSTag, fetchAlgorithmTag } from '_api/Tag.js';
 
 import { Row, Col, Menu, Button } from 'antd';
 import { AppstoreOutlined, MailOutlined } from '@ant-design/icons';
@@ -14,13 +14,13 @@ function ClassPage() {
     const [Css, setCss] = useState([]);
 
     useEffect(() => {
-        getAlgoTag().then(res => {
+        fetchAlgorithmTag().then(res => {
             console.log('algo', res.data.data);
             const algoTag = res.data.data;
             // console.log(languageTag);
             setAlgos(algoTag);
         });
-        getCsTag().then(res => {
+        fetchCSTag().then(res => {
             console.log('cs', res.data.data);
             const csTag = res.data.data;
             // console.log(languageTag);

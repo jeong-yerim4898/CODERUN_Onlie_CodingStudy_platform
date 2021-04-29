@@ -13,3 +13,9 @@ export function detailArticle(id) {
         headers: { token: ACCESS_TOKEN },
     });
 }
+
+export function deleteArticle(id) {
+    return axios.delete(`${SERVER}/api/board/delete/${id}`, {
+        headers: { token: ACCESS_TOKEN },
+    });
+}

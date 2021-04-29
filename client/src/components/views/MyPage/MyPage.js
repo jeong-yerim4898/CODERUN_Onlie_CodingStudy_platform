@@ -7,7 +7,7 @@ import MyPlayList from './MyPlayList.js';
 
 function MyPage() {
     return (
-        <>
+        <div>
             <Container fluid>
                 <Row>
                     <Col md="10"></Col>
@@ -21,7 +21,7 @@ function MyPage() {
                 <Row>
                     <Col md="8">
                         {/* 내 재생 리스트 */}
-                        {/* <MyPlayList /> */}
+                        <MyPlayList />
                     </Col>
                     {/* 사용자프로필 */}
                     <Col md="4">
@@ -76,7 +76,7 @@ function MyPage() {
                     </Card.Body>
                 </Card> */}
             </Container>
-        </>
+        </div>
     );
 }
 
