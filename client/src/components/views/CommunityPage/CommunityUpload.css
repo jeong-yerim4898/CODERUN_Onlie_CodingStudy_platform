@@ -1,0 +1,13 @@
+.uploadcontainer {
+  height: 600px;
+}
+
+.uploadform {
+  margin-top: 50px;
+}
+
+.uploadbutton {
+  /* display: flex;
+  justify-content: flex-end; */
+  float: right;
+}
