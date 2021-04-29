@@ -1,11 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { Avatar } from 'antd';
+
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import './NavBar.css';
 import NavBarSearch from './NavBarSearch.js';
+import { SERVER } from 'Config.js';
 
-function NavBar() {
+//api
+import { fetchProfileImage } from '_api/Profile';
+
+function NavBar(props) {
+    let user = useSelector(state => state.user);
+    const [imageUrl, setimageUrl] = useState('');
+    useEffect(() => {
+        setimageUrl(`${SERVER}/image/profile/${user.login.user.id}`);
+    }, []);
+
+    //기본 데이터 넣기
+    const renderImageUrl = () => {
+        setimageUrl(fetchProfileImage(0));
+    };
+
     return (
         <div className="Nav">
             <Navbar
@@ -34,22 +53,37 @@ function NavBar() {
                             </Nav.Link>
                         </Nav.Item>
                     </Nav>
-                    <Nav className="NavMenu">
+                    <Nav className="NavMenu-right">
                         {/* 검색창 */}
-                        <Nav.Item className="NavItem">
+                        <Nav.Item className="NavItem-right">
                             <NavBarSearch />
                         </Nav.Item>
                         {/* 동영상업로드 버튼 */}
-                        <Nav.Item className="NavItem">
+                        <Nav.Item className="NavItem-right">
                             <Button variant="outline-info" href="upload/video">
                                 <FontAwesomeIcon icon={faPlus} className="NavVideoBtn" />
                             </Button>
                         </Nav.Item>
                         {/* 로그인/회원가입 버튼 */}
-                        <Nav.Item className="NavItem">
-                            <a href="/account">
-                                <button className="Nav-AccountBtn">LogIn</button>
-                            </a>
+                        <Nav.Item className="NavItem-right">
+                            {window.localStorage.getItem('token') !== null ? (
+                                <Link to={`/profile/${user.login.user.id}`}>
+                                    <Avatar
+                                        size={45}
+                                        src={
+                                            <img
+                                                src={imageUrl}
+                                                alt="없음"
+                                                onError={renderImageUrl}
+                                            />
+                                        }
+                                    />
+                                </Link>
+                            ) : (
+                                <a href="/account">
+                                    <button className="Nav-AccountBtn">LogIn</button>
+                                </a>
+                            )}
                         </Nav.Item>
                     </Nav>
                 </Navbar.Collapse>
