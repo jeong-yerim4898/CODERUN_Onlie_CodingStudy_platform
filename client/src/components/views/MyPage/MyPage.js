@@ -20,7 +20,7 @@ function MyPage() {
                 </Row>
                 <Row>
                     <Col md="8">
-                        {/* 내 재생 리스트 */}
+                        {/* 나의 재생 리스트 */}
                         <MyPlayList />
                     </Col>
                     {/* 사용자프로필 */}
