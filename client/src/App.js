@@ -9,6 +9,8 @@ import AccountSuccess from './components/views/Accounts/AccountSuccess';
 import ClassList from './components/views/ClassPage/ClassList';
 import ClassPage from './components/views/ClassPage/ClassPage';
 import CommunityPage from './components/views/CommunityPage/CommunityPage';
+import CommunityUpload from './components/views/CommunityPage/CommunityUpload';
+import CommunityDetail from './components/views/CommunityPage/CommunityDetail';
 import Footer from './components/views/Footer/Footer';
 import MainPage from './components/views/MainPage/MainPage';
 import MyPage from './components/views/MyPage/MyPage';
@@ -37,6 +39,17 @@ function App() {
                     <Route exact path="/" component={Auth(MainPage, null)}></Route>
                     <Route exact path="/account/success" component={AccountSuccess}></Route>
                     <Route exact path="/class" component={Auth(ClassPage, null)}></Route>
+                    <Route exact path="/community" component={Auth(CommunityPage, null)}></Route>
+                    <Route
+                        exact
+                        path="/community/upload"
+                        component={Auth(CommunityUpload, null)}
+                    ></Route>
+                    <Route
+                        exact
+                        path="/community/:id"
+                        component={Auth(CommunityDetail, true)}
+                    ></Route>
                     <Route exact path="/watch/:id" component={Auth(WatchPage, true)}></Route>
                     <Route
                         exact
