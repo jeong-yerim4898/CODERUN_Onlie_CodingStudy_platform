@@ -52,8 +52,55 @@ def get_video_page(
     
     if not v_data:
         raise HTTPException(status_code=404, detail="No content")
-    return {"data": v_data}
+    return {"data": v_data, "page_cnt": len(v_data)//12 + 1}
 
+
+@router.get("/api/video/page/filter/{count}", tags=["video"], description="[filter] 동영상 12개씩 리스트로 보기 (알고리즘으로 보는경우 : algorithm_tag_id와 language_tag_id 지정, 과목으로 보는경우 : subject_tag_id 지정)")
+def get_video_filter_page(
+    count: int,
+    algorithm_tag_id: Optional[int] = 0,
+    language_tag_id: Optional[int] = 0,
+    subject_tag_id: Optional[int] = 0,
+    db: Session = Depends(get_db),
+):
+    if algorithm_tag_id:
+        v_data = (
+            db.query(models.AlgorithmUserTag)
+            .join(models.Video, models.AlgorithmUserTag.video_id == models.Video.id)
+            .filter(models.AlgorithmUserTag.algorithm_tag_id == algorithm_tag_id)
+            .filter(models.Video.language_tag_id == language_tag_id)
+            .offset(count * 12)
+            .limit(12)
+            .all()
+        )
+
+        for i in range(len(v_data)):
+            v_data[i].video
+            del v_data[i].video_id
+            del v_data[i].algorithm_tag_id
+            del v_data[i].id
+            # del v_data[i].AlgorithmUserTag
+    elif subject_tag_id:
+        v_data = (
+            db.query(models.SubjectUserTag)
+            .join(models.Video, models.SubjectUserTag.video_id == models.Video.id)
+            .filter(models.SubjectUserTag.subject_tag_id == subject_tag_id)
+            .offset(count * 12)
+            .limit(12)
+            .all()
+        )
+
+        for i in range(len(v_data)):
+            v_data[i].video
+            del v_data[i].video_id
+            del v_data[i].subject_tag_id
+            del v_data[i].id
+        pass
+    else:
+        v_data = []
+        
+
+    return {"data": v_data, "page_cnt": len(v_data)//12 + 1}
 
 @router.post("/api/video/create", tags=["video"], description="동영상 게시물 작성")
 def post_video(

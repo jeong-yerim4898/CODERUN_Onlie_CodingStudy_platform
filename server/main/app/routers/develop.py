@@ -25,7 +25,7 @@ ALGORITHM = getenv("ALGORITHM")
 SENDER = getenv("SENDER")
 PW = getenv("PW")
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 120
+ACCESS_TOKEN_EXPIRE_MINUTES = 120 * 12
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
