@@ -16,9 +16,14 @@
     "antd": "^4.15.2",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
+<<<<<<< HEAD
     "node-sass": "^5.0.0",
+=======
+    "chartist": "^0.11.4",
+>>>>>>> f41fc46... feat: 🎸 0429 front create mypage
     "react": "^17.0.2",
     "react-bootstrap": "^1.5.2",
+    "react-chartist": "^0.14.4",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.2",
     "react-hls": "0.0.8",
