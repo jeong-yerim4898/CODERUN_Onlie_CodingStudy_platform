@@ -1,88 +1,42 @@
 import React, { useState } from 'react';
-import { Button, Modal, Form, Input, Radio } from 'antd';
+import { Button, Modal, Form } from 'react-bootstrap';
 
 function MyPlayList() {
-    const CollectionCreateForm = ({ visible, onCreate, onCancel }) => {
-        const [form] = Form.useForm();
-        return (
-            <Modal
-                visible={visible}
-                title="Create a new Playlist"
-                okText="Create"
-                cancelText="Cancel"
-                onCancel={onCancel}
-                onOk={() => {
-                    form.validateFields()
-                        .then(values => {
-                            form.resetFields();
-                            onCreate(values);
-                        })
-                        .catch(info => {
-                            console.log('Validate Failed:', info);
-                        });
-                }}
-            >
-                <Form
-                    form={form}
-                    layout="vertical"
-                    name="form_in_modal"
-                    initialValues={{
-                        modifier: 'public',
-                    }}
-                >
-                    <Form.Item
-                        name="title"
-                        label="Title"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input the title of Playlist!',
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="description" label="Description">
-                        <Input type="textarea" />
-                    </Form.Item>
-                    <Form.Item name="modifier" className="collection-create-form_last-form-item">
-                        <Radio.Group>
-                            <Radio value="public">Public</Radio>
-                            <Radio value="private">Private</Radio>
-                        </Radio.Group>
-                    </Form.Item>
-                </Form>
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    return (
+        <>
+            <Button variant="primary" onClick={handleShow}>
+                플레이리스트 만들기
+            </Button>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>제목제목</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form.Group>
+                        <Form.Control size="lg" type="text" placeholder="Large text" />
+                        <br />
+                        <Form.Control type="text" placeholder="Normal text" />
+                        <br />
+                        <Form.Control size="sm" type="text" placeholder="Small text" />
+                    </Form.Group>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        취소
+                    </Button>
+                    <Button variant="primary" onClick={handleClose}>
+                        저장
+                    </Button>
+                </Modal.Footer>
             </Modal>
-        );
-    };
-
-    const CollectionsPage = () => {
-        const [visible, setVisible] = useState(false);
-
-        const onCreate = values => {
-            console.log('Received values of form: ', values);
-            setVisible(false);
-        };
-
-        return (
-            <div>
-                <Button
-                    type="primary"
-                    onClick={() => {
-                        setVisible(true);
-                    }}
-                >
-                    New Playlist
-                </Button>
-                <CollectionCreateForm
-                    visible={visible}
-                    onCreate={onCreate}
-                    onCancel={() => {
-                        setVisible(false);
-                    }}
-                />
-            </div>
-        );
-    };
+        </>
+    );
 }
+
 export default MyPlayList;

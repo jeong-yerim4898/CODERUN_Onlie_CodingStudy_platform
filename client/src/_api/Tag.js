@@ -8,5 +8,5 @@ export function fetchAlgorithmTag() {
     return axios.get(`${SERVER}/api/tag/algorithm`);
 }
 export function fetchCSTag() {
-    return axios.get(`${SERVER}/api/tag/cs`);
+    return axios.get(`${SERVER}/api/tag/subject`);
 }

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { getLanguageTag } from '_api/Class.js';
+import { fetchLanguageTag } from '_api/Tag.js';
 import { Button } from 'antd';
 
 function LanguageBox() {
     const [languages, setlanguages] = useState([]);
 
     useEffect(() => {
-        getLanguageTag().then(res => {
+        fetchLanguageTag().then(res => {
             // console.log(res.data.data);
             const languageTag = res.data.data;
             // console.log(languageTag);
