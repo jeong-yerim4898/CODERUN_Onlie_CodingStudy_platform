@@ -71,3 +71,8 @@ class BoardUpdateBase(BaseModel):
 class BoardCommentUpdateBase(BaseModel):
     board_comment_id: int
     content: Optional[str] = None
+
+
+class UserUpdateBase(BaseModel):
+    password: Optional[str] = None
+    name: Optional[str] = None
