@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../VideoUpload.scss';
 
 function VideoTag(props) {
@@ -13,6 +13,11 @@ function VideoTag(props) {
         }, 700);
     };
 
+    const handleTag = e => {
+        const id_tag = props.tag_id;
+        props.handlerTag(e, id_tag);
+    };
+
     var bubblyButtons = document.getElementsByClassName('bubbly-button');
 
     for (var i = 0; i < bubblyButtons.length; i++) {
@@ -20,7 +25,7 @@ function VideoTag(props) {
     }
 
     return (
-        <div class="videotag-container">
+        <div class="videotag-container" onClick={handleTag}>
             <button class="bubbly-button" onClick={animateButton}>
                 {props.tag}
             </button>

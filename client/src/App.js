@@ -59,7 +59,7 @@ function App() {
                         component={Auth(VideoUploadPage, true)}
                     ></Route>
 
-                    <Route exact path="*" component={NotFoundPage} />
+                    <Route path="*" component={NotFoundPage} />
                 </Switch>
                 <Footer></Footer>
             </BrowserRouter>
