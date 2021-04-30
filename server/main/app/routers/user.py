@@ -8,7 +8,7 @@ from random import choice
 
 # 서드 파티 라이브러리
 from dotenv import load_dotenv
-from fastapi import APIRouter, BackgroundTasks, Depends, Form, Header, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException
 from fastapi.responses import RedirectResponse
 from jose import JWTError, jwt
 from passlib.context import CryptContext

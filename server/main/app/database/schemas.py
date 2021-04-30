@@ -80,3 +80,17 @@ class UserUpdateBase(BaseModel):
 
 class FindUserPassword(BaseModel):
     email: Optional[str]
+
+
+class VideoListBase(BaseModel):
+    title: str
+
+
+class VideoListUpdateBase(BaseModel):
+    title: str
+    video_list_id: int
+
+
+class VideoListDataBase(BaseModel):
+    video_list_id: int
+    video_id: int
