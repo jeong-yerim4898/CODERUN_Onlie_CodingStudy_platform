@@ -38,6 +38,7 @@ def get_video_filter_page(
     algorithm_tag_id: Optional[int] = 0,
     language_tag_id: Optional[int] = 0,
     subject_tag_id: Optional[int] = 0,
+    user_id: Optional[int] = 0,
     db: Session = Depends(get_db),
 ):
     if algorithm_tag_id:
@@ -62,6 +63,8 @@ def get_video_filter_page(
                 del v_data[i].video_id
                 del v_data[i].algorithm_tag_id
                 del v_data[i].id
+                v_data[i].likecnt = len(v_data[i].like)
+                del v_data[i].like
         else:
             v_data = (
                 db.query(models.AlgorithmUserTag)
@@ -82,6 +85,8 @@ def get_video_filter_page(
                 del v_data[i].video_id
                 del v_data[i].algorithm_tag_id
                 del v_data[i].id
+                v_data[i].likecnt = len(v_data[i].like)
+                del v_data[i].like
 
     elif subject_tag_id:
         v_data = (
@@ -102,6 +107,8 @@ def get_video_filter_page(
             del v_data[i].video_id
             del v_data[i].subject_tag_id
             del v_data[i].id
+            v_data[i].likecnt = len(v_data[i].like)
+            del v_data[i].like
     else:
         v_data = (
             db.query(models.Video)
@@ -121,7 +128,23 @@ def get_video_filter_page(
             del v_data[i].content
             del v_data[i].created_date
             del v_data[i].updated_date
-
+            v_data[i].likecnt = len(v_data[i].like)
+            del v_data[i].like
+    # if user_id:
+    current_user_like_video = (
+        db.query(models.Like.video_id)
+        .filter(models.Like.user_id == user_id)
+        .all()
+    )
+    like_video_set = set()
+    for item in current_user_like_video:
+        like_video_set.add(item.video_id)
+    print(like_video_set)
+    for i in range(len(v_data)):
+        if v_data[i].id in like_video_set:
+            v_data[i].likestatus = True
+        else:
+            v_data[i].likestatus = False
     return {"data": v_data, "page_cnt": len(v_data)//12 + 1}
 
 @router.post("/api/video/create", tags=["video"], description="동영상 게시물 작성")
@@ -292,3 +315,36 @@ def delete_video_comment(
     db.delete(vc_data)
     db.commit()
     return {"delete": video_comment_id}
+
+
+@router.post("/api/video/{video_id}", tags=["video"], description="동영상 좋아요/취소")
+def video_like(
+    video_id: int,
+    token: Optional[str] = Header(None),
+    db: Session = Depends(get_db),
+):
+    current_user = get_current_user(token, db)
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Not Allowed. Please Login")
+    v_data = db.query(models.Video).filter(models.Video.id == video_id).first()
+    if not v_data:
+        raise HTTPException(status_code=404, detail="No Content")
+    current_video_like_data = db.query(models.Like).filter(models.Like.user_id == current_user.id).filter(models.Like.video_id == v_data.id).first()
+
+    if not current_video_like_data:
+        vl_data = models.Like(
+            user_id=current_user.id,
+            video_id=v_data.id,
+        )
+        db.add(vl_data)
+        db.commit()
+        db.refresh(vl_data)
+        like_status = True
+    else:
+        db.delete(current_video_like_data)
+        db.commit()
+        like_status = False
+
+    like_cnt = len(v_data.like)
+    del v_data.like
+    return {"data": v_data, "like_cnt": like_cnt, "like_status": like_status}
