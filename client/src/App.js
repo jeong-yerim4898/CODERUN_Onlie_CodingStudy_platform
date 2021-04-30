@@ -22,6 +22,7 @@ import VideoUploadPage from './components/views/VideoUpload/VideoUploadPage';
 import Playlist from './components/views/WatchPage/Playlist';
 import VideoInfo from './components/views/WatchPage/VideoInfo';
 import WatchPage from './components/views/WatchPage/WatchPage';
+import UserInfoUpdate from './components/views/UserInfoUpdatePage/UserInfoUpdate';
 import NotFoundPage from './components/views/NotFoundPage/NotFoundPage';
 
 /* 
@@ -57,6 +58,11 @@ function App() {
                         exact
                         path="/upload/video/"
                         component={Auth(VideoUploadPage, true)}
+                    ></Route>
+                    <Route
+                        exact
+                        path="/update/user/:user_id"
+                        component={Auth(UserInfoUpdate, true)}
                     ></Route>
 
                     <Route path="*" component={NotFoundPage} />
