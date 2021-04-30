@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import './AccountPage.css';
-import { Modal } from 'antd';
+import { Modal, Button } from 'react-bootstrap';
 
 import { loginUser, signupUser } from '_actions/user_actions';
-import { redirectEmail, checkEmail } from '_api/User';
+import { redirectEmail, checkEmail, postTemporaryPassword } from '_api/User';
 import { useDispatch } from 'react-redux';
-import a from './Section/emailcheck.svg';
 
 function LoginPage(props) {
     const dispatch = useDispatch();
@@ -17,7 +16,9 @@ function LoginPage(props) {
     const [Email, setEmail] = useState('');
     const [Nickname, setNickname] = useState('');
     const [Visible, setVisible] = useState(false);
+    const [Visible2, setVisible2] = useState(false);
     const [ConfirmLoading, setConfirmLoading] = useState(false);
+    const [FindEmail, setFindEmail] = useState('');
     const [ModalText, setModalText] = useState('이메일 인증을 진행해주세요.');
 
     const accountclick = event => {
@@ -91,7 +92,7 @@ function LoginPage(props) {
                     // props.history.push('/');
                 }
             })
-            .catch(err => alert('다시 회원가입해줭 ㅠㅠ'));
+            .catch(err => alert('로그인 다시해줭 ㅠㅠ'));
     };
 
     const ValidEmail = event => {
@@ -116,18 +117,27 @@ function LoginPage(props) {
         setLoginEmail(event.currentTarget.value);
     };
 
-    const handleOk = () => {
-        setConfirmLoading(true);
+    const findEmail = event => {
+        setFindEmail(event.currentTarget.value);
+    };
 
-        setTimeout(() => {
-            setVisible(false);
-            setConfirmLoading(false);
-        }, 2000);
+    const handleOk = () => {
+        setVisible(false);
         window.location.reload();
+    };
+
+    const handelFindEmail = () => {
+        setVisible(false);
+        const body = { email: FindEmail };
+        console.log(body);
+        postTemporaryPassword(body)
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
     };
 
     const handleCancel = () => {
         setVisible(false);
+        setVisible2(false);
     };
 
     const sendEmail = event => {
@@ -143,21 +153,61 @@ function LoginPage(props) {
         }
     };
 
+    const openPasswordModal = () => {
+        setVisible2(true);
+    };
     return (
         <div className="account-body">
-            <Modal
-                visible={Visible}
-                onOk={handleOk}
-                confirmLoading={ConfirmLoading}
-                onCancel={handleCancel}
-                style={{ textAlign: 'center' }}
-            >
-                <p style={{ fontSize: '25px', fontWeight: 'bold' }}>{ModalText}</p>
-                <p>인증메일을 받지 못하셨나요?</p>
+            <Modal show={Visible} onHide={handleCancel}>
+                <Modal.Header closeButton>
+                    <Modal.Title>이메일 인증</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p style={{ fontSize: '25px', fontWeight: 'bold' }}>{ModalText}</p>
+                </Modal.Body>
+                <p>인증메일을 받지 못하였나요?</p>
                 <button class="modal_button" onClick={sendEmail}>
                     인증메일 요청
                 </button>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCancel}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleOk}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
             </Modal>
+            <Modal show={Visible2} onHide={handleCancel}>
+                <Modal.Header closeButton>
+                    <Modal.Title>임시 비밀번호 발급</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p style={{ fontSize: '25px', fontWeight: 'bold' }}>이메일을 입력해주세요.</p>
+                </Modal.Body>
+                <input
+                    type="email"
+                    style={{
+                        backgroundColor: '#eee',
+                        border: 'none',
+                        padding: '12px 15px',
+                        margin: '0rem 10% 1rem 10%',
+                        width: '80%',
+                    }}
+                    placeholder="Email"
+                    onChange={findEmail}
+                />
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCancel}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handelFindEmail}>
+                        보내기
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
             <div className="container" id="container">
                 <div className="form-container sign-up-container">
                     <form action="#">
@@ -197,7 +247,9 @@ function LoginPage(props) {
                             placeholder="Password"
                             onChange={loginPassword}
                         />
-                        <a href="#">비밀번호 찾고 싶어?</a>
+                        <p class="findPW-text" onClick={openPasswordModal}>
+                            비밀번호 찾고 싶어?
+                        </p>
                         <button onClick={postLogin}>Sign In</button>
                     </form>
                 </div>

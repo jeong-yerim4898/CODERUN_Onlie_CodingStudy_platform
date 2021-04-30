@@ -8,21 +8,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import './NavBar.css';
 import NavBarSearch from './NavBarSearch.js';
-import { SERVER } from 'Config.js';
 
 //api
 import { fetchProfileImage } from '_api/Profile';
+import { SERVER } from 'Config.js';
 
 function NavBar(props) {
     let user = useSelector(state => state.user);
     const [imageUrl, setimageUrl] = useState('');
-    useEffect(() => {
-        setimageUrl(`${SERVER}/image/profile/${user.login.user.id}`);
-    }, []);
 
     //기본 데이터 넣기
     const renderImageUrl = () => {
-        setimageUrl(fetchProfileImage(0));
+        setimageUrl(`${SERVER}/image/profile/${user.login.user.id}`);
     };
 
     return (
@@ -67,7 +64,7 @@ function NavBar(props) {
                         {/* 로그인/회원가입 버튼 */}
                         <Nav.Item className="NavItem-right">
                             {window.localStorage.getItem('token') !== null ? (
-                                <Link to={`/profile/${user.login.user.id}`}>
+                                <a href={`/profile/${user.login.user.id}`}>
                                     <Avatar
                                         size={45}
                                         src={
@@ -78,7 +75,7 @@ function NavBar(props) {
                                             />
                                         }
                                     />
-                                </Link>
+                                </a>
                             ) : (
                                 <a href="/account">
                                     <button className="Nav-AccountBtn">LogIn</button>
