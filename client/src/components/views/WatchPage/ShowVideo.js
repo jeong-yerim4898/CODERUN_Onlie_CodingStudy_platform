@@ -2,6 +2,7 @@ import React from 'react';
 import ReactHLS from 'react-hls';
 import './ShowVideo.css';
 function ShowVideo() {
+    const number = 42;
     return (
         <div className="pageboard">
             <ReactHLS
@@ -9,7 +10,7 @@ function ShowVideo() {
                 autoplay={true}
                 width={1000}
                 height={500}
-                url={'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8'}
+                url={`https://k4d102.p.ssafy.io/video/${number}`}
             />
         </div>
     );

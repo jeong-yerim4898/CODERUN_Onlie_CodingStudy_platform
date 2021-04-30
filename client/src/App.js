@@ -53,6 +53,11 @@ function App() {
                         path="/community/detail/:id"
                         component={Auth(CommunityDetail, true)}
                     ></Route>
+                    <Route
+                        exact
+                        path="/community/detail/update/:id"
+                        component={Auth(CommunityUpdate, true)}
+                    ></Route>
                     <Route exact path="/watch/:id" component={Auth(WatchPage, true)}></Route>
                     <Route
                         exact
