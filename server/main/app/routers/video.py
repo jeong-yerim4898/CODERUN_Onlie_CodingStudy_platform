@@ -32,30 +32,7 @@ def get_video_detail(
     return {"data": v_data}
 
 
-@router.get("/api/video/page/{count}", tags=["video"], description="동영상 12개씩 리스트로 보기")
-def get_video_page(
-    count: int,
-    db: Session = Depends(get_db),
-):
-    v_data = (
-        db.query(models.Video)
-        .offset(count * 12)
-        .limit(12)
-        .all()
-    )
-    for i in range(len(v_data)):
-        v_data[i].subject_user_tag
-        v_data[i].algorithm_user_tag
-        del v_data[i].content
-        del v_data[i].created_date
-        del v_data[i].updated_date
-    
-    if not v_data:
-        raise HTTPException(status_code=404, detail="No content")
-    return {"data": v_data, "page_cnt": len(v_data)//12 + 1}
-
-
-@router.get("/api/video/page/filter/{count}", tags=["video"], description="[filter] 동영상 12개씩 리스트로 보기 (알고리즘으로 보는경우 : algorithm_tag_id와 language_tag_id 지정, 과목으로 보는경우 : subject_tag_id 지정)")
+@router.get("/api/video/page/{count}", tags=["video"], description="[filter] 동영상 12개씩 리스트로 보기 (알고리즘으로 보는경우 : algorithm_tag_id와 language_tag_id 지정, 과목으로 보는경우 : subject_tag_id 지정)")
 def get_video_filter_page(
     count: int,
     algorithm_tag_id: Optional[int] = 0,
@@ -64,22 +41,48 @@ def get_video_filter_page(
     db: Session = Depends(get_db),
 ):
     if algorithm_tag_id:
-        v_data = (
-            db.query(models.AlgorithmUserTag)
-            .join(models.Video, models.AlgorithmUserTag.video_id == models.Video.id)
-            .filter(models.AlgorithmUserTag.algorithm_tag_id == algorithm_tag_id)
-            .filter(models.Video.language_tag_id == language_tag_id)
-            .offset(count * 12)
-            .limit(12)
-            .all()
-        )
+        if language_tag_id:
+            v_data = (
+                db.query(models.AlgorithmUserTag)
+                .join(models.Video, models.AlgorithmUserTag.video_id == models.Video.id)
+                .filter(models.AlgorithmUserTag.algorithm_tag_id == algorithm_tag_id)
+                .filter(models.Video.language_tag_id == language_tag_id)
+                .offset(count * 12)
+                .limit(12)
+                .all()
+            )
 
-        for i in range(len(v_data)):
-            v_data[i].video
-            del v_data[i].video_id
-            del v_data[i].algorithm_tag_id
-            del v_data[i].id
-            # del v_data[i].AlgorithmUserTag
+            for i in range(len(v_data)):
+                v_data[i].video
+                v_data[i].video.user
+                if v_data[i].video.user.password: del v_data[i].video.user.password
+                if v_data[i].video.user.active: del v_data[i].video.user.active
+                if v_data[i].video.user.security_count == None: del v_data[i].video.user.security_count
+                if v_data[i].video.user.join_date: del v_data[i].video.user.join_date
+                del v_data[i].video_id
+                del v_data[i].algorithm_tag_id
+                del v_data[i].id
+        else:
+            v_data = (
+                db.query(models.AlgorithmUserTag)
+                .join(models.Video, models.AlgorithmUserTag.video_id == models.Video.id)
+                .filter(models.AlgorithmUserTag.algorithm_tag_id == algorithm_tag_id)
+                .offset(count * 12)
+                .limit(12)
+                .all()
+            )
+
+            for i in range(len(v_data)):
+                v_data[i].video
+                v_data[i].video.user
+                if v_data[i].video.user.password: del v_data[i].video.user.password
+                if v_data[i].video.user.active: del v_data[i].video.user.active
+                if v_data[i].video.user.security_count == None: del v_data[i].video.user.security_count
+                if v_data[i].video.user.join_date: del v_data[i].video.user.join_date
+                del v_data[i].video_id
+                del v_data[i].algorithm_tag_id
+                del v_data[i].id
+
     elif subject_tag_id:
         v_data = (
             db.query(models.SubjectUserTag)
@@ -92,13 +95,32 @@ def get_video_filter_page(
 
         for i in range(len(v_data)):
             v_data[i].video
+            if v_data[i].video.user.password: del v_data[i].video.user.password
+            if v_data[i].video.user.active: del v_data[i].video.user.active
+            if v_data[i].video.user.security_count == None: del v_data[i].video.user.security_count
+            if v_data[i].video.user.join_date: del v_data[i].video.user.join_date
             del v_data[i].video_id
             del v_data[i].subject_tag_id
             del v_data[i].id
-        pass
     else:
-        v_data = []
-        
+        v_data = (
+            db.query(models.Video)
+            .offset(count * 12)
+            .limit(12)
+            .all()
+        )
+        for i in range(len(v_data)):
+            v_data[i].subject_user_tag
+            v_data[i].algorithm_user_tag
+            v_data[i].user
+            if v_data[i].user.password: del v_data[i].user.password
+            if v_data[i].user.active: del v_data[i].user.active
+            if v_data[i].user.security_count == None: del v_data[i].user.security_count
+            if v_data[i].user.join_date: del v_data[i].user.join_date
+
+            del v_data[i].content
+            del v_data[i].created_date
+            del v_data[i].updated_date
 
     return {"data": v_data, "page_cnt": len(v_data)//12 + 1}
 
