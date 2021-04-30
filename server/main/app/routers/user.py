@@ -117,11 +117,11 @@ def login(data: schemas.LoginBase, db: Session = Depends(get_db)):
 
 @router.post("/api/newpassword", tags=["user"], description="비밀번호 찾기 -> 새 비밀번호 주기")
 def get_new_password(
+    data: schemas.FindUserPassword,
     background_tasks: BackgroundTasks,
-    email: str = Form(...),
     db: Session = Depends(get_db),
 ):
-    u_data = db.query(models.User).filter(models.User.email == email).first()
+    u_data = db.query(models.User).filter(models.User.email == data.email).first()
     if not u_data:
         raise HTTPException(status_code=404, detail="No user")
     random_arr = [chr(i) for i in range(64, 91)]
@@ -133,7 +133,7 @@ def get_new_password(
     for _ in range(12):
         s += choice(random_arr)
     background_tasks.add_task(
-        send_new_password, to_email=email, temp_pw=s, user_id=u_data.id
+        send_new_password, to_email=data.email, temp_pw=s, user_id=u_data.id
     )
     return {"send": "success"}
 
@@ -256,6 +256,8 @@ def get_user_data(
 ):
     get_current_user(token, db)
     u_data = db.query(models.User).filter(models.User.id == user_id).first()
+    u_data.video
+    u_data.video_list 
     if u_data:
         del u_data.password
         del u_data.security_count
