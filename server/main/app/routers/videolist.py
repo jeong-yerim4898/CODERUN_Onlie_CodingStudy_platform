@@ -4,7 +4,7 @@ from sys import path as pth
 from typing import Optional
 
 # 서드파티 라이브러리
-from fastapi import APIRouter, Depends, HTTPException, Header, Form
+from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 
 # 로컬 라이브러리
@@ -35,12 +35,12 @@ def get_video_list(
 
 @router.post("/api/videolist/create", tags=["video list"], description="비디오리스트 생성")
 def create_video_list(
-    title: str = Form(...),
+    data: schemas.VideoListBase,
     token: Optional[str] = Header(None),
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
-    vl_data = models.VideoList(user_id=current_user.id, title=title)
+    vl_data = models.VideoList(user_id=current_user.id, title=data.title)
     db.add(vl_data)
     db.commit()
     db.refresh(vl_data)
@@ -49,20 +49,19 @@ def create_video_list(
 
 @router.put("/api/videolist/update", tags=["video list"], description="비디오리스트 타이틀 수정")
 def update_video_list(
-    video_list_id: int = Form(...),
-    title: str = Form(...),
+    data: schemas.VideoListUpdateBase,
     token: Optional[str] = Header(None),
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
     vl_data = (
-        db.query(models.VideoList).filter(models.VideoList.id == video_list_id).first()
+        db.query(models.VideoList).filter(models.VideoList.id == data.video_list_id).first()
     )
     if not vl_data:
         raise HTTPException(status_code=404, detail="No content")
     if current_user.id != vl_data.user_id:
         raise HTTPException(status_code=401, detail="Incorrect user")
-    vl_data.title = title
+    vl_data.title = data.title
     db.commit()
     db.refresh(vl_data)
     return {"data": vl_data}
@@ -128,16 +127,15 @@ def get_video_list_data(
     "/api/videolist/detail/create", tags=["video list"], description="비디오리스트에 비디오 추가"
 )
 def create_video_list_data(
-    video_list_id: int = Form(...),
-    video_id: int = Form(...),
+    data: schemas.VideoListDataBase,
     token: Optional[str] = Header(None),
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
-    check_videolist(current_user.id, video_list_id, db)
-    if not db.query(models.Video).filter(models.Video.id == video_id).first():
+    check_videolist(current_user.id, data.video_list_id, db)
+    if not db.query(models.Video).filter(models.Video.id == data.video_id).first():
         raise HTTPException(status_code=404, detail="No content")
-    vld_data = models.VideoListData(video_list_id=video_list_id, video_id=video_id)
+    vld_data = models.VideoListData(video_list_id=data.video_list_id, video_id=data.video_id)
     db.add(vld_data)
     db.commit()
     db.refresh(vld_data)

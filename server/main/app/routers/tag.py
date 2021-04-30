@@ -4,7 +4,7 @@ from sys import path as pth
 from typing import Optional
 
 # 서드파티 라이브러리
-from fastapi import APIRouter, Depends, HTTPException, Header, Form
+from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 
 # 로컬 라이브러리
