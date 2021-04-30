@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { createArticle } from '_api/Board.js';
+import { updateArticle, detailArticle } from '_api/Board.js';
 import { useHistory } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import './CommunityUpdate.css';
 
-function CommunityUpdate() {
+function CommunityUpdate(props) {
     const history = useHistory();
 
     const [Title, setTitle] = useState('');
     const [Content, setContent] = useState('');
-    useEffect(() => {}, []);
+    useEffect(() => {
+        detailArticle(8).then(res => {
+            console.log(res.data.data);
+            console.log(1);
+            setTitle(res.data.data.title);
+            setContent(res.data.data.content);
+        });
+    }, []);
 
     const titleHandler = event => {
         setTitle(event.currentTarget.value);
@@ -21,20 +28,21 @@ function CommunityUpdate() {
         event.preventDefault();
         console.log(Title);
         console.log(Content);
-        // if (!Title || !Content) {
-        //     return alert('모든 값을 넣어 주셔야 합니다.');
-        // }
-        // const body = {
-        //     title: Title,
-        //     content: Content,
-        // };
-        // createArticle(body)
-        //     .then(res => {
-        //         console.log(res);
-        //         console.log('success');
-        //         props.history.push('/community');
-        //     })
-        //     .catch(err => console.log(err));
+        if (!Title || !Content) {
+            return alert('모든 값을 넣어 주셔야 합니다.');
+        }
+        const body = {
+            board_id: 8,
+            title: Title,
+            content: Content,
+        };
+        updateArticle(body)
+            .then(res => {
+                console.log(res);
+                console.log('success');
+                props.history.push('/community');
+            })
+            .catch(err => console.log(err));
     };
     return (
         <div className="updatecontainer">
@@ -43,12 +51,22 @@ function CommunityUpdate() {
                     <Form className="uploadform">
                         <Form.Group controlId="exampleForm.ControlInput1">
                             <Form.Label>제목</Form.Label>
-                            <Form.Control as="textarea" rows={1} onChange={titleHandler} />
+                            <Form.Control
+                                as="textarea"
+                                placeholder={Title}
+                                rows={1}
+                                onChange={titleHandler}
+                            />
                         </Form.Group>
 
                         <Form.Group controlId="exampleForm.ControlTextarea1">
                             <Form.Label>내용</Form.Label>
-                            <Form.Control as="textarea" rows={8} onChange={contentHandler} />
+                            <Form.Control
+                                as="textarea"
+                                plaintext={Content}
+                                rows={8}
+                                onChange={contentHandler}
+                            />
                         </Form.Group>
                         <Button
                             className="uploadbutton"
