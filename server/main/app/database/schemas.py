@@ -76,3 +76,7 @@ class BoardCommentUpdateBase(BaseModel):
 class UserUpdateBase(BaseModel):
     password: Optional[str] = None
     name: Optional[str] = None
+
+
+class FindUserPassword(BaseModel):
+    email: Optional[str]

@@ -46,8 +46,6 @@ def create_thumbnail(
         raise HTTPException(status_code=401, detail="Incorrect user")
     with open(f"{parent_route}/assets/thumbnail/thumbnail_{video_id}.png", "wb") as f:
         f.write(file)
-    v_data.thumbnail = f"https://k4d102.p.ssafy.io/image/thumbnail/{video_id}"
-    db.commit()
     return FileResponse(f"{parent_route}/assets/thumbnail/thumbnail_{video_id}.png")
 
 
@@ -65,8 +63,6 @@ def delete_thumbnail(
         raise HTTPException(status_code=401, detail="Incorrect user")
     try:
         remove(f"{parent_route}/assets/thumbnail/thumbnail_{video_id}.png")
-        v_data.thumbnail = None
-        db.commit()
         return {"delete": video_id}
     except:
         raise HTTPException(status_code=404, detail="No content")

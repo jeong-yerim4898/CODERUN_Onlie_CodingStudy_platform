@@ -43,9 +43,6 @@ def create_profile(
         raise HTTPException(status_code=401, detail="Incorrect user")
     with open(f"{parent_route}/assets/profile/profile_{user_id}.png", "wb") as f:
         f.write(file)
-    u_data = db.query(models.User).filter(models.User.id == user_id).first()
-    u_data.profile = f"https://k4d102.p.ssafy.io/image/profile/{user_id}"
-    db.commit()
     return FileResponse(f"{parent_route}/assets/profile/profile_{user_id}.png")
 
 
@@ -60,9 +57,6 @@ def delete_profile(
         raise HTTPException(status_code=401, detail="Incorrect user")
     try:
         remove(f"{parent_route}/assets/profile/profile_{user_id}.png")
-        u_data = db.query(models.User).filter(models.User.id == user_id).first()
-        u_data.profile = None
-        db.commit()
         return {"delete": user_id}
     except:
         raise HTTPException(status_code=404, detail="No content")
