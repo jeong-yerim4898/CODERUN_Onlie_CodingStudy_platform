@@ -4,6 +4,7 @@ import { Button, Card, Container, Row, Col } from 'react-bootstrap';
 import ProfileImage from './images/defaultimage.PNG';
 import UploadedVideos from './UploadedVideos.js';
 import MyPlayList from './MyPlayList.js';
+// import MyPlayListCreateForm from './MyPlayListCreateForm.js';
 
 function MyPage() {
     return (
@@ -22,6 +23,7 @@ function MyPage() {
                     <Col md="8">
                         {/* 나의 재생 리스트 */}
                         <MyPlayList />
+                        {/* <MyPlayListCreateForm /> */}
                     </Col>
                     {/* 사용자프로필 */}
                     <Col md="4">
