@@ -6,6 +6,7 @@ import uvicorn
 # 로컬 라이브러리
 from database import database, models
 from routers.video import router as video_router
+from routers.check import router as check_router
 
 
 app = FastAPI()
@@ -21,6 +22,7 @@ app.add_middleware(
 )
 
 app.include_router(video_router)
+app.include_router(check_router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8001)
