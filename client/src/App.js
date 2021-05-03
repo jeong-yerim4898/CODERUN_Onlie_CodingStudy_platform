@@ -16,8 +16,6 @@ import Footer from './components/views/Footer/Footer';
 import MainPage from './components/views/MainPage/MainPage';
 import MyPage from './components/views/MyPage/MyPage';
 import NavBar from './components/views/Navbar/NavBar';
-import DetailCodeRunCommunity from './components/views/PostCommunity/DetailCodeRunCommunity';
-import PostCommunity from './components/views/PostCommunity/PostCommunity';
 import VideoUploadPage from './components/views/VideoUpload/VideoUploadPage';
 import Playlist from './components/views/WatchPage/Playlist';
 import VideoInfo from './components/views/WatchPage/VideoInfo';
