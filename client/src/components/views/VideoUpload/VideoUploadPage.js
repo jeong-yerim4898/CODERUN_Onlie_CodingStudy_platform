@@ -7,7 +7,7 @@ import { PlusOutlined } from '@ant-design/icons';
 
 // api
 import { fetchLanguageTag, fetchAlgorithmTag, fetchCSTag } from '_api/Tag';
-import { postVideoUpload } from '_api/Video';
+import { postVideoContentUpload, postVideoUpload } from '_api/Video';
 import { postThumbnail } from '_api/Thumbnail';
 
 import { Button, Row, Col } from 'antd';
@@ -24,6 +24,7 @@ function VideoUpload() {
     const [AlgoList, setAlgoList] = useState([]);
     const [CSList, setCSList] = useState([]);
     const [FileArray, setFileArray] = useState([]);
+    const [VideoArray, setVideoArray] = useState([]);
 
     useEffect(() => {
         const TagData = async () => {
@@ -176,7 +177,7 @@ function VideoUpload() {
             subject_tag_ids: CSList,
         };
 
-        postVideoUpload(body)
+        postVideoContentUpload(body)
             .then(res => {
                 console.log(res.data.data.id);
                 const video_id = res.data.data.id;
@@ -186,24 +187,54 @@ function VideoUpload() {
                 postThumbnail(video_id, formData)
                     .then(res => console.log(res))
                     .catch(err => console.log(err));
+                let formData2 = new FormData();
+                console.log(VideoArray);
+                formData2.append('file', VideoArray);
+                const file_extension = VideoArray.type.split('/')[1];
+                postVideoUpload(video_id, file_extension, formData2)
+                    .then(res => console.log(res))
+                    .catch(err => console.log(err));
             })
             .catch(err => console.log(err));
     };
 
     const dropHandler = file => {
-        console.log(file[0]);
+        // console.log(file[0]);
         setFileArray(file[0]);
         // setFileArray(file.target.files);
+    };
+
+    const dropVideoHandler = video => {
+        // console.log(video[0].type.split('/')[1]);
+        setVideoArray(video[0]);
     };
 
     return (
         <div class="page">
             <div class="video-preview">
-                <VideoImageUpload />
-            </div>
-            <div>
+                <h1>비디오</h1>
+                <Dropzone onDrop={dropVideoHandler}>
+                    {({ getRootProps, getInputProps }) => (
+                        <section>
+                            <div
+                                style={{
+                                    width: 300,
+                                    height: 200,
+                                    border: '1px solid lightgray',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    marginBottom: '1rem',
+                                }}
+                                {...getRootProps()}
+                            >
+                                <input {...getInputProps()} />
+                                <PlusOutlined type="plus" style={{ fontSize: '3rem' }} />
+                            </div>
+                        </section>
+                    )}
+                </Dropzone>
                 <h1>썸네일</h1>
-                {/* <input type="file" name="files" multiple onChange={dropHandler} /> */}
                 <Dropzone onDrop={dropHandler}>
                     {({ getRootProps, getInputProps }) => (
                         <section>
@@ -225,6 +256,7 @@ function VideoUpload() {
                     )}
                 </Dropzone>
             </div>
+
             <div class="video-content">
                 <h3>제목</h3>
                 <VideoContent
