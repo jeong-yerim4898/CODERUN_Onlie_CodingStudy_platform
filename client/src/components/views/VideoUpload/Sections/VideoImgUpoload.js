@@ -2,7 +2,7 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import { PlusOutlined } from '@ant-design/icons';
 
-function VideoImgUpoload() {
+function VideoImgUpoload(props) {
     return (
         <div>
             <h1>비디오</h1>
@@ -27,7 +27,7 @@ function VideoImgUpoload() {
                     </section>
                 )}
             </Dropzone>
-            <div>
+            {/* <div>
                 <h1>썸네일</h1>
                 <Dropzone>
                     {({ getRootProps, getInputProps }) => (
@@ -49,7 +49,7 @@ function VideoImgUpoload() {
                         </section>
                     )}
                 </Dropzone>
-            </div>
+            </div> */}
         </div>
     );
 }
