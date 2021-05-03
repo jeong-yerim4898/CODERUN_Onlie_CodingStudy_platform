@@ -53,3 +53,10 @@ export function deleteComment(id, data) {
         headers: { token: ACCESS_TOKEN },
     });
 }
+
+// 댓글 수정
+export function updatingComment(data) {
+    return axios.put(`${SERVER}/api/board/comment/update`, data, {
+        headers: { token: ACCESS_TOKEN },
+    });
+}
