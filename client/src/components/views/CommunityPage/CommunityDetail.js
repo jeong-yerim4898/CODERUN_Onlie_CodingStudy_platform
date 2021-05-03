@@ -6,7 +6,6 @@ import CommentList from './CommentList';
 
 function CommunityDetail() {
     const [Article, setArticle] = useState({});
-    const [Comment, setComment] = useState('');
 
     useEffect(() => {
         detailArticle(8).then(res => {
