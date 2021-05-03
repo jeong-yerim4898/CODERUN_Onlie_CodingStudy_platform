@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { detailArticle, deleteArticle, createComment } from '_api/Board.js';
-import { Button, Form, Col, Row } from 'react-bootstrap';
+import { detailArticle, deleteArticle, createComment, listComment } from '_api/Board.js';
+import { Button, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import CommentList from './CommentList';
 
@@ -16,22 +16,6 @@ function CommunityDetail() {
         });
     }, []);
 
-    const commentHandler = event => {
-        setComment(event.currentTarget.value);
-    };
-    const createCommentHandler = event => {
-        event.preventDefault();
-        const article_id = 8;
-        console.log('댓글');
-        const body = {
-            board_id: article_id,
-            content: Comment,
-        };
-        console.log(body);
-        createComment(body).then(res => {
-            console.log('create comment success');
-        });
-    };
     const deleteHandler = event => {
         event.preventDefault();
         const article_id = 10;
@@ -53,19 +37,7 @@ function CommunityDetail() {
                     <Button variant="danger" onClick={deleteHandler}>
                         삭제
                     </Button>
-                    <h4>댓글</h4>
-                    <Form>
-                        <Form.Group controlId="formBasicEmail">
-                            <Form.Control
-                                type="textarea"
-                                placeholder="Enter email"
-                                onChange={commentHandler}
-                            />
-                        </Form.Group>
-                        <Button variant="primary" type="submit" onClick={createCommentHandler}>
-                            댓글작성
-                        </Button>
-                    </Form>
+
                     <br />
                     <CommentList />
                     <br />
