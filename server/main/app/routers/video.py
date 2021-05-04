@@ -23,13 +23,19 @@ def get_video_detail(
     token: Optional[str] = Header(None),
     db: Session = Depends(get_db),
 ):
-    get_current_user(token, db)
+    current_user = get_current_user(token, db)
     v_data = db.query(models.Video).filter(models.Video.id == video_id).first()
     if not v_data:
         raise HTTPException(status_code=404, detail="No content")
     v_data.subject_user_tag
     v_data.algorithm_user_tag
-    return {"data": v_data}
+    like_cnt = len(v_data.like)
+    del v_data.like
+    if db.query(models.Like).filter(models.Like.user_id == current_user.id).filter(models.Like.video_id == v_data.id).first():
+        like_status = True
+    else:
+        like_status = False
+    return {"data": v_data, "like_cnt": like_cnt, "like_status": like_status}
 
 
 @router.get("/api/video/page/{count}", tags=["video"], description="[filter] 동영상 12개씩 리스트로 보기 (알고리즘으로 보는경우 : algorithm_tag_id와 language_tag_id 지정, 과목으로 보는경우 : subject_tag_id 지정)")
