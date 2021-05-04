@@ -7,6 +7,7 @@ from typing import Optional
 from fastapi import APIRouter, BackgroundTasks, Depends, File, UploadFile, HTTPException, Header
 from fastapi.responses import FileResponse, StreamingResponse
 from sqlalchemy.orm import Session
+import ffmpeg
 
 # 로컬 라이브러리
 pth.append(path.dirname(path.abspath(path.dirname(__file__))))
@@ -19,10 +20,10 @@ router = APIRouter()
 parent_route = path.dirname(path.abspath(path.dirname(__file__)))
 
 
-@router.get("/video/{a}", tags=["video"], description="비디오 불러오기")
-def get_video(a: str):
+@router.get("/video/{video}", tags=["video"], description="비디오 불러오기")
+def get_video(video: str):
     try:
-        video = open(f"{parent_route}/videos/{a}", mode="rb")
+        video = open(f"{parent_route}/videos/{video}", mode="rb")
     except:
         raise HTTPException(status_code=404, detail="No content")
     return StreamingResponse(video, media_type="vnd.apple.mpegurl")
@@ -54,8 +55,11 @@ def create_video(
 
 
 def encoding_video(video_id, file_extension):
-    system(
-        f"{parent_route}/ffmpeg -i videos/{video_id}_VIDEO.{file_extension} -b:v 1M -g 60 -hls_time 10 -hls_list_size 0 videos/{video_id}_VIDEO.m3u8"
+    (
+        ffmpeg
+        .input(f'videos/{video_id}_VIDEO.{file_extension}')
+        .output(f'videos/{video_id}_VIDEO.m3u8', **{'b:v': '1M', 'g': 60, 'hls_time': 10, 'hls_list_size': 0})
+        .run()
     )
     remove(f"{parent_route}/videos/{video_id}_VIDEO.{file_extension}")
 
