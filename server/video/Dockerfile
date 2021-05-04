@@ -1,4 +1,8 @@
-FROM python:3.8
+FROM ubuntu:20.04
+RUN apt update
+RUN apt install -y ffmpeg
+RUN apt install -y python3
+RUN apt install -y python3-pip
 COPY ./requirements.txt requirements.txt
 COPY ./.env .env
 RUN pip3 install -r requirements.txt
