@@ -13,6 +13,8 @@ cssselect==1.1.0
 cssutils==2.2.0
 ecdsa==0.14.1
 fastapi==0.63.0
+ffmpeg-python==0.2.0
+future==0.18.2
 greenlet==1.0.0
 h11==0.12.0
 idna==2.10
