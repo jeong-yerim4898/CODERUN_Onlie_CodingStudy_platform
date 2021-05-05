@@ -14,7 +14,7 @@ export function readPlaylist() {
     });
 }
 
-export function updatePlaylist(data) {
+export function editPlaylist(data) {
     return axios.put(`${SERVER}/api/videolist/update`, data, {
         headers: { token: ACCESS_TOKEN },
     });
@@ -39,7 +39,7 @@ export function createPlaylistdata(data) {
     });
 }
 
-export function deleteePlaylistdata(video_list_data_id) {
+export function deletePlaylistdata(video_list_data_id) {
     return axios.delete(`${SERVER}/api/videolist/detail/delete/${video_list_data_id}`, {
         headers: { token: ACCESS_TOKEN },
     });
