@@ -182,7 +182,6 @@ function VideoUpload() {
                 console.log(res.data.data.id);
                 const video_id = res.data.data.id;
                 let formData = new FormData();
-                // console.log(FileArray);
                 formData.append('file', FileArray);
                 postThumbnail(video_id, formData)
                     .then(res => console.log(res))
