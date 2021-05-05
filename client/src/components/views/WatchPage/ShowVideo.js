@@ -2,7 +2,7 @@ import React from 'react';
 import ReactHLS from 'react-hls';
 import './ShowVideo.css';
 function ShowVideo() {
-    const video_idx = 4;
+    const video_idx = 2;
     return (
         <div className="pageboard">
             <ReactHLS
