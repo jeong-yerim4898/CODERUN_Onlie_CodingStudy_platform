@@ -57,7 +57,6 @@ function WatchPage() {
                                     <h2>
                                         <strong>{VideoDetail.title}</strong>
                                     </h2>
-
                                     <p>
                                         {VideoDetail.content} <br />
                                     </p>

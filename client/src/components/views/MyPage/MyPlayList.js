@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
     createPlaylist,
     readPlaylist,
@@ -9,8 +10,9 @@ import {
 import { ListGroup, Button, Form, Card } from 'react-bootstrap';
 
 function MyPlayList(props) {
+    const history = useHistory();
     const [Playlists, setPlaylists] = useState([]);
-    const [Playlist, setPlaylist] = useState('');
+    const [Playlist, setPlaylist] = useState([]);
     const [updatePlaylist, setupdatePlaylist] = useState('');
     const [UpdateNum, setUpdateNum] = useState(null);
     const video_list_id = UpdateNum;
@@ -74,16 +76,16 @@ function MyPlayList(props) {
         setupdatePlaylist(e.currentTarget.value);
     };
 
-    const gotoWatchpage = event => {
-        const body = {
-            video_list_id: video_list_id,
-        };
-        console.log(body);
-        watchPlaylist(body)
+    const gotoWatchpage = num => {
+        const video_list_id = num;
+
+        watchPlaylist(video_list_id)
             .then(res => {
-                props.history.push('/watch/:video_list_id');
+                history.push(`/watch/${video_list_id}`);
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err);
+            });
     };
 
     const renderPlaylists = Playlists.map((playlist, idx) => {
