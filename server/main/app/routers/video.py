@@ -69,8 +69,9 @@ def get_video_filter_page(
                 del v_data[i].video_id
                 del v_data[i].algorithm_tag_id
                 del v_data[i].id
-                v_data[i].likecnt = len(v_data[i].video.like)
-                del v_data[i].video.like
+                v_data[i] = v_data[i].video
+                v_data[i].likecnt = len(v_data[i].like)
+                del v_data[i].like
         else:
             total = (
                 db.query(models.AlgorithmUserTag)
@@ -91,8 +92,9 @@ def get_video_filter_page(
                 del v_data[i].video_id
                 del v_data[i].algorithm_tag_id
                 del v_data[i].id
-                v_data[i].likecnt = len(v_data[i].video.like)
-                del v_data[i].video.like
+                v_data[i] = v_data[i].video
+                v_data[i].likecnt = len(v_data[i].like)
+                del v_data[i].like
 
     elif subject_tag_id:
         total = (
@@ -115,8 +117,9 @@ def get_video_filter_page(
             del v_data[i].video_id
             del v_data[i].subject_tag_id
             del v_data[i].id
-            v_data[i].likecnt = len(v_data[i].video.like)
-            del v_data[i].video.like
+            v_data[i] = v_data[i].video
+            v_data[i].likecnt = len(v_data[i].like)
+            del v_data[i].like
     else:
         total = (
             db.query(models.Video)
