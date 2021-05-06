@@ -28,8 +28,6 @@ def get_video_list(
         .filter(models.VideoList.user_id == current_user.id)
         .all()
     )
-    if not videolist:
-        raise HTTPException(status_code=404, detail="No content")
     return {"data": videolist}
 
 
@@ -118,8 +116,6 @@ def get_video_list_data(
         .filter(models.VideoListData.video_list_id == video_list_id)
         .all()
     )
-    if not videolistdata:
-        raise HTTPException(status_code=404, detail="No content")
     return {"data": videolistdata}
 
 
