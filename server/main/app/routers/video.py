@@ -49,16 +49,16 @@ def get_video_filter_page(
 ):
     if algorithm_tag_id:
         if language_tag_id:
-            v_data = (
+            total = (
                 db.query(models.AlgorithmUserTag)
                 .join(models.Video, models.AlgorithmUserTag.video_id == models.Video.id)
                 .filter(models.AlgorithmUserTag.algorithm_tag_id == algorithm_tag_id)
                 .filter(models.Video.language_tag_id == language_tag_id)
-                .offset(count * 12)
-                .limit(12)
+                # .offset(count * 12)
+                # .limit(12)
                 .all()
             )
-
+            v_data = total[(count-1)*12:count*12]
             for i in range(len(v_data)):
                 v_data[i].video
                 v_data[i].video.user
@@ -69,18 +69,18 @@ def get_video_filter_page(
                 del v_data[i].video_id
                 del v_data[i].algorithm_tag_id
                 del v_data[i].id
-                v_data[i].likecnt = len(v_data[i].like)
-                del v_data[i].like
+                v_data[i].likecnt = len(v_data[i].video.like)
+                del v_data[i].video.like
         else:
-            v_data = (
+            total = (
                 db.query(models.AlgorithmUserTag)
                 .join(models.Video, models.AlgorithmUserTag.video_id == models.Video.id)
                 .filter(models.AlgorithmUserTag.algorithm_tag_id == algorithm_tag_id)
-                .offset(count * 12)
-                .limit(12)
+                # .offset(count * 12)
+                # .limit(12)
                 .all()
             )
-
+            v_data = total[(count-1)*12:count*12]
             for i in range(len(v_data)):
                 v_data[i].video
                 v_data[i].video.user
@@ -91,19 +91,21 @@ def get_video_filter_page(
                 del v_data[i].video_id
                 del v_data[i].algorithm_tag_id
                 del v_data[i].id
-                v_data[i].likecnt = len(v_data[i].like)
-                del v_data[i].like
+                v_data[i].likecnt = len(v_data[i].video.like)
+                del v_data[i].video.like
 
     elif subject_tag_id:
-        v_data = (
+        total = (
             db.query(models.SubjectUserTag)
             .join(models.Video, models.SubjectUserTag.video_id == models.Video.id)
             .filter(models.SubjectUserTag.subject_tag_id == subject_tag_id)
-            .offset(count * 12)
-            .limit(12)
+            # .offset(count * 12)
+            # .limit(12)
             .all()
         )
-
+        v_data = total[(count-1)*12:count*12]
+        # print(subject_tag_id)
+        # print(len(v_data))
         for i in range(len(v_data)):
             v_data[i].video
             if v_data[i].video.user.password: del v_data[i].video.user.password
@@ -113,15 +115,16 @@ def get_video_filter_page(
             del v_data[i].video_id
             del v_data[i].subject_tag_id
             del v_data[i].id
-            v_data[i].likecnt = len(v_data[i].like)
-            del v_data[i].like
+            v_data[i].likecnt = len(v_data[i].video.like)
+            del v_data[i].video.like
     else:
-        v_data = (
+        total = (
             db.query(models.Video)
-            .offset(count * 12)
-            .limit(12)
+            # .offset(count * 12)
+            # .limit(12)
             .all()
         )
+        v_data = total[(count-1)*12:count*12]
         for i in range(len(v_data)):
             v_data[i].subject_user_tag
             v_data[i].algorithm_user_tag
@@ -145,13 +148,12 @@ def get_video_filter_page(
     like_video_set = set()
     for item in current_user_like_video:
         like_video_set.add(item.video_id)
-    print(like_video_set)
     for i in range(len(v_data)):
         if v_data[i].id in like_video_set:
             v_data[i].likestatus = True
         else:
             v_data[i].likestatus = False
-    return {"data": v_data, "page_cnt": len(v_data)//12 + 1}
+    return {"data": v_data, "page_cnt": (len(total)-1)//12 + 1}
 
 @router.post("/api/video/create", tags=["video"], description="동영상 게시물 작성")
 def post_video(
