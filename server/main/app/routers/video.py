@@ -261,6 +261,11 @@ def get_video_comment(
         .filter(models.VideoComment.video_id == video_id)
         .all()
     )
+    for i in range(len(vc_data)):
+        vc_data[i].user
+        if vc_data[i].user.password: del vc_data[i].user.password
+        if vc_data[i].user.active: del vc_data[i].user.active
+        if vc_data[i].user.join_date: del vc_data[i].user.join_date
     return {"data": vc_data}
 
 
@@ -275,9 +280,15 @@ def post_video_comment(
     vc_data = models.VideoComment(
         user_id=current_user.id, video_id=data.video_id, content=data.content
     )
+    print(vc_data)
+    
     db.add(vc_data)
     db.commit()
     db.refresh(vc_data)
+    vc_data.user
+    if vc_data.user.password: del vc_data.user.password
+    if vc_data.user.active: del vc_data.user.active
+    if vc_data.user.join_date: del vc_data.user.join_date
     return {"data": vc_data}
 
 
@@ -300,6 +311,10 @@ def update_video_comment(
     vc_data.content = data.content
     db.commit()
     db.refresh(vc_data)
+    vc_data.user
+    if vc_data.user.password: del vc_data.user.password
+    if vc_data.user.active: del vc_data.user.active
+    if vc_data.user.join_date: del vc_data.user.join_date
     return {"data": vc_data}
 
 
