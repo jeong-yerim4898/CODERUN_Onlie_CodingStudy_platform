@@ -181,7 +181,7 @@ def post_video(
         for i in data.subject_tag_ids:
             aut_data = models.SubjectUserTag(video_id=v_data.id, subject_tag_id=i)
             db.add(aut_data)
-        v_data.thumbnail = f"https://k4d102.p.ssafy.io/image/thumbnail/{v_data.id}"
+        v_data.thumbnail = f"https://www.코드런.com/image/thumbnail/{v_data.id}"
         db.commit()
         db.refresh(v_data)
         v_data.subject_user_tag
