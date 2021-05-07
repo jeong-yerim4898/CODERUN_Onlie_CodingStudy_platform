@@ -56,12 +56,15 @@ pipeline {
 				-v /etc/localtime:/etc/localtime:ro \
 				--network coderunnet mainserver:latest'
 				sh 'docker run -d --name mainswagger \
+				-p 8000:8000 \
 				-v /etc/localtime:/etc/localtime:ro \
 				mainserver:latest'
 				sh 'docker run -d --name imageswagger \
+				-p 8001:8001 \
 				-v /etc/localtime:/etc/localtime:ro \
 				imageswagger:latest'
 				sh 'docker run -d --name videoswagger \
+				-p 8002:8002 \
 				-v /etc/localtime:/etc/localtime:ro \
 				videoswagger:latest'
 			}
