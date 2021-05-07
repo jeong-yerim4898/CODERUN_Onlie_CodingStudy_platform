@@ -78,10 +78,13 @@ function MyPlayList(props) {
 
     const gotoWatchpage = num => {
         const video_list_id = num;
+        // console.log(first_video);
 
         watchPlaylist(video_list_id)
             .then(res => {
-                history.push(`/watch/${video_list_id}`);
+                console.log(res.data.data[0].video_id);
+
+                history.push(`/watch/${res.data.data[0].video_id}`);
             })
             .catch(err => {
                 console.log(err);

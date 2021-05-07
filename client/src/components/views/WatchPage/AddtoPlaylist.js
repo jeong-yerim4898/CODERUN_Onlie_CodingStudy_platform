@@ -5,15 +5,19 @@ import { readPlaylist, createPlaylistdata, deletePlaylistdata } from '_api/Playl
 import { Radio } from 'antd';
 
 function AddtoPlaylist(props) {
-    const [selectPlaylist, setselectPlaylist] = useState('');
-    const [AddtoPlaylist, setAddtoPlaylist] = useState('');
     const [Playlists, setPlaylists] = useState([]);
+    const [SelectPlaylist, setSelectPlaylist] = useState('');
+    const [AddtoPlaylist, setAddtoPlaylist] = useState('');
+    const [UpdateNum, setUpdateNum] = useState(null);
+    const video_list_id = UpdateNum;
+    const video_id = props.classId;
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     useEffect(() => {
+        console.log(video_id);
         readPlaylist().then(res => {
             console.log(res.data.data);
             console.log('play list!!');
@@ -21,8 +25,33 @@ function AddtoPlaylist(props) {
         });
     }, []);
 
+    const selectPlaylistHandler = num => {
+        console.log('radio checked', num);
+        setSelectPlaylist(num);
+    };
+
+    const onAddVideotoPlaylist = event => {
+        const body = {
+            video_list_id: SelectPlaylist,
+            video_id: video_id,
+        };
+        console.log(body);
+        createPlaylistdata(body).then(res => {
+            setAddtoPlaylist(res.data.data);
+            setUpdateNum(null);
+        });
+    };
+
     const renderPlaylists = Playlists.map((playlist, idx) => {
-        return <Radio key={idx}>{playlist.title}</Radio>;
+        return (
+            <Radio
+                key={idx}
+                onChange={() => selectPlaylistHandler(playlist.id)}
+                value={SelectPlaylist}
+            >
+                {playlist.title}
+            </Radio>
+        );
     });
 
     return (
@@ -38,7 +67,7 @@ function AddtoPlaylist(props) {
                     <Button variant="secondary" onClick={handleClose}>
                         취소
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={() => onAddVideotoPlaylist()}>
                         추가
                     </Button>
                 </Modal.Footer>
