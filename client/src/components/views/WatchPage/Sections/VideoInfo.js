@@ -6,8 +6,6 @@ import { HeartOutlined, PlusSquareOutlined, HeartTwoTone } from '@ant-design/ico
 import { postVideoLike } from '_api/Video';
 
 function VideoInfo(props) {
-    console.log('like' + props.like);
-    // const Like = props.like;
     const [Like, setLike] = useState(props.like);
     const clickHeart = e => {
         console.log(Like);
@@ -32,7 +30,7 @@ function VideoInfo(props) {
         <div class="video-info-container">
             <div class="card-content">
                 <div class="row">
-                    <div class="left col">
+                    <div class="col">
                         <h2>
                             <strong>{props.video.title}</strong>
                         </h2>

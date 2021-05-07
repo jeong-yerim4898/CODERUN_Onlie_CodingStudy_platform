@@ -6,7 +6,11 @@ import UploadedVideos from './UploadedVideos.js';
 import MyPlayList from './MyPlayList.js';
 // import MyPlayListCreateForm from './MyPlayListCreateForm.js';
 
-function MyPage() {
+function MyPage(props) {
+    const deleteToken = () => {
+        localStorage.removeItem('token');
+        props.history.push('/account');
+    };
     return (
         <div>
             <Container fluid>
@@ -14,7 +18,7 @@ function MyPage() {
                     <Col md="10"></Col>
                     {/* 로그아웃 */}
                     <Col md="2">
-                        <Button className="m-0" href="#pablo" onClick={e => e.preventDefault()}>
+                        <Button className="m-0" href="#pablo" onClick={deleteToken}>
                             <span className="no-icon">Log out</span>
                         </Button>
                     </Col>

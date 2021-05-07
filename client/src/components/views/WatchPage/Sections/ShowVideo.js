@@ -8,7 +8,7 @@ function ShowVideo(props) {
         <div className="pageboard">
             <ReactHLS
                 className="videoarea"
-                width={1000}
+                width={'90%'}
                 height={500}
                 url={`${SERVER}/video/${classId}_VIDEO.m3u8`}
             />
