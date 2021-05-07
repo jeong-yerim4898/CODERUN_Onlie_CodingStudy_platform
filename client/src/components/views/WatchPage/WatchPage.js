@@ -9,7 +9,7 @@ import './AddtoPlaylist.js';
 import { fetchVideoDetail, postVideoLike } from '_api/Video';
 import AddtoPlaylist from './AddtoPlaylist.js';
 
-function WatchPage() {
+function WatchPage(props) {
     const [VideoDetail, setVideoDetail] = useState({});
     const [LikeStatus, setLikeStatus] = useState(true);
 
@@ -50,7 +50,9 @@ function WatchPage() {
     return (
         <div>
             <Row>
-                <Col lg={9}>{/* <ShowVideo /> */}</Col>
+                <Col lg={9}>
+                    <ShowVideo classId={props.match.params.id} />
+                </Col>
                 <Col lg={3}>
                     <div class="video-info-container">
                         <div class="card-content">

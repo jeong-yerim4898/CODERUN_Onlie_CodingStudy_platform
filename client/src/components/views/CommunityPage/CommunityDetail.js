@@ -28,6 +28,7 @@ function CommunityDetail() {
         <div>
             <Row>
                 <Col md={{ span: 8, offset: 2 }}>
+                    {Article.select ? <Button variant="warning">Warning</Button> : console.log()}
                     <h1>{Article.title}</h1>
                     <h2>{Article.content}</h2>
                     <Link to="update/8">

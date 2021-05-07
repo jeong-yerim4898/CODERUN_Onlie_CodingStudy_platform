@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
     detailArticle,
     listComment,
@@ -10,6 +11,8 @@ import {
 import { ListGroup, Button, Badge, Form } from 'react-bootstrap';
 
 function CommentList() {
+    let user = useSelector(state => state.user);
+
     const [Article, setArticle] = useState({});
     const [Comments, setComments] = useState([]);
     const [Comment, setComment] = useState([]);
@@ -105,20 +108,26 @@ function CommentList() {
             <ListGroup.Item key={index}>
                 {comment.user_id}
                 {comment.select ? <Badge variant="warning">Warning</Badge> : console.log()}
-                {Article.select ? (
+                {!Article.select && Article.user_id === user?.login?.user?.id ? (
                     <Button onClick={() => onselectHander(comment.id)}>채택하기</Button>
                 ) : (
                     console.log()
                 )}
-                <Button variant="danger" onClick={() => onDeleteHander(comment.id)}>
-                    삭제
-                </Button>
-                {UpdateNum === comment.id ? (
-                    console.log()
+                {Article.user_id === user?.login?.user?.id ||
+                comment.user_id === user?.login?.user?.id ? (
+                    <Button variant="danger" onClick={() => onDeleteHander(comment.id)}>
+                        삭제
+                    </Button>
                 ) : (
+                    console.log()
+                )}
+
+                {UpdateNum !== comment.id && comment.user_id === user?.login?.user?.id ? (
                     <Button variant="success" onClick={() => onUpdateHander(comment.id)}>
                         수정
                     </Button>
+                ) : (
+                    console.log()
                 )}
 
                 <br />

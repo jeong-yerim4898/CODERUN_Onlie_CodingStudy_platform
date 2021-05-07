@@ -26,3 +26,56 @@ export function postVideoLike(video_id) {
         headers: { token: `${ACCESS_TOKEN}` },
     });
 }
+
+// 비디오 가져오기
+export function fetchFilteredVideoList(count) {
+    return axios.get(`${SERVER}/api/video/page/${count}`);
+}
+
+// 비디오 가져오기 (로그인)
+export function fetchLoginedFilteredVideoList(user_id, count) {
+    return axios.get(`${SERVER}/api/video/page/${count}?user_id=${user_id}`);
+}
+
+// 비디오 가져오기(알고만)
+export function fetchAlgoFilteredVideoList(algorithm_tag_id, count) {
+    return axios.get(`${SERVER}/api/video/page/${count}?algorithm_tag_id=${algorithm_tag_id}`);
+}
+
+// 비디오 가져오기(알고 & 로그인)
+export function fetchLoginedAlgoFilteredVideoList(algorithm_tag_id, user_id, count) {
+    return axios.get(
+        `${SERVER}/api/video/page/${count}?algorithm_tag_id=${algorithm_tag_id}&user_id=${user_id}`,
+    );
+}
+
+// 비디오 가져오기(CS만)
+export function fetchCsFilteredVideoList(subject_tag_id, count) {
+    return axios.get(`${SERVER}/api/video/page/${count}?subject_tag_id=${subject_tag_id}`);
+}
+
+// 비디오 가져오기(CS & 로그인)
+export function fetchLoginedCsFilteredVideoList(subject_tag_id, user_id, count) {
+    return axios.get(
+        `${SERVER}/api/video/page/${count}?subject_tag_id=${subject_tag_id}&user_id=${user_id}`,
+    );
+}
+
+// 비디오 가져오기(algo/언어)
+export function fetchAlgoLangFilteredVideoList(algorithm_tag_id, language_tag_id, count) {
+    return axios.get(
+        `${SERVER}/api/video/page/${count}?algorithm_tag_id=${algorithm_tag_id}&language_tag_id=${language_tag_id}`,
+    );
+}
+
+// 비디오 가져오기(algo/언어 & 로그인)
+export function fetchLoginedAlgoLangFilteredVideoList(
+    algorithm_tag_id,
+    language_tag_id,
+    user_id,
+    count,
+) {
+    return axios.get(
+        `${SERVER}/api/video/page/${count}?algorithm_tag_id=${algorithm_tag_id}&language_tag_id=${language_tag_id}&user_id=${user_id}`,
+    );
+}
