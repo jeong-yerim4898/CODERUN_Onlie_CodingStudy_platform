@@ -74,7 +74,7 @@ function WatchPage(props) {
                             ) : (
                                 <HeartOutlined onClick={clickHeart} />
                             )}
-                            <AddtoPlaylist />
+                            <AddtoPlaylist classId={props.match.params.id} />
                         </div>
                         <hr></hr>
                     </div>
