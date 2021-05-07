@@ -92,7 +92,7 @@ async def signup(
     db.commit()
     db.refresh(u_data)
     background_tasks.add_task(confirm_email, to_email=data.email, user_id=u_data.id)
-    u_data.profile = f"https://k4d102.p.ssafy.io/image/profile/{u_data.id}"
+    u_data.profile = f"https://www.코드런.com/image/profile/{u_data.id}"
     db.commit()
     return {"data": "success"}
 
@@ -149,7 +149,7 @@ def send_new_password(to_email: str, temp_pw: str, user_id: int):
     <h1>안녕하세요 CODE:RUN입니다.</h1>
     <h3>회원님의 임시 비밀번호는 {temp_pw} 입니다. </h3>
     <h3>밑의 버튼을 누르면 회원님의 비밀번호가 임시 비밀번호로 변경됩니다.</h3>
-    <a href="https://k4d102.p.ssafy.io/api/newpassword/redirect/{to_email}/{user_id}/{res}"> 비밀번호 변경 </a>
+    <a href="https://www.코드런.com/api/newpassword/redirect/{to_email}/{user_id}/{res}"> 비밀번호 변경 </a>
     """
     img = ""
     yag.send(to=to, subject=subject, contents=[body, html, img])
@@ -192,7 +192,7 @@ def confirm_email(to_email: str, user_id: int):
     html = f"""
     <h1>안녕하세요 CODE:RUN입니다.</h1>
     <h3>회원가입을 진행하려면 밑의 버튼을 눌러주세요</h3>
-    <a href="https://k4d102.p.ssafy.io/api/emailconfirm/redirect/{to_email}/{user_id}"> 이메일 인증 </a>
+    <a href="https://www.코드런.com/api/emailconfirm/redirect/{to_email}/{user_id}"> 이메일 인증 </a>
     """
     img = ""
     yag.send(to=to, subject=subject, contents=[body, html, img])
@@ -228,7 +228,7 @@ def redirect_site(email: str, user_id: int, db: Session = Depends(get_db)):
         if u_data.id == user_id:
             u_data.active = True
             db.commit()
-            return RedirectResponse("https://k4d102.p.ssafy.io/account/success")
+            return RedirectResponse("https://www.코드런.com/account/success")
     raise HTTPException(status_code=400, detail="Incorrect route")
 
 
@@ -246,7 +246,7 @@ def redirect_site_pw(
             pw = get_password_hash(tmp_pw)
             u_data.password = pw
             db.commit()
-            return RedirectResponse("https://k4d102.p.ssafy.io/account")
+            return RedirectResponse("https://www.코드런.com/account")
     raise HTTPException(status_code=400, detail="Incorrect route")
 
 
