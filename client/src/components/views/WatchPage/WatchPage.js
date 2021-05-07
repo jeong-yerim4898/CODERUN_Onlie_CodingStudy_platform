@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import ShowVideo from './ShowVideo';
 import VideoInfo from './Sections/VideoInfo';
+import { HeartOutlined, HeartTwoTone } from '@ant-design/icons';
 import { Row, Col } from 'react-bootstrap';
-
-import { HeartOutlined, PlusSquareOutlined, HeartTwoTone } from '@ant-design/icons';
+import './AddtoPlaylist.js';
 
 //api
 import { fetchVideoDetail, postVideoLike } from '_api/Video';
+import AddtoPlaylist from './AddtoPlaylist.js';
 
 function WatchPage() {
     const [VideoDetail, setVideoDetail] = useState({});
     const [LikeStatus, setLikeStatus] = useState(true);
+
     // const [Like, setLike] = useState(props.like);
     useEffect(() => {
         const videoData = async () => {
@@ -23,9 +25,9 @@ function WatchPage() {
                 console.log(err);
             }
         };
-
         videoData();
     }, []);
+
     const clickHeart = e => {
         console.log(LikeStatus);
         if (LikeStatus === false) {
@@ -70,8 +72,7 @@ function WatchPage() {
                             ) : (
                                 <HeartOutlined onClick={clickHeart} />
                             )}
-
-                            <PlusSquareOutlined />
+                            <AddtoPlaylist />
                         </div>
                         <hr></hr>
                     </div>
