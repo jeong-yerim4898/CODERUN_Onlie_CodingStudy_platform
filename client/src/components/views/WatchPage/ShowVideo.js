@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactHLS from 'react-hls';
 import './ShowVideo.css';
-function ShowVideo() {
-    const video_idx = 2;
+import { SERVER } from 'Config.js';
+function ShowVideo(props) {
+    const classId = props.classId;
     return (
         <div className="pageboard">
             <ReactHLS
@@ -10,7 +11,7 @@ function ShowVideo() {
                 autoplay={true}
                 width={1000}
                 height={500}
-                url={`https://k4d102.p.ssafy.io/video/${video_idx}_VIDEO.m3u8`}
+                url={`${SERVER}/video/${classId}_VIDEO.m3u8`}
             />
         </div>
     );
