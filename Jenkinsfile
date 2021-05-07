@@ -13,6 +13,8 @@ pipeline {
 			steps {
 				sh 'docker build -t client:latest /var/jenkins_home/workspace/coderun/client'
 				sh 'docker build -t mainserver:latest /var/jenkins_home/workspace/coderun/server/main'
+				sh 'docker build -t imageswagger:latest /var/jenkins_home/workspace/coderun/server/image'
+				sh 'docker build -t videoswagger:latest /var/jenkins_home/workspace/coderun/server/video'
 			}
 		}
 		stage('Docker run') {
@@ -22,10 +24,22 @@ pipeline {
         | xargs --no-run-if-empty docker container stop'
 				sh 'docker ps -f name=mainserver -q \
 				| xargs --no-run-if-empty docker container stop'
+				sh 'docker ps -f name=mainswagger -q \
+				| xargs --no-run-if-empty docker container stop'
+				sh 'docker ps -f name=imageswagger -q \
+				| xargs --no-run-if-empty docker container stop'
+				sh 'docker ps -f name=videoswagger -q \
+				| xargs --no-run-if-empty docker container stop'
 
 				sh 'docker container ls -a -f name=client -q \
         | xargs -r docker container rm'
 				sh 'docker container ls -a -f name=mainserver -q \
+        | xargs -r docker container rm'
+				sh 'docker container ls -a -f name=mainswagger -q \
+        | xargs -r docker container rm'
+				sh 'docker container ls -a -f name=imageswagger -q \
+        | xargs -r docker container rm'
+				sh 'docker container ls -a -f name=videoswagger -q \
         | xargs -r docker container rm'
 
 				sh 'docker images -f dangling=true && \
@@ -41,6 +55,15 @@ pipeline {
 				sh 'docker run -d --name mainserver \
 				-v /etc/localtime:/etc/localtime:ro \
 				--network coderunnet mainserver:latest'
+				sh 'docker run -d --name mainswagger \
+				-v /etc/localtime:/etc/localtime:ro \
+				mainserver:latest'
+				sh 'docker run -d --name imageswagger \
+				-v /etc/localtime:/etc/localtime:ro \
+				imageswagger:latest'
+				sh 'docker run -d --name videoswagger \
+				-v /etc/localtime:/etc/localtime:ro \
+				videoswagger:latest'
 			}
 		}
 	}
