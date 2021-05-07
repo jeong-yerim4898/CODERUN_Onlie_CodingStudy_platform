@@ -5,13 +5,25 @@
   background: pink;
 } */
 
-.pageboard {
+/* .pageboard {
   margin-top: 55px;
-}
+} */
 
 .colpage {
   border-width: 3px;
   border: 3px;
   border-color: black;
   /* background-color: aquamarine; */
+}
+
+.colcard {
+  /* margin-top: 10px; */
+  margin-left: 0px;
+  margin-right: 10px;
+}
+
+.board {
+  display: flex;
+  justify-content: start;
+  margin-left: 80px;
 }
