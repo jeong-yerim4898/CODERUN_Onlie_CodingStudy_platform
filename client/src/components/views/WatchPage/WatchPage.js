@@ -61,7 +61,7 @@ function WatchPage(props) {
     const sendVideoComment = () => {
         if (CommentContent.length !== 0) {
             const body = { video_id: video_id, content: CommentContent };
-            postVideoComment(video_id, body)
+            postVideoComment(body)
                 .then(res => {
                     setVideoComments([...VideoComments, res.data.data]);
                     setCommentContent('');
@@ -71,10 +71,10 @@ function WatchPage(props) {
             alert('댓글을 입력해주세요.');
         }
     };
-    const EnterComment = () => {
+    const EnterComment = e => {
         if (CommentContent.length !== 0) {
             const body = { video_id: video_id, content: CommentContent };
-            postVideoComment(video_id, body)
+            postVideoComment(body)
                 .then(res => {
                     setVideoComments([...VideoComments, res.data.data]);
                     setCommentContent('');
