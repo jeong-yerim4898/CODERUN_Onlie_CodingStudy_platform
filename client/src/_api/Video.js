@@ -80,7 +80,7 @@ export function fetchLoginedAlgoLangFilteredVideoList(
     );
 }
 // 비디오 댓글 작성하기
-export function postVideoComment(video_id, comment) {
+export function postVideoComment(comment) {
     return axios.post(`${SERVER}/api/video/comment/create`, comment, {
         headers: { token: `${ACCESS_TOKEN}` },
     });
@@ -94,6 +94,12 @@ export function fetchVideoComments(video_id) {
 // 비디오 댓글 지우기
 export function deleteVideoComment(video_comment_id) {
     return axios.delete(`${SERVER}/api/video/comment/delete/${video_comment_id}`, {
+        headers: { token: `${ACCESS_TOKEN}` },
+    });
+}
+// 비디오 댓글 수정하기
+export function updateVideoComment(comment) {
+    return axios.put(`${SERVER}/api/video/comment/update`, comment, {
         headers: { token: `${ACCESS_TOKEN}` },
     });
 }

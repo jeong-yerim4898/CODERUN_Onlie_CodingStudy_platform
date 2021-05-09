@@ -8,7 +8,7 @@ function CommunityDetail() {
     const [Article, setArticle] = useState({});
 
     useEffect(() => {
-        detailArticle(8).then(res => {
+        detailArticle(1).then(res => {
             console.log(res.data.data);
             setArticle(res.data.data);
             console.log(Article);
