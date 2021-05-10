@@ -1,16 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 // import ChartistGraph from 'react-chartist';
 import { Button, Card, Container, Row, Col } from 'react-bootstrap';
 import ProfileImage from './images/defaultimage.PNG';
 import UploadedVideos from './UploadedVideos.js';
 import MyPlayList from './MyPlayList.js';
+import Dropzone from 'react-dropzone';
+import { PlusOutlined } from '@ant-design/icons';
+import { fetchProfileImage, createProfileImage, deleteProfileImage } from '_api/Profile.js';
 // import MyPlayListCreateForm from './MyPlayListCreateForm.js';
 
 function MyPage(props) {
+    const [File, setFile] = useState('');
+    const [PreviewUrl, setPreviewUrl] = useState('');
+
     const deleteToken = () => {
         localStorage.removeItem('token');
         props.history.push('/account');
     };
+
+    const postProfileImg = e => {
+        const body = {
+            file: File,
+        };
+        console.log(body);
+        createProfileImage(body).then(res => {
+            fetchProfileImage().then(res => {
+                console.log(res.data);
+                setFile(res.data.data);
+            });
+        });
+    };
+
+    const dropHandler = file => {
+        console.log(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setPreviewUrl(reader.result);
+        };
+    };
+
+    const canclePreviewImg = () => {
+        setPreviewUrl('');
+    };
+
     return (
         <div>
             <Container fluid>
@@ -35,16 +67,45 @@ function MyPage(props) {
                             <Card.Body>
                                 <div className="user">
                                     <a href="#pablo" onClick={e => e.preventDefault()}>
-                                        <img
-                                            alt="..."
-                                            className="avatar border-gray"
-                                            src={ProfileImage}
-                                        ></img>
+                                        {PreviewUrl.length === 0 ? (
+                                            <Dropzone onDrop={dropHandler}>
+                                                {({ getRootProps, getInputProps }) => (
+                                                    <section>
+                                                        <div
+                                                            style={{
+                                                                width: 280,
+                                                                height: 210,
+                                                                border: '1px solid lightgray',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                            }}
+                                                            {...getRootProps()}
+                                                        >
+                                                            <input {...getInputProps()} />
+                                                            <PlusOutlined
+                                                                type="plus"
+                                                                style={{ fontSize: '3rem' }}
+                                                            />
+                                                        </div>
+                                                    </section>
+                                                )}
+                                            </Dropzone>
+                                        ) : (
+                                            <div>
+                                                <img
+                                                    style={{ height: '210px', width: '280px' }}
+                                                    src={PreviewUrl}
+                                                ></img>
+                                            </div>
+                                        )}
+                                        <Button onClick={canclePreviewImg}>취소</Button>
                                         <h5 className="title">사용자 닉네임</h5>
                                     </a>
                                     <p className="description">사용자 이메일</p>
                                 </div>
                                 <p className="description text-center">사용자 소개</p>
+                                <Button onClick={postProfileImg}>등록</Button>
                             </Card.Body>
                         </Card>
                     </Col>
@@ -53,34 +114,6 @@ function MyPage(props) {
                     {/* 내가 올린 동영상들 */}
                     <UploadedVideos />
                 </Row>
-                {/* 그래프 */}
-                {/* <Card>
-                    <Card.Header>
-                        <Card.Title as="h4">Q&A 채택률</Card.Title>
-                        <p className="card-category">Last Campaign Performance</p>
-                    </Card.Header>
-                    <Card.Body>
-                        <div className="ct-chart ct-perfect-fourth" id="chartPreferences">
-                            <ChartistGraph
-                                data={{
-                                    labels: ['40%', '20%', '40%'],
-                                    series: [40, 20, 40],
-                                }}
-                                type="Pie"
-                            />
-                        </div>
-                        <div className="legend">
-                            <i className="fas fa-circle text-info">등록 질문 수</i>
-                            <i className="fas fa-circle text-danger">등록 답변 수</i>
-                            <i className="fas fa-circle text-warning">채택 답변 수</i>
-                        </div>
-                        <hr></hr>
-                        <div className="stats">
-                            <i className="far fa-clock"></i>
-                            사용자 닉네임님의 채택률은 (채택 답변 수 / 등록 답변수 X 100)% 입니다.
-                        </div>
-                    </Card.Body>
-                </Card> */}
             </Container>
         </div>
     );

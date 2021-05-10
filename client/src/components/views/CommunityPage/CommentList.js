@@ -10,23 +10,19 @@ import {
 } from '_api/Board.js';
 import { ListGroup, Button, Badge, Form } from 'react-bootstrap';
 
-function CommentList() {
+function CommentList(props) {
     let user = useSelector(state => state.user);
-
+    const ArticleId = props.ArticleId;
     const [Article, setArticle] = useState({});
     const [Comments, setComments] = useState([]);
     const [Comment, setComment] = useState([]);
     const [updateComment, setupdateComment] = useState('');
     const [UpdateNum, setUpdateNum] = useState(null);
     useEffect(() => {
-        detailArticle(8).then(res => {
-            // console.log(res.data.data);
+        detailArticle(ArticleId).then(res => {
             setArticle(res.data.data);
-            // console.log(Article);
         });
-        listComment(8).then(res => {
-            // console.log(res.data.data);
-            // console.log('comment list!!');
+        listComment(ArticleId).then(res => {
             setComments(res.data.data);
         });
     }, []);
@@ -36,65 +32,50 @@ function CommentList() {
     };
     const createCommentHandler = event => {
         event.preventDefault();
-        const article_id = 8;
-        // console.log('댓글');
+        const article_id = ArticleId;
+
         const body = {
             board_id: article_id,
             content: Comment,
         };
-        console.log(body);
+
         createComment(body).then(res => {
-            // console.log('create comment success');
-            listComment(8).then(res => {
-                // console.log(res.data.data);
-                // console.log('comment create list!!');
+            // console.log(res.data.data);
+            listComment(ArticleId).then(res => {
                 setComments(res.data.data);
             });
         });
     };
     const onselectHander = idx => {
-        console.log(idx, 1);
         const body = {
             board_comment_id: idx,
         };
         selectComment(body).then(res => {
-            listComment(8).then(res => {
-                // console.log(res.data.data);
-                // console.log('comment create list!!');
+            listComment(ArticleId).then(res => {
                 setComments(res.data.data);
             });
         });
     };
     const onDeleteHander = idx => {
-        // console.log(idx);
         deleteComment(idx).then(res => {
-            listComment(8).then(res => {
-                // console.log(res.data.data);
-                // console.log('comment delete list!!');
+            listComment(ArticleId).then(res => {
                 setComments(res.data.data);
             });
         });
     };
     const onUpdateHander = idx => {
-        // console.log(idx, 123);
         setUpdateNum(idx);
-        // console.log(UpdateNum, 11);
     };
     const onUpdateCommentHander = event => {
-        // event.preventDefault();
         const board_comment_id = UpdateNum;
-        // console.log('댓글');
-        // console.log(UpdateNum, UpdateNum);
+
         const body = {
             board_comment_id: board_comment_id,
             content: updateComment,
         };
-        console.log(body);
+
         updatingComment(body).then(res => {
-            // console.log('create update success');
-            listComment(8).then(res => {
-                // console.log(res.data.data);
-                // console.log('comment Update list!!');
+            listComment(ArticleId).then(res => {
                 setComments(res.data.data);
                 setUpdateNum(null);
             });
@@ -107,7 +88,7 @@ function CommentList() {
         return (
             <ListGroup.Item key={index}>
                 {comment.user_id}
-                {comment.select ? <Badge variant="warning">Warning</Badge> : console.log()}
+                {comment.select ? <Badge variant="warning">채택</Badge> : console.log()}
                 {!Article.select && Article.user_id === user?.login?.user?.id ? (
                     <Button onClick={() => onselectHander(comment.id)}>채택하기</Button>
                 ) : (

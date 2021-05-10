@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { detailArticle, deleteArticle, createComment, listComment } from '_api/Board.js';
+import { useSelector } from 'react-redux';
+import { detailArticle, deleteArticle } from '_api/Board.js';
 import { Button, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import CommentList from './CommentList';
 
-function CommunityDetail() {
+function CommunityDetail(props) {
     const [Article, setArticle] = useState({});
-
+    let user = useSelector(state => state.user);
     useEffect(() => {
-        detailArticle(1).then(res => {
+        console.log(user.login.user.id);
+        detailArticle(props.match.params.id).then(res => {
             console.log(res.data.data);
             setArticle(res.data.data);
             console.log(Article);
@@ -17,9 +19,7 @@ function CommunityDetail() {
 
     const deleteHandler = event => {
         event.preventDefault();
-        const article_id = 10;
-        console.log(1);
-
+        const article_id = props.match.params.id;
         deleteArticle(article_id).then(res => {
             console.log('delete success');
         });
@@ -28,18 +28,26 @@ function CommunityDetail() {
         <div>
             <Row>
                 <Col md={{ span: 8, offset: 2 }}>
-                    {Article.select ? <Button variant="warning">Warning</Button> : console.log()}
-                    <h1>{Article.title}</h1>
+                    <h1>
+                        {Article.title}{' '}
+                        {Article.select ? <Button variant="warning">채택</Button> : console.log()}
+                    </h1>
                     <h2>{Article.content}</h2>
-                    <Link to="update/8">
-                        <Button variant="success">수정</Button>
-                    </Link>
-                    <Button variant="danger" onClick={deleteHandler}>
-                        삭제
-                    </Button>
+                    {Article.user_id === user.login.user.id ? (
+                        <div>
+                            <Link to={`update/${props.match.params.id}`}>
+                                <Button variant="success">수정</Button>
+                            </Link>
+                            <Button variant="danger" onClick={deleteHandler}>
+                                삭제
+                            </Button>
+                        </div>
+                    ) : (
+                        console.log()
+                    )}
 
                     <br />
-                    <CommentList />
+                    <CommentList ArticleId={props.match.params.id} />
                     <br />
                 </Col>
             </Row>
