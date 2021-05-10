@@ -17,6 +17,30 @@ from routers.user import get_current_user
 router = APIRouter()
 
 
+@router.get("/api/board/search", tags=["board"], description="게시판 글 조회")
+def get_baord(
+    count: int,
+    search_text: Optional[str] = '',
+    db: Session = Depends(get_db),
+):
+    
+    title_board = db.query(models.Board, models.User.name, models.User.profile).join(models.User, models.Board.user_id == models.User.id).filter(models.Board.title.ilike(f'%{search_text}%'))
+    content_board = db.query(models.Board, models.User.name, models.User.profile).join(models.User, models.Board.user_id == models.User.id).filter(models.Board.content.ilike(f'%{search_text}%'))
+
+
+    result = title_board.union(content_board)
+
+    
+    user_board = db.query(models.Board, models.User.name, models.User.profile).join(models.User, models.Board.user_id == models.User.id).filter(models.User.name.ilike(f'%{search_text}%'))
+
+    result = result.union(user_board).order_by(models.Board.created_date.desc()).all()
+    return_result = result[(count-1)*10:count*10]
+    
+
+    return {"data": return_result, "page_cnt": (len(result)-1)//10 + 1}
+
+
+
 @router.post("/api/board", tags=["board"], description="게시판 글 작성")
 def post_board(
     data: schemas.BoardBase,
