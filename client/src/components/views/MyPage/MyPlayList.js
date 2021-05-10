@@ -19,8 +19,6 @@ function MyPlayList(props) {
 
     useEffect(() => {
         readPlaylist().then(res => {
-            console.log(res.data.data);
-            console.log('play list!!');
             setPlaylists(res.data.data);
         });
     }, []);
