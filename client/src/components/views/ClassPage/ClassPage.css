@@ -22,8 +22,14 @@
   margin-right: 10px;
 }
 
-.board {
+.cardBoard {
   display: flex;
   justify-content: start;
-  margin-left: 80px;
+  color: black;
+  /* margin-left: 80px; */
+}
+
+.classAtag {
+  color: black;
+  text-decoration: none;
 }

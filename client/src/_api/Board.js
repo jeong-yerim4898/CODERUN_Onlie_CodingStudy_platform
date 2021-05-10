@@ -60,3 +60,13 @@ export function updatingComment(data) {
         headers: { token: ACCESS_TOKEN },
     });
 }
+
+// 글 검색 리스트
+export function listArticle(count, search_text) {
+    return axios.get(`${SERVER}​/api/board/search?count=${count}&search_text=${search_text}`);
+}
+
+// 글 리스트
+export function initialListArticle(count) {
+    return axios.get(`${SERVER}​/api/board/search?count=${count}`);
+}

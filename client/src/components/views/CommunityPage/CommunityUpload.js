@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { createArticle } from '_api/Board.js';
+import React, { useState, useEffect } from 'react';
+
+import { detailArticle, updateArticle } from '_api/Board.js';
 import { useHistory } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import './CommunityUpload.css';
@@ -9,6 +10,14 @@ function CommunityUpload(props) {
 
     const [Title, setTitle] = useState('');
     const [Content, setContent] = useState('');
+
+    useEffect(() => {
+        detailArticle(props.match.params.id).then(res => {
+            console.log(res.data.data);
+            setTitle(res.data.data.title);
+            setContent(res.data.data.content);
+        });
+    }, []);
 
     const titleHandler = event => {
         setTitle(event.currentTarget.value);
@@ -24,10 +33,11 @@ function CommunityUpload(props) {
             return alert('모든 값을 넣어 주셔야 합니다.');
         }
         const body = {
+            board_id: props.match.params.id,
             title: Title,
             content: Content,
         };
-        createArticle(body)
+        updateArticle(body)
             .then(res => {
                 console.log(res);
                 console.log('success');

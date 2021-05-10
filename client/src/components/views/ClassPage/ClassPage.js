@@ -3,6 +3,10 @@ import { useSelector } from 'react-redux';
 import './ClassPage.css';
 import 'antd/dist/antd.css';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as fasHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
+
 import { fetchCSTag, fetchAlgorithmTag, fetchLanguageTag } from '_api/Tag.js';
 
 import {
@@ -274,12 +278,21 @@ function ClassPage() {
     });
     const renderCards = Classes.map((classs, index) => {
         return (
-            <a href={'/watch/' + classs.id} key={index}>
+            <a className="classAtag" href={'/watch/' + classs.id} key={index}>
                 <Col className="colcard" span={5}>
-                    <Card style={{ width: 240 }}>
-                        <Card.Img variant="top" src={classs.thumbnail} />
+                    <Card style={{ width: 240, height: 320 }}>
+                        <Card.Img variant="top" src={classs.thumbnail} style={{ height: 180 }} />
                         <Card.Title>{classs.user.name}</Card.Title>
                         <Card.Text>{classs.title}</Card.Text>
+                        {classs.likestatus ? (
+                            <Card.Text>
+                                <FontAwesomeIcon icon={fasHeart} /> {classs.likecnt}
+                            </Card.Text>
+                        ) : (
+                            <Card.Text>
+                                <FontAwesomeIcon icon={farHeart} /> {classs.likecnt}
+                            </Card.Text>
+                        )}
                     </Card>
                 </Col>
             </a>
@@ -293,7 +306,7 @@ function ClassPage() {
                 <Col md={2}>
                     <Menu
                         // onClick={this.handleClick}
-                        style={{ width: 256 }}
+                        // style={{ width: 256 }}
                         defaultSelectedKeys={['1']}
                         defaultOpenKeys={['sub1', 'sub2']}
                         mode="inline"
@@ -310,7 +323,7 @@ function ClassPage() {
                     {renderButton}
 
                     {/* <Space size={2}> */}
-                    <Row className="board">{renderCards}</Row>
+                    <Row className="cardBoard">{renderCards}</Row>
                     {/* </Space> */}
                     <Button variant="info" onClick={onNextHandler}>
                         다음페이지
