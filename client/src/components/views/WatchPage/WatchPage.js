@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Input, Button } from 'antd';
 import './AddtoPlaylist.js';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import ShowVideo from './Sections/ShowVideo';
 import VideoInfo from './Sections/VideoInfo';
 import VideoComment from './Sections/VideoComment';
@@ -39,15 +40,28 @@ function WatchPage(props) {
         setCommentContent(e.currentTarget.value);
     };
 
-    const renderComment = VideoComments.map((comment, index) => {
+    const renderComment = () => {
         return (
-            <VideoComment
-                key={index}
-                VideoComment={comment}
-                removeComment={comment_id => deleteCommentHandler(comment_id)}
-            />
+            <div
+                style={{
+                    height: '350px',
+                    overflow: 'auto',
+                    display: 'flex',
+                    flexDirection: 'column',
+                }}
+            >
+                <InfiniteScroll dataLength={VideoComments.length}>
+                    {VideoComments.map((comment, index) => (
+                        <VideoComment
+                            key={index}
+                            VideoComment={comment}
+                            removeComment={comment_id => deleteCommentHandler(comment_id)}
+                        />
+                    ))}
+                </InfiniteScroll>
+            </div>
         );
-    });
+    };
 
     const deleteCommentHandler = comment_id => {
         deleteVideoComment(comment_id)
@@ -115,7 +129,7 @@ function WatchPage(props) {
                             <p>아직 댓글이 없어요 ㅠㅠ</p>
                         </div>
                     ) : (
-                        renderComment
+                        renderComment()
                     )}
                 </Col>
             </Row>
