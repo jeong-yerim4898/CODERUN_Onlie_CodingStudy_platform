@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import VideoImageUpload from './Sections/VideoImgUpoload';
 import VideoContent from './Sections/VideoContent';
 import VideoTag from './Sections/VideoTag';
 import Dropzone from 'react-dropzone';
@@ -25,6 +24,7 @@ function VideoUpload() {
     const [CSList, setCSList] = useState([]);
     const [FileArray, setFileArray] = useState([]);
     const [VideoArray, setVideoArray] = useState([]);
+    const [PreviewUrl, setPreviewUrl] = useState('');
 
     useEffect(() => {
         const TagData = async () => {
@@ -97,8 +97,6 @@ function VideoUpload() {
         } else {
             e.target.style.backgroundColor = 'grey';
         }
-
-        // console.log(tag);
     };
     const handlerAlgoTag = (e, tag) => {
         if (e.target.style.backgroundColor === 'grey') {
@@ -198,62 +196,113 @@ function VideoUpload() {
     };
 
     const dropHandler = file => {
-        // console.log(file[0]);
+        console.log(file);
         setFileArray(file[0]);
-        // setFileArray(file.target.files);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setPreviewUrl(reader.result);
+        };
+        reader.readAsDataURL(file[0]);
+    };
+
+    const canclePreviewImg = () => {
+        setPreviewUrl('');
+    };
+    const canclePreviewVideo = () => {
+        setVideoArray([]);
     };
 
     const dropVideoHandler = video => {
-        // console.log(video[0].type.split('/')[1]);
-        setVideoArray(video[0]);
+        const content = document.getElementsByClassName('video-size-text');
+        if (video[0].size >= 2.5e8) {
+            content[0].style.color = 'red';
+            alert('헤당 비디오는 250MB를 넘어갑니다.');
+        } else {
+            setVideoArray(video[0]);
+        }
     };
 
     return (
         <div class="page">
             <div class="video-preview">
-                <h1>비디오</h1>
-                <Dropzone onDrop={dropVideoHandler}>
-                    {({ getRootProps, getInputProps }) => (
-                        <section>
-                            <div
-                                style={{
-                                    width: 300,
-                                    height: 200,
-                                    border: '1px solid lightgray',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    marginBottom: '1rem',
-                                }}
-                                {...getRootProps()}
-                            >
-                                <input {...getInputProps()} />
-                                <PlusOutlined type="plus" style={{ fontSize: '3rem' }} />
-                            </div>
-                        </section>
+                <div>
+                    <h1>비디오</h1>
+                    <p className="video-size-text">용량은 최대 250MB까지 지원됩니다.</p>
+                    {VideoArray.length === 0 ? (
+                        <Dropzone onDrop={dropVideoHandler}>
+                            {({ getRootProps, getInputProps }) => (
+                                <section>
+                                    <div
+                                        style={{
+                                            width: 280,
+                                            height: 210,
+                                            border: '1px solid lightgray',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginBottom: '1rem',
+                                        }}
+                                        {...getRootProps()}
+                                    >
+                                        <input {...getInputProps()} />
+
+                                        <PlusOutlined type="plus" style={{ fontSize: '3rem' }} />
+                                    </div>
+                                </section>
+                            )}
+                        </Dropzone>
+                    ) : (
+                        <div
+                            style={{
+                                width: 280,
+                                height: 210,
+                                border: '1px solid lightgray',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <img
+                                style={{ height: '100px' }}
+                                src={`${process.env.PUBLIC_URL}/img/okay.png`}
+                                alt="gg"
+                            />
+                        </div>
                     )}
-                </Dropzone>
-                <h1>썸네일</h1>
-                <Dropzone onDrop={dropHandler}>
-                    {({ getRootProps, getInputProps }) => (
-                        <section>
-                            <div
-                                style={{
-                                    width: 300,
-                                    height: 200,
-                                    border: '1px solid lightgray',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}
-                                {...getRootProps()}
-                            >
-                                <input {...getInputProps()} />
-                                <PlusOutlined type="plus" style={{ fontSize: '3rem' }} />
-                            </div>
-                        </section>
+                    <Button onClick={canclePreviewVideo}>취소</Button>
+                </div>
+
+                <div>
+                    <h1>썸네일</h1>
+                    <p className="video-size-text">이미지 비율은 4:3을 권장합니다.</p>
+                    {PreviewUrl.length === 0 ? (
+                        <Dropzone onDrop={dropHandler}>
+                            {({ getRootProps, getInputProps }) => (
+                                <section>
+                                    <div
+                                        style={{
+                                            width: 280,
+                                            height: 210,
+                                            border: '1px solid lightgray',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                        {...getRootProps()}
+                                    >
+                                        <input {...getInputProps()} />
+                                        <PlusOutlined type="plus" style={{ fontSize: '3rem' }} />
+                                    </div>
+                                </section>
+                            )}
+                        </Dropzone>
+                    ) : (
+                        <div>
+                            <img style={{ height: '210px', width: '280px' }} src={PreviewUrl}></img>
+                        </div>
                     )}
-                </Dropzone>
+                    <Button onClick={canclePreviewImg}>취소</Button>
+                </div>
             </div>
 
             <div class="video-content">

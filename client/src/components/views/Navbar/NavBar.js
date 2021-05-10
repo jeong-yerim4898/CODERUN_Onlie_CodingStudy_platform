@@ -57,7 +57,7 @@ function NavBar(props) {
                         </Nav.Item>
                         {/* 동영상업로드 버튼 */}
                         <Nav.Item className="NavItem-right">
-                            <Button variant="outline-info" href="upload/video">
+                            <Button variant="outline-info" href="/upload/video">
                                 <FontAwesomeIcon icon={faPlus} className="NavVideoBtn" />
                             </Button>
                         </Nav.Item>
