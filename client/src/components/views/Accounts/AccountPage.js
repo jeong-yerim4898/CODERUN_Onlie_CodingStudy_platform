@@ -33,7 +33,6 @@ function LoginPage(props) {
     };
 
     const NicknameHandler = event => {
-        console.log(event.currentTarget.value);
         setNickname(event.currentTarget.value);
     };
 
@@ -44,9 +43,15 @@ function LoginPage(props) {
 
     const OverlapEmail = event => {
         event.preventDefault();
-        checkEmail(Email)
-            .then(res => alert('email 쌉가능'))
-            .catch(err => alert('email이 중복되요'));
+        let regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        console.log(Email, regExp.test(Email) === true);
+        if (regExp.test(Email) === true) {
+            checkEmail(Email)
+                .then(res => alert('email 쌉가능'))
+                .catch(err => alert('email이 중복되요'));
+        } else {
+            alert('email 형식이 맞지 않아요.');
+        }
     };
 
     const passwordConfirmHandler = event => {
@@ -58,7 +63,6 @@ function LoginPage(props) {
             setHashPasswordConfirm(sha(pw));
             pwconfirm.style.backgroundColor = '#eee';
         } else {
-            console.log('not same');
             pwconfirm.style.backgroundColor = '#ffdcdc';
         }
     };
@@ -66,15 +70,19 @@ function LoginPage(props) {
     const postSignup = event => {
         event.preventDefault();
         const body = { email: Email, password: HashPasswordConfirm, name: Nickname };
-        dispatch(signupUser(body))
-            .then(res => {
-                if (res.payload.profile === undefined) {
-                    setVisible(true);
-                } else {
-                    alert('회원가입에 실패했습니다. ㅠㅠ');
-                }
-            })
-            .catch(err => console.log(err));
+        if (Email.length === 0 || HashPasswordConfirm.length === 0 || Nickname.length === 0) {
+            alert('빠짐없이 입력해주세요.');
+        } else {
+            dispatch(signupUser(body))
+                .then(res => {
+                    if (res.payload.profile === undefined) {
+                        setVisible(true);
+                    } else {
+                        alert('회원가입에 실패했습니다. ㅠㅠ');
+                    }
+                })
+                .catch(err => console.log(err));
+        }
     };
 
     const postLogin = event => {
@@ -89,7 +97,6 @@ function LoginPage(props) {
                     console.log(res.data);
                     window.localStorage.setItem('token', res.payload.token);
                     window.location.replace('/');
-                    // props.history.push('/');
                 }
             })
             .catch(err => alert('로그인 다시해줭 ㅠㅠ'));
@@ -98,12 +105,14 @@ function LoginPage(props) {
     const ValidEmail = event => {
         const email = document.getElementById('email');
         let asValue = event.currentTarget.value;
+        console.log(asValue);
         let regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         if (regExp.test(asValue) === true) {
             email.style.backgroundColor = '#eee';
             setEmail(asValue);
         } else {
             email.style.backgroundColor = '#ffdcdc';
+            setEmail(asValue);
         }
     };
 
@@ -138,6 +147,7 @@ function LoginPage(props) {
     const handleCancel = () => {
         setVisible(false);
         setVisible2(false);
+        window.location.reload();
     };
 
     const sendEmail = event => {

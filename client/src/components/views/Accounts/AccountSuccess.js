@@ -2,14 +2,15 @@ import React from 'react';
 
 function AccountSuccess() {
     return (
-        <div>
+        <div style={{ height: '500px' }}>
             <h1
                 style={{
                     width: '50%',
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
+                    position: 'relative',
+                    top: '200px',
+                    left: '25%',
+                    // transform: 'translate(-50%, -25%)',
+                    zIndex: '100',
                 }}
             >
                 인증이 완료되었습니다. Welcome Code:RUN

@@ -8,10 +8,10 @@ function Footer() {
             <div className="AboutUs">
                 <div className="TeamIntroduce">
                     <p className="Team">(주)삼성말고오성</p>
-                    <p className="TeamMember">Team Leader | 구태완</p>
-                    <p className="TeamMember">Tech Member | 권세진</p>
+                    <p className="TeamMember">Team Leader | 구태완 (넥슨으로 싸탈)</p>
+                    <p className="TeamMember">Team Member | 권세진</p>
                     <p className="TeamMember">Team Member | 정예림</p>
-                    <p className="TeamMember">Team Member | 이경연</p>
+                    <p className="TeamMember">Team Member | 이경연 (지그재그로 싸탈)</p>
                     <p className="TeamMember">Team Member | 박노정</p>
                 </div>
 
