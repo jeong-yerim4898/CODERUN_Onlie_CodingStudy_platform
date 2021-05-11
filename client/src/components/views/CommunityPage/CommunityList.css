@@ -1,0 +1,14 @@
+.articleAtag {
+  color: black;
+  text-decoration: none;
+
+}
+
+.articleAtag:hover {
+  color: black;
+  text-decoration: none;
+}
+
+.articleItem {
+  border: none !important;
+}
