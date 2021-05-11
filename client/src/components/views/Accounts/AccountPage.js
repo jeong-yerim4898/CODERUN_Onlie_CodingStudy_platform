@@ -79,7 +79,6 @@ function LoginPage(props) {
 
     const postLogin = event => {
         event.preventDefault();
-        console.log('여기가지');
         const body = { email: LoginEmail, password: Loginpw };
         dispatch(loginUser(body))
             .then(res => {
@@ -87,6 +86,7 @@ function LoginPage(props) {
                     setModalText('이메일 인증이 안된거 같아요 ㅠㅠ');
                     setVisible(true);
                 } else {
+                    console.log(res.data);
                     window.localStorage.setItem('token', res.payload.token);
                     window.location.replace('/');
                     // props.history.push('/');

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { LOGIN_USER, SIGNUP_USER } from './types';
-import { SERVER } from 'Config.js';
+import { LOGIN_USER, SIGNUP_USER, UPDATE_USER } from './types';
+import { SERVER, ACCESS_TOKEN } from 'Config.js';
 
 export function loginUser(dataToSubmit) {
     const request = axios
@@ -20,6 +20,19 @@ export function signupUser(dataToSumbmit) {
         .catch(err => console.log(err));
     return {
         type: SIGNUP_USER,
+        payload: request,
+    };
+}
+
+export function updateUser(dataToSubmit) {
+    const request = axios
+        .put(`${SERVER}/api/user/data/update`, dataToSubmit, {
+            headers: { token: `${ACCESS_TOKEN}` },
+        })
+        .then(res => res.data.user)
+        .catch(err => console.log(err));
+    return {
+        type: UPDATE_USER,
         payload: request,
     };
 }

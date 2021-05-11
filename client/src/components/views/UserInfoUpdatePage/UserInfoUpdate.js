@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import './UserInfoUpdate.css';
 import { Avatar } from 'antd';
 import { updateUserInfo } from '_api/User';
+import { useDispatch } from 'react-redux';
+import { updateUser } from '_actions/user_actions';
 
 function UserInfoUpdate(props) {
+    const dispatch = useDispatch();
     const [UpdateNickname, setUpdateNickname] = useState('');
     const [UpdatePassword, setUpdatePassword] = useState('');
     const [UpdatePasswordConfirm, setUpdatePasswordConfirm] = useState('');
@@ -16,7 +19,6 @@ function UserInfoUpdate(props) {
 
     const passwordConfirmHandler = event => {
         const pwconfirm = document.getElementsByClassName('update-password-confirm');
-        console.log(pwconfirm);
         let pw = event.currentTarget.value;
         setUpdatePasswordConfirm(pw);
         const sha = require('sha256');
@@ -34,11 +36,17 @@ function UserInfoUpdate(props) {
     };
 
     const submitInfo = () => {
-        const body = { password: HashPasswordConfirm, name: UpdateNickname };
-        updateUserInfo(body)
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
-        props.history.push(`/profile/${props.user.login.user.id}`);
+        if (HashPasswordConfirm.length === 0 || UpdateNickname.length === 0) {
+            alert('데이터를 모두 넣어주세요.');
+        } else {
+            const body = { password: HashPasswordConfirm, name: UpdateNickname };
+            dispatch(updateUser(body))
+                .then(res => {
+                    console.log(res);
+                    props.history.push(`/profile/${props.user.login.user.id}`);
+                })
+                .catch(err => console.log(err));
+        }
     };
 
     return (
