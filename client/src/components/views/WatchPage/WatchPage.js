@@ -5,22 +5,17 @@ import './AddtoPlaylist.js';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ShowVideo from './Sections/ShowVideo';
 import VideoInfo from './Sections/VideoInfo';
+import VideoCommentInput from './Sections/VideoCommentInput';
 import VideoComment from './Sections/VideoComment';
 
 //api
-import {
-    fetchVideoDetail,
-    fetchVideoComments,
-    postVideoComment,
-    deleteVideoComment,
-} from '_api/Video';
+import { fetchVideoDetail, fetchVideoComments, deleteVideoComment } from '_api/Video';
 import AddtoPlaylist from './AddtoPlaylist.js';
 
 function WatchPage(props) {
     const video_id = props.match.params.id;
     const [VideoDetail, setVideoDetail] = useState({});
     const [VideoComments, setVideoComments] = useState([]);
-    const [CommentContent, setCommentContent] = useState('');
 
     useEffect(() => {
         const videoData = async () => {
@@ -28,6 +23,7 @@ function WatchPage(props) {
                 const res = await fetchVideoDetail(video_id);
                 setVideoDetail(res.data);
                 const res2 = await fetchVideoComments(video_id);
+                console.log(res2.data.data);
                 setVideoComments(res2.data.data);
             } catch (err) {
                 console.log(err);
@@ -36,11 +32,8 @@ function WatchPage(props) {
         videoData();
     }, []);
 
-    const changeContent = e => {
-        setCommentContent(e.currentTarget.value);
-    };
-
     const renderComment = () => {
+        console.log(VideoComments, 'asdasdasd77777777');
         return (
             <div
                 style={{
@@ -54,7 +47,7 @@ function WatchPage(props) {
                     {VideoComments.map((comment, index) => (
                         <VideoComment
                             key={index}
-                            VideoComment={comment}
+                            Videocomment={comment}
                             removeComment={comment_id => deleteCommentHandler(comment_id)}
                         />
                     ))}
@@ -62,42 +55,35 @@ function WatchPage(props) {
             </div>
         );
     };
-
     const deleteCommentHandler = comment_id => {
-        deleteVideoComment(comment_id)
-            .then(res => console.log(res))
-            .then(err => console.log(err));
-        const removeComment = VideoComments.findIndex(comment => comment.id === comment_id);
-        VideoComments.splice(removeComment, 1);
-        setVideoComments([...VideoComments]);
+        console.log(comment_id);
+        const newVideoComments = VideoComments;
+        // deleteVideoComment(comment_id)
+        //     .then(res => console.log(res))
+        //     .then(err => console.log(err));
+        console.log(newVideoComments, 'new');
+        function arrayRemove(arr, value) {
+            return arr.filter(function (ele) {
+                return ele.id != value;
+            });
+        }
+        const result = arrayRemove(newVideoComments, comment_id);
+        console.log(result, 'result');
+        // const removeComment = newVideoComments.findIndex(comment => comment.id === comment_id);
+        // console.log(newVideoComments.splice(removeComment, 1));
+        // VideoComments.splice(removeComment, 1);
+        //     console.log(VideoComments);
+        setVideoComments(result);
     };
 
-    const sendVideoComment = () => {
-        if (CommentContent.length !== 0) {
-            const body = { video_id: video_id, content: CommentContent };
-            postVideoComment(body)
-                .then(res => {
-                    setVideoComments([...VideoComments, res.data.data]);
-                    setCommentContent('');
-                })
-                .catch(err => console.log(err));
-        } else {
-            alert('댓글을 입력해주세요.');
-        }
+    const onasdHandelr = () => {
+        console.log(VideoComments, 'gg');
     };
-    const EnterComment = e => {
-        if (CommentContent.length !== 0) {
-            const body = { video_id: video_id, content: CommentContent };
-            postVideoComment(body)
-                .then(res => {
-                    setVideoComments([...VideoComments, res.data.data]);
-                    setCommentContent('');
-                })
-                .catch(err => console.log(err));
-        } else {
-            alert('댓글을 입력해주세요.');
-        }
+    const addCommentHandler = newcomment => {
+        console.log(newcomment);
+        setVideoComments([...VideoComments, newcomment]);
     };
+
     return (
         <div>
             <Row>
@@ -105,7 +91,10 @@ function WatchPage(props) {
                     {VideoDetail.data === undefined ? (
                         console.log('yet')
                     ) : (
-                        <ShowVideo classId={VideoDetail.data.id} />
+                        <div>
+                            <ShowVideo classId={VideoDetail.data.id} />
+                            <button onClick={onasdHandelr}>asdasd</button>
+                        </div>
                     )}
                 </Col>
                 <Col xs={12} md={4} lg={4} xl={4}>
@@ -114,16 +103,16 @@ function WatchPage(props) {
                     ) : (
                         <VideoInfo video={VideoDetail.data} like={VideoDetail.like_status} />
                     )}
-                    <div style={{ display: 'flex' }}>
-                        <Input
-                            className="comment-input"
-                            placeholder="댓글을 입력해주세요."
-                            onPressEnter={EnterComment}
-                            onChange={changeContent}
-                            value={CommentContent}
-                        ></Input>
-                        <Button onClick={sendVideoComment}>작성</Button>
-                    </div>
+                    {VideoDetail.data === undefined ? (
+                        console.log('yet')
+                    ) : (
+                        <VideoCommentInput
+                            VideoComments={VideoComments}
+                            VideoDetail={VideoDetail}
+                            addComment={comment => addCommentHandler(comment)}
+                        />
+                    )}
+
                     {VideoComments.length === 0 ? (
                         <div>
                             <p>아직 댓글이 없어요 ㅠㅠ</p>

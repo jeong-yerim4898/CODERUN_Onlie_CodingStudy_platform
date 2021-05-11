@@ -6,22 +6,25 @@ import { updateVideoComment } from '_api/Video';
 
 function VideoComment(props) {
     let user = useSelector(state => state.user);
-    const [comment, setcomment] = useState(props.VideoComment.content);
+    const [comment, setcomment] = useState(props.Videocomment.content);
     const [commentUpdate, setcommentUpdate] = useState('');
+
     const deleteComment = () => {
-        props.removeComment(props.VideoComment.id);
+        console.log('delete' + props.Videocomment.id);
+        props.removeComment(props.Videocomment.id);
     };
+
     const handlerUpdate = e => {
         setcommentUpdate(e.currengtTarget.value);
     };
     const updateComment = () => {
-        const updateBtn = document.getElementsByClassName(`${props.VideoComment.id}comment-update`);
-        const content = document.getElementsByClassName(`${props.VideoComment.id}comment-content`);
+        const updateBtn = document.getElementsByClassName(`${props.Videocomment.id}comment-update`);
+        const content = document.getElementsByClassName(`${props.Videocomment.id}comment-content`);
         const updateIcon = document.getElementsByClassName(
-            `${props.VideoComment.id}comment-update-icon`,
+            `${props.Videocomment.id}comment-update-icon`,
         );
         const deleteIcon = document.getElementsByClassName(
-            `${props.VideoComment.id}comment-delete-icon`,
+            `${props.Videocomment.id}comment-delete-icon`,
         );
         updateBtn[0].classList.remove('hidden');
         content[0].classList.add('hidden');
@@ -30,15 +33,15 @@ function VideoComment(props) {
     };
 
     const sendCommentUpdate = () => {
-        const updateBtn = document.getElementsByClassName(`${props.VideoComment.id}comment-update`);
-        const content = document.getElementsByClassName(`${props.VideoComment.id}comment-content`);
+        const updateBtn = document.getElementsByClassName(`${props.Videocomment.id}comment-update`);
+        const content = document.getElementsByClassName(`${props.Videocomment.id}comment-content`);
         const updateIcon = document.getElementsByClassName(
-            `${props.VideoComment.id}comment-update-icon`,
+            `${props.Videocomment.id}comment-update-icon`,
         );
         const deleteIcon = document.getElementsByClassName(
-            `${props.VideoComment.id}comment-delete-icon`,
+            `${props.Videocomment.id}comment-delete-icon`,
         );
-        const body = { video_comment_id: props.VideoComment.id, content: commentUpdate };
+        const body = { video_comment_id: props.Videocomment.id, content: commentUpdate };
         updateVideoComment(body)
             .then(res => {
                 console.log(res.data);
@@ -52,15 +55,14 @@ function VideoComment(props) {
         setcomment(commentUpdate);
     };
     const cancleCommentUpdate = () => {
-        const updateBtn = document.getElementsByClassName(`${props.VideoComment.id}comment-update`);
-
+        const updateBtn = document.getElementsByClassName(`${props.Videocomment.id}comment-update`);
         const updateIcon = document.getElementsByClassName(
-            `${props.VideoComment.id}comment-update-icon`,
+            `${props.Videocomment.id}comment-update-icon`,
         );
         const deleteIcon = document.getElementsByClassName(
-            `${props.VideoComment.id}comment-delete-icon`,
+            `${props.Videocomment.id}comment-delete-icon`,
         );
-        const content = document.getElementsByClassName(`${props.VideoComment.id}comment-content`);
+        const content = document.getElementsByClassName(`${props.Videocomment.id}comment-content`);
         updateBtn[0].classList.add('hidden');
         content[0].classList.remove('hidden');
         updateIcon[0].classList.remove('hidden');
@@ -70,24 +72,24 @@ function VideoComment(props) {
         <div>
             <div style={{ display: 'flex' }}>
                 <img
-                    src={props.VideoComment.user.profile}
-                    style={{ height: `50px`, borderRadius: '50%' }}
+                    src={props.Videocomment.user.profile}
+                    style={{ height: `50px`, width: '50px', borderRadius: '50%' }}
                 />
                 <div style={{ width: '60%' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <h4>{props.VideoComment.user.name}</h4>
-                        {props.VideoComment.user.id == user.login.user.id ? (
+                        <h4>{props.Videocomment.user.name}</h4>
+                        {props.Videocomment.user.id == user.login.user.id ? (
                             <div>
                                 <EditOutlined
-                                    className={props.VideoComment.id + 'comment-update-icon'}
+                                    className={props.Videocomment.id + 'comment-update-icon'}
                                     onClick={updateComment}
                                 />
                                 <CloseOutlined
-                                    className={props.VideoComment.id + 'comment-delete-icon'}
+                                    className={props.Videocomment.id + 'comment-delete-icon'}
                                     onClick={deleteComment}
                                 />
                                 <div
-                                    className={props.VideoComment.id + 'comment-update' + ' hidden'}
+                                    className={props.Videocomment.id + 'comment-update' + ' hidden'}
                                 >
                                     <Input onChange={handlerUpdate} />
                                     <Button onClick={sendCommentUpdate}>수정완료</Button>
@@ -99,7 +101,7 @@ function VideoComment(props) {
                         )}
                     </div>
 
-                    <p className={props.VideoComment.id + 'comment-content'}>{comment}</p>
+                    <p className={props.Videocomment.id + 'comment-content'}>{comment}</p>
                 </div>
             </div>
         </div>
