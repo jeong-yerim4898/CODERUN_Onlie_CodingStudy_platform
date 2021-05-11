@@ -282,6 +282,5 @@ def update_user_data(
         db.refresh(u_data)
         del u_data.password
         del u_data.security_count
-        del u_data.active
-        return {"data": u_data}
+        return {"user": u_data}
     raise HTTPException(status_code=404, detail="No content")
