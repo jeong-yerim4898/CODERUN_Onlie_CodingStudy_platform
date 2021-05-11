@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+
 import {
     detailArticle,
     listComment,
@@ -12,6 +13,7 @@ import { ListGroup, Button, Badge, Form } from 'react-bootstrap';
 
 function CommentList(props) {
     let user = useSelector(state => state.user);
+
     const ArticleId = props.ArticleId;
     const [Article, setArticle] = useState({});
     const [Comments, setComments] = useState([]);
@@ -138,7 +140,7 @@ function CommentList(props) {
                 <Form.Group controlId="formBasicEmail">
                     <Form.Control
                         type="textarea"
-                        placeholder="Enter email"
+                        placeholder="댓글을 작성하세요"
                         onChange={commentHandler}
                     />
                 </Form.Group>

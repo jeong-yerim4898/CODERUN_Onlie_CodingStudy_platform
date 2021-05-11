@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { ListGroup, Row, Col, InputGroup, FormControl, Button, Image } from 'react-bootstrap';
 import { useHistory } from 'react-router';
-
+import './CommunityList.css';
 import { listArticle, initialListArticle } from '_api/Board.js';
 
 function CommunityList() {
@@ -66,13 +66,13 @@ function CommunityList() {
     };
     const RenderList = ListData.map((data, index) => {
         return (
-            <a href={'/community/detail/' + data.Board.id} key={index}>
+            <a className="articleAtag" href={'/community/detail/' + data.Board.id} key={index}>
                 <ListGroup horizontal={true}>
-                    <ListGroup.Item>
-                        <Image src={data.profile} style={{ width: 50 }} roundedCircle></Image>
+                    <ListGroup.Item className="articleItem">
+                        <Image src={data.profile} style={{ width: 25 }} roundedCircle></Image>
                         {data.name}
                     </ListGroup.Item>
-                    <ListGroup.Item>{data.Board.content}</ListGroup.Item>
+                    <ListGroup.Item className="articleItem">{data.Board.content}</ListGroup.Item>
                 </ListGroup>
             </a>
         );

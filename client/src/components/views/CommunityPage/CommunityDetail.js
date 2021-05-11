@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+
 import { detailArticle, deleteArticle } from '_api/Board.js';
 import { Button, Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import CommentList from './CommentList';
 
 function CommunityDetail(props) {
     const [Article, setArticle] = useState({});
+    const history = useHistory();
     let user = useSelector(state => state.user);
     useEffect(() => {
         console.log(user.login.user.id);
@@ -21,7 +23,7 @@ function CommunityDetail(props) {
         event.preventDefault();
         const article_id = props.match.params.id;
         deleteArticle(article_id).then(res => {
-            console.log('delete success');
+            props.history.push('/community');
         });
     };
     return (

@@ -26,10 +26,62 @@
   display: flex;
   justify-content: start;
   color: black;
+
   /* margin-left: 80px; */
 }
 
 .classAtag {
   color: black;
   text-decoration: none;
+}
+
+.classAtag:hover {
+  color: black;
+  text-decoration: none;
+}
+
+.classCard {
+  border: none !important;
+  border-radius: 30px !important;
+  font-family: "payboocMedium";
+
+}
+
+.classTitle {
+  font-weight: bold !important;
+}
+
+.classCard:hover {
+  transform: scale(1.02);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.classImg {
+  /* margin-bottom: 15px; */
+  border-radius: 15% !important;
+}
+
+.ant-menu-item-selected {
+  background-color: #effcef !important;
+  color: #655c56 !important;
+}
+
+.ant-menu-inline .ant-menu-item::after {
+
+  border-right: 3px solid #655c56 !important;
+}
+
+.classmenu:hover {
+  color: #94d3ac !important;
+}
+
+.algoButton {
+  background-color: #fc8a15 !important;
+
+  color: white !important;
+
+  border: none !important;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
 }

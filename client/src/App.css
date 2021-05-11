@@ -32,7 +32,29 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+
+@font-face {
+  font-family: "62570";
+  src: url("./fonts/62570.ttf");
+}
+
+@font-face {
+  font-family: "drfont";
+  src: url("./fonts/drfont_daraehand_Basic.ttf");
+}
+
+@font-face {
+  font-family: "payboocMedium";
+  src: url("./fonts/payboocMedium.ttf");
+}
+
+@font-face {
+  font-family: "sandol";
+  src: url("./fonts/sandol.ttf");
 }
