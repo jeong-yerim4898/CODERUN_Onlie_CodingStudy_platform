@@ -50,8 +50,11 @@ function MyPage(props) {
                     <Col md="10"></Col>
                     {/* 로그아웃 */}
                     <Col md="2">
-                        <Button className="m-0" href="#pablo" onClick={deleteToken}>
+                        <Button className="m-0" onClick={deleteToken}>
                             <span className="no-icon">Log out</span>
+                        </Button>
+                        <Button className="m-0" href={'/update/user/' + props.user.login.user.id}>
+                            <span className="no-icon">회원정보 수정</span>
                         </Button>
                     </Col>
                 </Row>
