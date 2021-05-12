@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Button } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
@@ -6,16 +6,19 @@ import { updateVideoComment } from '_api/Video';
 
 function VideoComment(props) {
     let user = useSelector(state => state.user);
-    const [comment, setcomment] = useState(props.Videocomment.content);
+    const [comment, setcomment] = useState('');
     const [commentUpdate, setcommentUpdate] = useState('');
 
+    useEffect(() => {
+        setcomment(props.Videocomment.content);
+    }, [props.Videocomment.content]);
+
     const deleteComment = () => {
-        console.log('delete' + props.Videocomment.id);
         props.removeComment(props.Videocomment.id);
     };
 
     const handlerUpdate = e => {
-        setcommentUpdate(e.currengtTarget.value);
+        setcommentUpdate(e.currentTarget.value);
     };
     const updateComment = () => {
         const updateBtn = document.getElementsByClassName(`${props.Videocomment.id}comment-update`);
@@ -44,7 +47,6 @@ function VideoComment(props) {
         const body = { video_comment_id: props.Videocomment.id, content: commentUpdate };
         updateVideoComment(body)
             .then(res => {
-                console.log(res.data);
                 setcomment(commentUpdate);
                 updateBtn[0].classList.add('hidden');
                 content[0].classList.remove('hidden');
