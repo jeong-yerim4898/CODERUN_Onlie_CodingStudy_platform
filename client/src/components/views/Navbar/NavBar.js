@@ -18,6 +18,9 @@ function NavBar(props) {
     const [imageUrl, setimageUrl] = useState('');
 
     //기본 데이터 넣기
+    useEffect(() => {
+        setimageUrl(`${SERVER}/image/profile/${user.login.user.id}`);
+    }, []);
     const renderImageUrl = () => {
         setimageUrl(`${SERVER}/image/profile/${user.login.user.id}`);
     };
