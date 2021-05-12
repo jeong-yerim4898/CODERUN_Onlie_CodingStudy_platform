@@ -12,7 +12,7 @@
 
 
 .bannerment {
-  display: grid;
+  /* display: grid; */
   z-index: 1;
   height: 600px;
   width: 100%;

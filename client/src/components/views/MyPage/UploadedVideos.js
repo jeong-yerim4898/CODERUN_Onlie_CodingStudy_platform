@@ -4,11 +4,6 @@ import './UploadedVideos.css';
 import ProfileImage from './images/실전리액트프로그래밍.PNG';
 
 function UploadedVideos() {
-    const [Skip, setSkip] = useState(0);
-    // const [Limit, setLimit] = useState(8);
-
-    const { Meta } = Card;
-
     const Classes = [
         {
             title: '1',
