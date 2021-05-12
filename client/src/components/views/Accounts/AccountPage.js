@@ -17,7 +17,6 @@ function LoginPage(props) {
     const [Nickname, setNickname] = useState('');
     const [Visible, setVisible] = useState(false);
     const [Visible2, setVisible2] = useState(false);
-    const [ConfirmLoading, setConfirmLoading] = useState(false);
     const [FindEmail, setFindEmail] = useState('');
     const [ModalText, setModalText] = useState('이메일 인증을 진행해주세요.');
 
@@ -47,8 +46,8 @@ function LoginPage(props) {
         console.log(Email, regExp.test(Email) === true);
         if (regExp.test(Email) === true) {
             checkEmail(Email)
-                .then(res => alert('email 쌉가능'))
-                .catch(err => alert('email이 중복되요'));
+                .then(res => alert('사용가능한 Email 입니다.'))
+                .catch(err => alert('Email이 중복되요'));
         } else {
             alert('email 형식이 맞지 않아요.');
         }

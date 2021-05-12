@@ -29,8 +29,8 @@ function VideoInfo(props) {
     return (
         <div class="video-info-container">
             <div class="card-content">
-                <div class="row">
-                    <div class="col">
+                <div class="card-row">
+                    <div class="card-col">
                         <h2>
                             <strong>{props.video.title}</strong>
                         </h2>
