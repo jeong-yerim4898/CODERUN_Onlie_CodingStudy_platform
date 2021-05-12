@@ -8,10 +8,16 @@ import Dropzone from 'react-dropzone';
 import { PlusOutlined } from '@ant-design/icons';
 import { fetchProfileImage, createProfileImage, deleteProfileImage } from '_api/Profile.js';
 // import MyPlayListCreateForm from './MyPlayListCreateForm.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserEdit } from '@fortawesome/free-solid-svg-icons';
+import './MyPage.css';
 
 function MyPage(props) {
     const [File, setFile] = useState('');
     const [PreviewUrl, setPreviewUrl] = useState('');
+    const nickname = props.user.login.user.name;
+    const email = props.user.login.user.email;
+    const img = props.user.login.user.profile;
 
     const deleteToken = () => {
         localStorage.removeItem('token');
@@ -44,73 +50,49 @@ function MyPage(props) {
     };
 
     return (
-        <div>
+        <div className="mypage">
             <Container fluid>
                 <Row>
-                    <Col md="10"></Col>
-                    {/* 로그아웃 */}
-                    <Col md="2">
-                        <Button className="m-0" onClick={deleteToken}>
-                            <span className="no-icon">Log out</span>
-                        </Button>
-                        <Button className="m-0" href={'/update/user/' + props.user.login.user.id}>
-                            <span className="no-icon">회원정보 수정</span>
-                        </Button>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md="8">
-                        {/* 나의 재생 리스트 */}
+                    {/* 나의 재생 리스트 */}
+                    <Col md="6">
                         <MyPlayList />
                         {/* <MyPlayListCreateForm /> */}
                     </Col>
                     {/* 사용자프로필 */}
-                    <Col md="4">
-                        <Card className="card-user">
-                            <Card.Body>
-                                <div className="user">
-                                    <a href="#pablo" onClick={e => e.preventDefault()}>
-                                        {PreviewUrl.length === 0 ? (
-                                            <Dropzone onDrop={dropHandler}>
-                                                {({ getRootProps, getInputProps }) => (
-                                                    <section>
-                                                        <div
-                                                            style={{
-                                                                width: 280,
-                                                                height: 210,
-                                                                border: '1px solid lightgray',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                            }}
-                                                            {...getRootProps()}
-                                                        >
-                                                            <input {...getInputProps()} />
-                                                            <PlusOutlined
-                                                                type="plus"
-                                                                style={{ fontSize: '3rem' }}
-                                                            />
-                                                        </div>
-                                                    </section>
-                                                )}
-                                            </Dropzone>
-                                        ) : (
-                                            <div>
-                                                <img
-                                                    style={{ height: '210px', width: '280px' }}
-                                                    src={PreviewUrl}
-                                                ></img>
-                                            </div>
-                                        )}
-                                        <Button onClick={canclePreviewImg}>취소</Button>
-                                        <h5 className="title">사용자 닉네임</h5>
+                    <Col md="6">
+                        <main class="profile">
+                            <div class="profile-bg"></div>
+                            <section class="container">
+                                <aside class="profile-image" src={img}>
+                                    <a href={'/update/user/' + props.user.login.user.id}>
+                                        <FontAwesomeIcon icon={faUserEdit} className="camera" />
                                     </a>
-                                    <p className="description">사용자 이메일</p>
-                                </div>
-                                <p className="description text-center">사용자 소개</p>
-                                <Button onClick={postProfileImg}>등록</Button>
-                            </Card.Body>
-                        </Card>
+                                </aside>
+                                <section class="profile-info">
+                                    <h1 class="first-name"></h1>
+                                    <h1 class="second-name">{nickname}</h1>
+                                    <p>{email}</p>
+                                    {/* 로그아웃 */}
+                                    <a onClick={deleteToken}>
+                                        <h2>LOG OUT</h2>
+                                    </a>
+                                </section>
+                            </section>
+                            <section class="statistics">
+                                <button class="icon arrow left"></button>
+                                <button class="icon arrow right"></button>
+                                <p>
+                                    <strong>29</strong> Followers
+                                </p>
+                                <p>
+                                    <strong>184</strong> Following
+                                </p>
+                                <p>
+                                    <strong>6</strong> Likes
+                                </p>
+                            </section>
+                            <button class="icon close"></button>
+                        </main>
                     </Col>
                 </Row>
                 <Row>

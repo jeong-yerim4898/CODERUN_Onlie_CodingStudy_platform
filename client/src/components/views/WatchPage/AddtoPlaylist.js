@@ -7,9 +7,9 @@ import { Radio } from 'antd';
 function AddtoPlaylist(props) {
     const [Playlists, setPlaylists] = useState([]);
     const [SelectPlaylist, setSelectPlaylist] = useState('');
-    const [AddtoPlaylist, setAddtoPlaylist] = useState('');
+    const [addtoPlaylist, setaddtoPlaylist] = useState('');
     const [UpdateNum, setUpdateNum] = useState(null);
-    const video_list_id = UpdateNum;
+    // const video_list_id = UpdateNum;
     const video_id = props.classId;
 
     const [show, setShow] = useState(false);
@@ -37,7 +37,7 @@ function AddtoPlaylist(props) {
         };
         console.log(body);
         createPlaylistdata(body).then(res => {
-            setAddtoPlaylist(res.data.data);
+            setaddtoPlaylist(res.data.data);
             setUpdateNum(null);
         });
     };
