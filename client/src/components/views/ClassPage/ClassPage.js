@@ -58,7 +58,7 @@ function ClassPage() {
             setlanguages(languageTag);
         });
         const user_id = user?.login?.user?.id;
-        const count = Page;
+        const count = 1;
         if (user_id) {
             fetchLoginedFilteredVideoList(user_id, count).then(res => {
                 console.log('success get');
@@ -77,7 +77,7 @@ function ClassPage() {
     const onAlgoHandler = num => {
         setCs(0);
         setAlgo(num);
-        const count = Page;
+        const count = 1;
         const algorithm_tag_id = num;
         const user_id = user?.login?.user?.id;
         if (user_id) {
@@ -96,7 +96,7 @@ function ClassPage() {
     const onCsHandler = num => {
         setAlgo(0);
         setCs(num);
-        const count = Page;
+        const count = 1;
         const subject_tag_id = num;
         const user_id = user?.login?.user?.id;
         if (user_id) {
@@ -114,7 +114,7 @@ function ClassPage() {
 
     const onLanguageHandler = num => {
         setLanguage(num);
-        const count = Page;
+        const count = 1;
         const user_id = user?.login?.user?.id;
         if (user_id) {
             fetchLoginedAlgoLangFilteredVideoList(Algo, num, user_id, count).then(res => {
@@ -287,13 +287,13 @@ function ClassPage() {
     });
     const renderCards = Classes.map((classs, index) => {
         return (
-            <a className="classAtag" href={'/watch/' + classs.id} key={index}>
+            <a className="classAtag" href={'/watch/' + classs.Video.id} key={index}>
                 <Col className="colcard" span={5}>
                     <Card className="shadow classCard" style={{ width: 240, height: 320 }}>
                         <Card.Img
                             className="classImg"
                             variant="top"
-                            src={classs.thumbnail}
+                            src={classs.Video.thumbnail}
                             style={{ height: 180 }}
                         />
                         <Card.Body>
@@ -301,10 +301,11 @@ function ClassPage() {
                                 className="classTitle"
                                 style={{ fontFamily: 'payboocMedium' }}
                             >
-                                {classs.title}
+                                {classs.Video.title}
                             </Card.Title>
-                            <Card.Text>{classs.user.name}</Card.Text>
-                            {classs.likestatus ? (
+                            {/* 유저네임 */}
+                            <Card.Text>{classs.name}</Card.Text>
+                            {classs.Video.likestatus ? (
                                 <Card.Text>
                                     <FontAwesomeIcon style={{ color: '#1ee494' }} icon={fasHeart} />{' '}
                                     {classs.likecnt}
