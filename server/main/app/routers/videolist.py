@@ -112,7 +112,7 @@ def get_video_list_data(
     current_user = get_current_user(token, db)
     check_videolist(current_user.id, video_list_id, db)
     videolistdata = (
-        db.query(models.VideoListData.video_id, models.VideoListData.id)
+        db.query(models.VideoListData.video_id, models.VideoListData.id, models.Video)
         .filter(models.VideoListData.video_list_id == video_list_id)
         .all()
     )
