@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { SERVER } from 'Config.js';
 import { useHistory } from 'react-router-dom';
 import {
     createPlaylist,
@@ -6,8 +7,10 @@ import {
     editPlaylist,
     deletePlaylist,
     watchPlaylist,
+    fetchPlaylist,
 } from '_api/Playlist.js';
 import { ListGroup, Button, Form, Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function MyPlayList(props) {
     const history = useHistory();
@@ -82,7 +85,10 @@ function MyPlayList(props) {
             .then(res => {
                 console.log(res.data.data[0].video_id);
 
-                history.push(`/watch/${res.data.data[0].video_id}`);
+                history.push({
+                    pathname: '/watch/' + res.data.data[0].video_id,
+                    state: { playlistId: video_list_id },
+                });
             })
             .catch(err => {
                 console.log(err);
@@ -90,15 +96,20 @@ function MyPlayList(props) {
     };
 
     const renderPlaylists = Playlists.map((playlist, idx) => {
+        console.log(playlist.id);
+        var video_id = 0;
+        fetchPlaylist(playlist.id).then(res => {
+            if (res?.data?.data[0]?.video_id) {
+                video_id = res.data.data[0].video_id;
+            }
+        });
         return (
             <Card style={{ width: '18rem' }} key={idx}>
-                <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
+                <Card.Img variant="top" src={`${SERVER}/image/thumbnail/${video_id}`} />
                 <Card.Body>
                     <Card.Title>{playlist.title}</Card.Title>
                     <Card.Text>
-                        <Button variant="primary" onClick={() => gotoWatchpage(playlist.id)}>
-                            Go to Watch
-                        </Button>
+                        <Button onClick={() => gotoWatchpage(playlist.id)}>Go to Watch</Button>
                     </Card.Text>
                 </Card.Body>
                 <Card.Body>

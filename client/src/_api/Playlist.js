@@ -14,6 +14,12 @@ export function readPlaylist() {
     });
 }
 
+export function fetchPlaylist(video_list_id) {
+    return axios.get(`${SERVER}/api/videolist/detail/${video_list_id}`, {
+        headers: { token: ACCESS_TOKEN },
+    });
+}
+
 export function editPlaylist(data) {
     return axios.put(`${SERVER}/api/videolist/update`, data, {
         headers: { token: ACCESS_TOKEN },

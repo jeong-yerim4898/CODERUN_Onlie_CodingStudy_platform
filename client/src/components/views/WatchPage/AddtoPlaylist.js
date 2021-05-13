@@ -10,7 +10,7 @@ function AddtoPlaylist(props) {
     const [addtoPlaylist, setaddtoPlaylist] = useState('');
     const [UpdateNum, setUpdateNum] = useState(null);
     // const video_list_id = UpdateNum;
-    const video_id = props.classId;
+    const video_id = props.videoId;
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
