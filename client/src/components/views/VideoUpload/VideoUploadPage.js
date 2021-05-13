@@ -9,10 +9,10 @@ import { fetchLanguageTag, fetchAlgorithmTag, fetchCSTag } from '_api/Tag';
 import { postVideoContentUpload, postVideoUpload } from '_api/Video';
 import { postThumbnail } from '_api/Thumbnail';
 
-import { Button, Row, Col } from 'antd';
+import { Row, Col } from 'antd';
 import './VideoUpload.css';
 
-function VideoUpload() {
+function VideoUpload(props) {
     const [Languages, setLanguages] = useState([]);
     const [Algorithms, setAlgorithms] = useState([]);
     const [CSes, setCSes] = useState([]);
@@ -167,6 +167,9 @@ function VideoUpload() {
     };
 
     const postVideo = e => {
+        const loaderContainer = document.getElementsByClassName('loader-container');
+        loaderContainer[0].classList.remove('hidden');
+        console.log(loaderContainer);
         const body = {
             title: Title,
             content: Content,
@@ -177,7 +180,6 @@ function VideoUpload() {
 
         postVideoContentUpload(body)
             .then(res => {
-                console.log(res.data.data.id);
                 const video_id = res.data.data.id;
                 let formData = new FormData();
                 formData.append('file', FileArray);
@@ -189,7 +191,14 @@ function VideoUpload() {
                 formData2.append('file', VideoArray);
                 const file_extension = VideoArray.type.split('/')[1];
                 postVideoUpload(video_id, file_extension, formData2)
-                    .then(res => console.log(res))
+                    .then(res => {
+                        console.log(res.data.data);
+                        if (res.data.data === 'success') {
+                            props.history.push(`/profile/${props.user.login.user.id}`);
+                        } else {
+                            alert('Stay!!!');
+                        }
+                    })
                     .catch(err => console.log(err));
             })
             .catch(err => console.log(err));
@@ -269,7 +278,9 @@ function VideoUpload() {
                             />
                         </div>
                     )}
-                    <Button onClick={canclePreviewVideo}>취소</Button>
+                    <button className="pulse" onClick={canclePreviewVideo}>
+                        취소
+                    </button>
                 </div>
 
                 <div>
@@ -301,24 +312,44 @@ function VideoUpload() {
                             <img style={{ height: '210px', width: '280px' }} src={PreviewUrl}></img>
                         </div>
                     )}
-                    <Button onClick={canclePreviewImg}>취소</Button>
+                    <button className="pulse" onClick={canclePreviewImg}>
+                        취소
+                    </button>
                 </div>
             </div>
 
             <div class="video-content">
-                <h3>제목</h3>
-                <VideoContent
-                    row={1}
-                    maxlength={50}
-                    handlerContent={title => handlerTitle(title)}
-                />
-                <h3>내용</h3>
+                <div style={{ marginBottom: '1rem' }}>
+                    <h1>제목</h1>
+                    <VideoContent
+                        row={1}
+                        maxlength={50}
+                        handlerContent={title => handlerTitle(title)}
+                        style={{ marginBottom: '1rem' }}
+                    />
+                </div>
+                <h1>내용</h1>
                 <VideoContent
                     row={10}
                     maxlength={1000}
                     handlerContent={info => handlerInfo(info)}
                 />
-                <Button onClick={postVideo}>제출</Button>
+                <button
+                    className="pulse"
+                    style={{ position: 'absolute', right: '10px', top: '60%' }}
+                    onClick={postVideo}
+                >
+                    제출
+                </button>
+                <div className="loader-container hidden">
+                    <div id="loader">
+                        <div id="d1"></div>
+                        <div id="d2"></div>
+                        <div id="d3"></div>
+                        <div id="d4"></div>
+                        <div id="d5"></div>
+                    </div>
+                </div>
             </div>
             <div class="video-tag" onClick={clickCourse}>
                 <div>
