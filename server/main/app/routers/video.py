@@ -5,6 +5,7 @@ from typing import Optional
 
 # 서드파티 라이브러리
 from fastapi import APIRouter, Depends, HTTPException, Header
+from sqlalchemy import func, case
 from sqlalchemy.orm import Session
 
 # 로컬 라이브러리
@@ -47,116 +48,64 @@ def get_video_filter_page(
     user_id: Optional[int] = 0,
     db: Session = Depends(get_db),
 ):
+
+
     if algorithm_tag_id:
         if language_tag_id:
-            total = (
-                db.query(models.AlgorithmUserTag)
-                .join(models.Video, models.AlgorithmUserTag.video_id == models.Video.id)
+            v_data = (
+                db.query(models.Video, func.count(models.Like.id).label("likecnt"), models.User.name, models.User.profile)
+                .join(models.AlgorithmUserTag, models.AlgorithmUserTag.video_id == models.Video.id)
+                .join(models.User, models.Video.user_id == models.User.id)
+                .join(models.Like, models.Like.video_id == models.Video.id)
                 .filter(models.AlgorithmUserTag.algorithm_tag_id == algorithm_tag_id)
                 .filter(models.Video.language_tag_id == language_tag_id)
-                # .offset(count * 12)
-                # .limit(12)
+                .group_by(models.Video.id)
+                .order_by(models.Video.id.desc())
                 .all()
             )
-            v_data = total[(count-1)*12:count*12]
-            for i in range(len(v_data)):
-                v_data[i].video
-                v_data[i].video.user
-                if v_data[i].video.user.password: del v_data[i].video.user.password
-                if v_data[i].video.user.active: del v_data[i].video.user.active
-                if v_data[i].video.user.security_count == None: del v_data[i].video.user.security_count
-                if v_data[i].video.user.join_date: del v_data[i].video.user.join_date
-                del v_data[i].video_id
-                del v_data[i].algorithm_tag_id
-                del v_data[i].id
-                v_data[i] = v_data[i].video
-                v_data[i].likecnt = len(v_data[i].like)
-                del v_data[i].like
         else:
-            total = (
-                db.query(models.AlgorithmUserTag)
-                .join(models.Video, models.AlgorithmUserTag.video_id == models.Video.id)
+            v_data = (
+                db.query(models.Video, func.count(models.Like.id).label("likecnt"), models.User.name, models.User.profile)
+                .join(models.AlgorithmUserTag, models.AlgorithmUserTag.video_id == models.Video.id)
+                .join(models.User, models.Video.user_id == models.User.id)
+                .join(models.Like, models.Like.video_id == models.Video.id)
                 .filter(models.AlgorithmUserTag.algorithm_tag_id == algorithm_tag_id)
-                # .offset(count * 12)
-                # .limit(12)
+                .group_by(models.Video.id)
+                .order_by(models.Video.id.desc())
                 .all()
             )
-            v_data = total[(count-1)*12:count*12]
-            for i in range(len(v_data)):
-                v_data[i].video
-                v_data[i].video.user
-                if v_data[i].video.user.password: del v_data[i].video.user.password
-                if v_data[i].video.user.active: del v_data[i].video.user.active
-                if v_data[i].video.user.security_count == None: del v_data[i].video.user.security_count
-                if v_data[i].video.user.join_date: del v_data[i].video.user.join_date
-                del v_data[i].video_id
-                del v_data[i].algorithm_tag_id
-                del v_data[i].id
-                v_data[i] = v_data[i].video
-                v_data[i].likecnt = len(v_data[i].like)
-                del v_data[i].like
-
     elif subject_tag_id:
-        total = (
-            db.query(models.SubjectUserTag)
-            .join(models.Video, models.SubjectUserTag.video_id == models.Video.id)
+        v_data = (
+            db.query(models.Video, func.count(models.Like.id).label("likecnt"), models.User.name, models.User.profile)
+            .join(models.SubjectUserTag, models.SubjectUserTag.video_id == models.Video.id)
+            .join(models.User, models.Video.user_id == models.User.id)
+            .join(models.Like, models.Like.video_id == models.Video.id)
             .filter(models.SubjectUserTag.subject_tag_id == subject_tag_id)
-            # .offset(count * 12)
-            # .limit(12)
+            .group_by(models.Video.id)
+            .order_by(models.Video.id.desc())
             .all()
         )
-        v_data = total[(count-1)*12:count*12]
-        # print(subject_tag_id)
-        # print(len(v_data))
-        for i in range(len(v_data)):
-            v_data[i].video
-            if v_data[i].video.user.password: del v_data[i].video.user.password
-            if v_data[i].video.user.active: del v_data[i].video.user.active
-            if v_data[i].video.user.security_count == None: del v_data[i].video.user.security_count
-            if v_data[i].video.user.join_date: del v_data[i].video.user.join_date
-            del v_data[i].video_id
-            del v_data[i].subject_tag_id
-            del v_data[i].id
-            v_data[i] = v_data[i].video
-            v_data[i].likecnt = len(v_data[i].like)
-            del v_data[i].like
     else:
-        total = (
-            db.query(models.Video)
-            # .offset(count * 12)
-            # .limit(12)
+        v_data = (
+            db.query(models.Video, func.count(models.Like.id).label("likecnt"), models.User.name, models.User.profile)
+            .join(models.User, models.Video.user_id == models.User.id)
+            .join(models.Like, models.Like.video_id == models.Video.id)
+            .group_by(models.Video.id)
+            .order_by(models.Video.id.desc())
             .all()
         )
-        v_data = total[(count-1)*12:count*12]
-        for i in range(len(v_data)):
-            v_data[i].subject_user_tag
-            v_data[i].algorithm_user_tag
-            v_data[i].user
-            if v_data[i].user.password: del v_data[i].user.password
-            if v_data[i].user.active: del v_data[i].user.active
-            if v_data[i].user.security_count == None: del v_data[i].user.security_count
-            if v_data[i].user.join_date: del v_data[i].user.join_date
+    
 
-            del v_data[i].content
-            del v_data[i].created_date
-            del v_data[i].updated_date
-            v_data[i].likecnt = len(v_data[i].like)
-            del v_data[i].like
-    # if user_id:
-    current_user_like_video = (
-        db.query(models.Like.video_id)
-        .filter(models.Like.user_id == user_id)
-        .all()
-    )
-    like_video_set = set()
-    for item in current_user_like_video:
-        like_video_set.add(item.video_id)
-    for i in range(len(v_data)):
-        if v_data[i].id in like_video_set:
-            v_data[i].likestatus = True
+    return_data = v_data[(count-1)*12:count*12]
+
+    for i in range(len(return_data)):
+        if db.query(models.Like).filter(models.Like.user_id == user_id).filter(models.Like.video_id == return_data[i].Video.id).first():
+            return_data[i].Video.likestatus = True
         else:
-            v_data[i].likestatus = False
-    return {"data": v_data, "page_cnt": (len(total)-1)//12 + 1}
+            return_data[i].Video.likestatus = False
+
+    return {"data": return_data, "page_cnt": (len(v_data)-1)//12 + 1}
+
 
 @router.post("/api/video/create", tags=["video"], description="동영상 게시물 작성")
 def post_video(
