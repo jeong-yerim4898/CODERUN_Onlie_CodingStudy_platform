@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './UserInfoUpdate.css';
-import { Avatar, Upload } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import ImgCrop from 'antd-img-crop';
 import Dropzone from 'react-dropzone';
 import { SERVER } from 'Config.js';
-import { updateUserInfo } from '_api/User';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '_actions/user_actions';
-import { fetchProfileImage, createProfileImage } from '_api/Profile';
+import { createProfileImage } from '_api/Profile';
 
 function UserInfoUpdate(props) {
     const [File, setFile] = useState([]);
@@ -28,21 +25,6 @@ function UserInfoUpdate(props) {
         reader.readAsDataURL(file[0]);
         setFile(file[0]);
     };
-
-    // const onPreview = async file => {
-    //     let src = file.url;
-    //     if (!src) {
-    //         src = await new Promise(resolve => {
-    //             const reader = new FileReader();
-    //             reader.readAsDataURL(file.originFileObj);
-    //             reader.onload = () => resolve(reader.result);
-    //         });
-    //     }
-    //     const image = new Image();
-    //     image.src = src;
-    //     const imgWindow = window.open(src);
-    //     imgWindow.document.write(image.outerHTML);
-    // };
 
     const dispatch = useDispatch();
     const [UpdateNickname, setUpdateNickname] = useState('');

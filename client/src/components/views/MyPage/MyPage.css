@@ -217,7 +217,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  max-height: 750px;
+  max-height: 600px;
   max-width: 900px;
 }
 
@@ -233,20 +233,26 @@
   z-index: -1;
 }
 
-.container {
+.containerMyPage {
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  box-shadow: #000;
+  border-radius: 10px;
+  box-shadow: 0 30px 50px -20px rgba(14, 0, 47, 0.21);
+  background: white;
+  height: 300px;
   width: 100%;
-} 
+  /* border: 1px, black !important; */
+}
 
 .profile-image {
   animation: loadProfileImage 1s ease-in-out 0.5s;
   animation-fill-mode: both;
   position: relative;
   border-radius: 10px;
-  box-shadow: 0 25px 45px -20px rgba(255, 0, 47, 0.55),
-    inset 0 0px 120px rgba(255, 0, 47, 0.75);
+  /* box-shadow: 0 25px 45px -20px rgba(255, 0, 47, 0.55),
+    inset 0 0px 120px rgba(255, 0, 47, 0.75); */
   width: 45%;
   flex: none;
   background-image: url("https://zephyo.github.io/22Days/code/3/graphics/profile.png");
@@ -260,16 +266,24 @@
   width: 100%;
   height: 100%;
   border-radius: 10px;
-  background-color: #009378;
+  /* background-color: #009378; */
   opacity: 0.8;
   mix-blend-mode: screen;
 }
 
 .camera {
-  color: #FFFF;
+  color: black;
   position: absolute;
   bottom: 28px;
   left: 28px;
+  font-size: 1.3rem;
+}
+
+.trash {
+  color: black;
+  position: absolute;
+  bottom: 28px;
+  left: 200px;
   font-size: 1.3rem;
 }
 
@@ -288,15 +302,15 @@
 }
 
 h1.first-name {
-  animation: titleEffect 1s cubic-bezier(0,0.2,0.4,1);
+  animation: titleEffect 1s cubic-bezier(0, 0.2, 0.4, 1);
   top: -115px;
   left: -85px;
-} 
+}
 
 h1.second-name {
-  animation: titleEffect 1s cubic-bezier(0,0,0.3,1);
+  animation: titleEffect 1s cubic-bezier(0, 0, 0.3, 1);
   top: -50px;
-  left: -45px;
+  left: 30px;
 }
 
 .profile-info h2 {
@@ -399,20 +413,25 @@ h1.second-name {
     margin: 3%;
     height: 97%;
   }
+
   .container {
     height: 86%;
     flex-direction: column;
   }
+
   .profile-image {
     height: 40%;
     width: calc(100% - 90px);
   }
+
   .profile-bg {
     width: 100%;
   }
+
   h1.first-name {
     left: 10px;
   }
+
   h1.second-name {
     left: 60px;
   }
@@ -429,21 +448,24 @@ h1.second-name {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
 }
 
 @keyframes loadProfile {
- from{
+  from {
     transform: translateY(100px);
     opacity: 0;
   }
- to {
-     transform: translateY(0px);
+
+  to {
+    transform: translateY(0px);
     opacity: 1;
   }
 }
@@ -453,19 +475,21 @@ h1.second-name {
     transform: translateY(50px);
     opacity: 0;
   }
- to {
-     transform: translateY(0px);
+
+  to {
+    transform: translateY(0px);
     opacity: 1;
   }
 }
 
 @keyframes titleEffect {
- from {
-   opacity:0;
-     transform: translateX(-75px);
+  from {
+    opacity: 0;
+    transform: translateX(-75px);
   }
+
   to {
-     transform: translateX(0px);
+    transform: translateX(0px);
     opacity: 1;
   }
 }

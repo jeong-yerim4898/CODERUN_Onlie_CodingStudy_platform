@@ -13,6 +13,7 @@ function VideoInfomation(props) {
     const [CommentContent, setCommentContent] = useState('');
 
     useEffect(() => {
+        console.log(props.VideoListId);
         setVideoComments(props.VideoComments);
     }, [props.VideoComments]);
 
@@ -83,7 +84,11 @@ function VideoInfomation(props) {
 
     return (
         <div>
-            <VideoInfo video={VideoDetail.data} like={VideoDetail.like_status} />
+            <VideoInfo
+                VideoListId={props.VideoListId}
+                video={VideoDetail.data}
+                like={VideoDetail.like_status}
+            />
 
             <div style={{ display: 'flex' }}>
                 <Input

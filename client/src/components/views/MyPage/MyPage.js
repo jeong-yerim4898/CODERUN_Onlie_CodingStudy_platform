@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 // import ChartistGraph from 'react-chartist';
 import { Button, Card, Container, Row, Col } from 'react-bootstrap';
-import ProfileImage from './images/defaultimage.PNG';
+import { SERVER } from 'Config.js';
 import UploadedVideos from './UploadedVideos.js';
 import MyPlayList from './MyPlayList.js';
 import Dropzone from 'react-dropzone';
 import { PlusOutlined } from '@ant-design/icons';
+import { Avatar } from 'antd';
 import { fetchProfileImage, createProfileImage, deleteProfileImage } from '_api/Profile.js';
 // import MyPlayListCreateForm from './MyPlayListCreateForm.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import './MyPage.css';
 
 function MyPage(props) {
@@ -18,22 +20,20 @@ function MyPage(props) {
     const nickname = props.user.login.user.name;
     const email = props.user.login.user.email;
     const img = props.user.login.user.profile;
+    const user_id = props.user.login.user.id;
 
     const deleteToken = () => {
         localStorage.removeItem('token');
         props.history.push('/account');
     };
 
-    const postProfileImg = e => {
-        const body = {
-            file: File,
-        };
-        console.log(body);
-        createProfileImage(body).then(res => {
-            fetchProfileImage().then(res => {
-                console.log(res.data);
-                setFile(res.data.data);
-            });
+    const onDeleteProfileHandler = id => {
+        console.log('delete');
+        deleteProfileImage(id).then(res => {
+            console.log(res.data);
+            console.log('good');
+
+            setPreviewUrl(`${SERVER}/image/profile/${user_id}`);
         });
     };
 
@@ -62,11 +62,26 @@ function MyPage(props) {
                     <Col md="6">
                         <main class="profile">
                             <div class="profile-bg"></div>
-                            <section class="container">
+                            <section class="containerMyPage">
                                 <aside class="profile-image" src={img}>
-                                    <a href={'/update/user/' + props.user.login.user.id}>
+                                    <img
+                                        style={{
+                                            height: '70%',
+                                            width: `100%`,
+                                            marginTop: '10px',
+                                            borderRadius: '10px',
+                                        }}
+                                        src={img}
+                                    ></img>
+                                    <a href={'/update/user/' + user_id}>
                                         <FontAwesomeIcon icon={faUserEdit} className="camera" />
                                     </a>
+                                    <FontAwesomeIcon
+                                        style={{ cursor: 'pointer' }}
+                                        icon={faTrashAlt}
+                                        className="trash"
+                                        onClick={() => onDeleteProfileHandler(user_id)}
+                                    />
                                 </aside>
                                 <section class="profile-info">
                                     <h1 class="first-name"></h1>

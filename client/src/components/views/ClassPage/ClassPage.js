@@ -38,6 +38,7 @@ function ClassPage() {
     const [Classes, setClasses] = useState([]);
 
     useEffect(() => {
+        console.log(Classes.length);
         fetchAlgorithmTag().then(res => {
             console.log('algo', res.data.data);
             const algoTag = res.data.data;
@@ -370,7 +371,7 @@ function ClassPage() {
                             이전페이지
                         </Button>
                     )}{' '}
-                    {Classes.count === 12 ? (
+                    {Classes.length === 12 ? (
                         <Button variant="outline-success" onClick={onNextHandler}>
                             다음페이지
                         </Button>

@@ -9,6 +9,7 @@ import { fetchVideoDetail, fetchVideoComments } from '_api/Video';
 import AddtoPlaylist from './AddtoPlaylist.js';
 
 function WatchPage(props) {
+    const getParams = props.location?.state?.playlistId;
     const video_id = props.match.params.id;
     const [VideoDetail, setVideoDetail] = useState({});
     const [VideoComments, setVideoComments] = useState([]);
@@ -44,7 +45,11 @@ function WatchPage(props) {
                     {VideoDetail.data === undefined ? (
                         console.log('yet')
                     ) : (
-                        <VideoInfomation VideoDetail={VideoDetail} VideoComments={VideoComments} />
+                        <VideoInfomation
+                            VideoListId={getParams}
+                            VideoDetail={VideoDetail}
+                            VideoComments={VideoComments}
+                        />
                     )}
                 </Col>
             </Row>
