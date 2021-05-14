@@ -7,6 +7,7 @@ import VideoInfomation from './Sections/VideoInfomation';
 //api
 import { fetchVideoDetail, fetchVideoComments } from '_api/Video';
 import AddtoPlaylist from './AddtoPlaylist.js';
+import { Link } from 'react-router-dom';
 
 function WatchPage(props) {
     const getParams = props.location?.state?.playlistId;
@@ -17,8 +18,15 @@ function WatchPage(props) {
     useEffect(() => {
         const videoData = async () => {
             try {
-                const res = await fetchVideoDetail(video_id);
-                setVideoDetail(res.data);
+                await fetchVideoDetail(video_id)
+                    .then(res => setVideoDetail(res.data))
+                    .catch(err => {
+                        if (err.response.data.detail === 'Could not validate credentials') {
+                            window.localStorage.removeItem('token');
+                            props.history.push('/account');
+                        }
+                    });
+
                 const res2 = await fetchVideoComments(video_id);
 
                 setVideoComments(res2.data.data);

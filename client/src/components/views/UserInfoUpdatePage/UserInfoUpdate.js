@@ -10,28 +10,17 @@ import { createProfileImage } from '_api/Profile';
 function UserInfoUpdate(props) {
     const [File, setFile] = useState([]);
     const [PreviewUrl, setPreviewUrl] = useState('');
-
-    useEffect(() => {
-        console.log(props.user.login.user);
-        setPreviewUrl(props.user.login.user.profile);
-    }, []);
-
-    const dropHandler = file => {
-        console.log(file);
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewUrl(reader.result);
-        };
-        reader.readAsDataURL(file[0]);
-        setFile(file[0]);
-    };
-
     const dispatch = useDispatch();
-    const [UpdateNickname, setUpdateNickname] = useState('');
+    const [UpdateNickname, setUpdateNickname] = useState(props.user.login.user.name);
     const [UpdatePassword, setUpdatePassword] = useState('');
     const [UpdatePasswordConfirm, setUpdatePasswordConfirm] = useState('');
     const [HashPasswordConfirm, setHashPasswordConfirm] = useState('');
 
+    useEffect(() => {
+        console.log(props.user.login.user);
+        const date = new Date();
+        setPreviewUrl(props.user.login.user.profile + '?' + date);
+    }, []);
     const passwordHandler = event => {
         let pw = event.currentTarget.value;
         setUpdatePassword(pw);
@@ -64,18 +53,12 @@ function UserInfoUpdate(props) {
             formData.append('file', File);
             const user_id = props.user.login.user.id;
             console.log(user_id);
-            createProfileImage(user_id, formData).then(res => {
-                console.log('good');
-                // fetchProfileImage(user_id).then(res => {
-                setPreviewUrl(`${SERVER}/image/profile/${user_id}`);
-                props.history.push(`/profile/${props.user.login.user.id}`);
-                // setFile(res.data.data);
-                // });
-            });
+
             dispatch(updateUser(body))
                 .then(res => {
                     console.log(res);
                     console.log(props.user.login.user.id, 'userid');
+                    props.history.push(`/profile/${props.user.login.user.id}`);
                 })
                 .catch(err => console.log(err));
         }
@@ -86,7 +69,7 @@ function UserInfoUpdate(props) {
             <div class="user-update-container">
                 <h1>Update User Info</h1>
                 {/* <Avatar size={150}> */}
-                {PreviewUrl.length === 0 ? (
+                {/* {PreviewUrl.length === 0 ? (
                     <Dropzone onDrop={dropHandler}>
                         {({ getRootProps, getInputProps }) => (
                             <section>
@@ -131,7 +114,7 @@ function UserInfoUpdate(props) {
                         </Dropzone>{' '}
                         <img style={{ height: '210px', width: '280px' }} src={PreviewUrl}></img>
                     </div>
-                )}
+                )} */}
                 {/* </Avatar> */}
                 <input
                     defaultValue={props.user.login.user.name}

@@ -493,3 +493,11 @@ h1.second-name {
     opacity: 1;
   }
 }
+
+.profile-img {
+	-webkit-transition: opacity 1s;
+	transition: opacity 1s;
+}
+.profile-img:hover {
+  opacity: 50%;
+}
