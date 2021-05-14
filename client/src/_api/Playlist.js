@@ -14,6 +14,7 @@ export function readPlaylist() {
     });
 }
 
+// 재생목록 내 동영상 가져오기
 export function fetchPlaylist(video_list_id) {
     return axios.get(`${SERVER}/api/videolist/detail/${video_list_id}`, {
         headers: { token: ACCESS_TOKEN },

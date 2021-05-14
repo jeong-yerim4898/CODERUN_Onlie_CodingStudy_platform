@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+
 import { Avatar } from 'antd';
 
 import { Navbar, Nav, Button } from 'react-bootstrap';
@@ -10,17 +10,14 @@ import './NavBar.css';
 import NavBarSearch from './NavBarSearch.js';
 
 //api
-import { fetchProfileImage } from '_api/Profile';
+
 import { SERVER } from 'Config.js';
 
-function NavBar(props) {
+function NavBar() {
     let user = useSelector(state => state.user);
     const [imageUrl, setimageUrl] = useState('');
 
     //기본 데이터 넣기
-    useEffect(() => {
-        setimageUrl(`${SERVER}/image/profile/${user.login.user.id}`);
-    }, []);
     const renderImageUrl = () => {
         setimageUrl(`${SERVER}/image/profile/${user.login.user.id}`);
     };

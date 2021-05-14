@@ -3,7 +3,9 @@ import ReactHLS from 'react-hls';
 import './ShowVideo.css';
 import { SERVER } from 'Config.js';
 function ShowVideo(props) {
+    //props.match.params.id
     const classId = props.classId;
+    console.log(props);
     return (
         <div className="pageboard">
             <ReactHLS
