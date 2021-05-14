@@ -37,7 +37,7 @@ function WatchPage(props) {
                         console.log('yet')
                     ) : (
                         <div>
-                            <ShowVideo classId={VideoDetail.data.id} />
+                            <ShowVideo classId={video_id} />
                         </div>
                     )}
                 </Col>

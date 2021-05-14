@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import './ClassPage.css';
 import 'antd/dist/antd.css';
 
@@ -24,8 +25,9 @@ import { Row, Col, Button, Card } from 'react-bootstrap';
 import { Menu } from 'antd';
 import { ApartmentOutlined, CalculatorOutlined } from '@ant-design/icons';
 
-function ClassPage() {
+function ClassPage(props) {
     let user = useSelector(state => state.user);
+    const history = useHistory();
 
     const [Algos, setAlgos] = useState([]);
     const [Css, setCss] = useState([]);
@@ -38,35 +40,24 @@ function ClassPage() {
     const [Classes, setClasses] = useState([]);
 
     useEffect(() => {
-        console.log(Classes.length);
         fetchAlgorithmTag().then(res => {
-            console.log('algo', res.data.data);
-            const algoTag = res.data.data;
-            // console.log(languageTag);
-            setAlgos(algoTag);
+            setAlgos(res.data.data);
         });
         fetchCSTag().then(res => {
-            console.log('cs', res.data.data);
-            const csTag = res.data.data;
-            // console.log(languageTag);
-            setCss(csTag);
+            setCss(res.data.data);
         });
         fetchLanguageTag().then(res => {
-            // console.log(res.data.data);
-            const languageTag = res.data.data;
-            // console.log(languageTag);
-            setlanguages(languageTag);
+            setlanguages(res.data.data);
         });
         const user_id = user?.login?.user?.id;
-        const count = 1;
         if (user_id) {
-            fetchLoginedFilteredVideoList(user_id, count).then(res => {
+            fetchLoginedFilteredVideoList(user_id, Page).then(res => {
                 console.log('success get');
                 console.log(res.data.data, 'userEffect');
                 setClasses(res.data.data);
             });
         } else {
-            fetchFilteredVideoList(count).then(res => {
+            fetchFilteredVideoList(Page).then(res => {
                 console.log('success get');
                 console.log(res.data.data, 'userEffect');
                 setClasses(res.data.data);
@@ -130,127 +121,6 @@ function ClassPage() {
             });
         }
     };
-    const onNextHandler = () => {
-        setPage(Page + 1);
-        const user_id = user?.login?.user?.id;
-        console.log(Page);
-        if (user_id) {
-            if (Algo) {
-                if (Language) {
-                    fetchLoginedAlgoLangFilteredVideoList(Algo, Language, user_id, Page).then(
-                        res => {
-                            console.log(res.data.data, 'language');
-                            setClasses(res.data.data);
-                            console.log(Classes, 'asdasd');
-                        },
-                    );
-                } else {
-                    fetchLoginedAlgoFilteredVideoList(Algo, user_id, Page).then(res => {
-                        console.log(res.data.data, 'algo');
-                        setClasses(res.data.data);
-                    });
-                }
-            } else if (Cs) {
-                fetchLoginedCsFilteredVideoList(Cs, user_id, Page).then(res => {
-                    console.log(res.data.data, 'Cs');
-                    setClasses(res.data.data);
-                });
-            } else {
-                fetchFilteredVideoList(Page).then(res => {
-                    console.log('success get');
-                    console.log(res.data.data, 'userEffect');
-                    setClasses(res.data.data);
-                });
-            }
-        } else {
-            if (Algo) {
-                if (Language) {
-                    fetchAlgoLangFilteredVideoList(Algo, Language, Page).then(res => {
-                        console.log(res.data.data, 'language');
-                        setClasses(res.data.data);
-                        console.log(Classes, 'asdasd');
-                    });
-                } else {
-                    fetchAlgoFilteredVideoList(Algo, Page).then(res => {
-                        console.log(res.data.data, 'algo');
-                        setClasses(res.data.data);
-                    });
-                }
-            } else if (Cs) {
-                fetchCsFilteredVideoList(Cs, Page).then(res => {
-                    console.log(res.data.data, 'Cs');
-                    setClasses(res.data.data);
-                });
-            } else {
-                fetchFilteredVideoList(Page).then(res => {
-                    console.log('success get');
-                    console.log(res.data.data, 'userEffect');
-                    setClasses(res.data.data);
-                });
-            }
-        }
-    };
-
-    const onPreviousHandler = () => {
-        setPage(Page - 1);
-        const user_id = user?.login?.user?.id;
-        console.log(Page);
-        if (user_id) {
-            if (Algo) {
-                if (Language) {
-                    fetchLoginedAlgoLangFilteredVideoList(Algo, Language, user_id, Page).then(
-                        res => {
-                            console.log(res.data.data, 'language');
-                            setClasses(res.data.data);
-                            console.log(Classes, 'asdasd');
-                        },
-                    );
-                } else {
-                    fetchLoginedAlgoFilteredVideoList(Algo, user_id, Page).then(res => {
-                        console.log(res.data.data, 'algo');
-                        setClasses(res.data.data);
-                    });
-                }
-            } else if (Cs) {
-                fetchLoginedCsFilteredVideoList(Cs, user_id, Page).then(res => {
-                    console.log(res.data.data, 'Cs');
-                    setClasses(res.data.data);
-                });
-            } else {
-                fetchLoginedFilteredVideoList(user_id, Page).then(res => {
-                    console.log('success get');
-                    console.log(res.data.data, 'userEffect');
-                    setClasses(res.data.data);
-                });
-            }
-        } else {
-            if (Algo) {
-                if (Language) {
-                    fetchAlgoLangFilteredVideoList(Algo, Language, Page).then(res => {
-                        console.log(res.data.data, 'language');
-                        setClasses(res.data.data);
-                        console.log(Classes, 'asdasd');
-                    });
-                } else {
-                    fetchAlgoFilteredVideoList(Algo, Page).then(res => {
-                        console.log(res.data.data, 'algo');
-                        setClasses(res.data.data);
-                    });
-                }
-            } else if (Cs) {
-                fetchCsFilteredVideoList(Cs, Page).then(res => {
-                    console.log(res.data.data, 'Cs');
-                    setClasses(res.data.data);
-                });
-            } else {
-                fetchFilteredVideoList(Page).then(res => {
-                    console.log('success get');
-                    console.log(res.data.data, 'userEffect');
-                    setClasses(res.data.data);
-                });
-            }
-        }
-    };
 
     const renderAlgo = Algos.map((Algo, index) => {
         return (
@@ -285,44 +155,169 @@ function ClassPage() {
             return <div></div>;
         }
     });
+    const toWatchHandler = num => {
+        {
+            props.user?.login?.token ? history.push('/watch/' + num) : alert('로그인해주세요');
+        }
+    };
     const renderCards = Classes.map((classs, index) => {
         return (
-            <a className="classAtag" href={'/watch/' + classs.Video.id} key={index}>
-                <Col className="colcard" span={5}>
-                    <Card className="shadow classCard" style={{ width: 240, height: 320 }}>
-                        <Card.Img
-                            className="classImg"
-                            variant="top"
-                            src={classs.Video.thumbnail}
-                            style={{ height: 180 }}
-                        />
-                        <Card.Body>
-                            <Card.Title
-                                className="classTitle"
-                                style={{ fontFamily: 'payboocMedium' }}
-                            >
-                                {classs.Video.title}
-                            </Card.Title>
-                            {/* 유저네임 */}
-                            <Card.Text>{classs.name}</Card.Text>
-                            {classs.Video.likestatus ? (
-                                <Card.Text>
-                                    <FontAwesomeIcon style={{ color: '#1ee494' }} icon={fasHeart} />{' '}
-                                    {classs.likecnt}
-                                </Card.Text>
-                            ) : (
-                                <Card.Text>
-                                    <FontAwesomeIcon style={{ color: '#1ee494' }} icon={farHeart} />{' '}
-                                    {classs.likecnt}
-                                </Card.Text>
-                            )}
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </a>
+            <Col className="colcard" span={5}>
+                <Card
+                    key={index}
+                    onClick={() => toWatchHandler(classs.Video.id)}
+                    className="shadow classCard"
+                    style={{ width: 240, height: 320 }}
+                >
+                    <Card.Img
+                        className="classImg"
+                        variant="top"
+                        src={classs.Video.thumbnail}
+                        style={{ height: 180 }}
+                    />
+                    <Card.Body>
+                        <Card.Title className="classTitle" style={{ fontFamily: 'payboocMedium' }}>
+                            {classs.Video.title}
+                        </Card.Title>
+                        {/* 유저네임 */}
+                        <Card.Text>{classs.name}</Card.Text>
+                        {classs.Video.likestatus ? (
+                            <Card.Text>
+                                <FontAwesomeIcon style={{ color: '#1ee494' }} icon={fasHeart} />{' '}
+                                {classs.Video.likecnt}
+                            </Card.Text>
+                        ) : (
+                            <Card.Text>
+                                <FontAwesomeIcon style={{ color: '#1ee494' }} icon={farHeart} />{' '}
+                                {classs.Video.likecnt}
+                            </Card.Text>
+                        )}
+                    </Card.Body>
+                </Card>
+            </Col>
         );
     });
+    const onNextHandler = num => {
+        console.log(num);
+        setPage(num);
+        const user_id = user?.login?.user?.id;
+        if (user_id) {
+            if (Algo) {
+                if (Language) {
+                    fetchLoginedAlgoLangFilteredVideoList(Algo, Language, user_id, num).then(
+                        res => {
+                            console.log(res.data.data, 'language');
+                            setClasses(res.data.data);
+                            console.log(Classes, 'asdasd');
+                        },
+                    );
+                } else {
+                    fetchLoginedAlgoFilteredVideoList(Algo, user_id, num).then(res => {
+                        console.log(res.data.data, 'algo');
+                        setClasses(res.data.data);
+                    });
+                }
+            } else if (Cs) {
+                fetchLoginedCsFilteredVideoList(Cs, user_id, num).then(res => {
+                    console.log(res.data.data, 'Cs');
+                    setClasses(res.data.data);
+                });
+            } else {
+                fetchLoginedFilteredVideoList(user_id, num).then(res => {
+                    console.log('success get');
+                    console.log(res.data.data, '123');
+                    setClasses(res.data.data);
+                });
+            }
+        } else {
+            if (Algo) {
+                if (Language) {
+                    fetchAlgoLangFilteredVideoList(Algo, Language, num).then(res => {
+                        console.log(res.data.data, 'language');
+                        setClasses(res.data.data);
+                        console.log(Classes, 'asdasd');
+                    });
+                } else {
+                    fetchAlgoFilteredVideoList(Algo, num).then(res => {
+                        console.log(res.data.data, 'algo');
+                        setClasses(res.data.data);
+                    });
+                }
+            } else if (Cs) {
+                fetchCsFilteredVideoList(Cs, num).then(res => {
+                    console.log(res.data.data, 'Cs');
+                    setClasses(res.data.data);
+                });
+            } else {
+                fetchFilteredVideoList(num).then(res => {
+                    console.log('success get');
+                    console.log(res.data.data, '1231111');
+                    setClasses(res.data.data);
+                });
+            }
+        }
+    };
 
+    const onPreviousHandler = num => {
+        console.log(num);
+        setPage(num);
+        const user_id = user?.login?.user?.id;
+        if (user_id) {
+            if (Algo) {
+                if (Language) {
+                    fetchLoginedAlgoLangFilteredVideoList(Algo, Language, user_id, num).then(
+                        res => {
+                            console.log(res.data.data, 'language');
+                            setClasses(res.data.data);
+                            console.log(Classes, 'asdasd');
+                        },
+                    );
+                } else {
+                    fetchLoginedAlgoFilteredVideoList(Algo, user_id, num).then(res => {
+                        console.log(res.data.data, 'algo');
+                        setClasses(res.data.data);
+                    });
+                }
+            } else if (Cs) {
+                fetchLoginedCsFilteredVideoList(Cs, user_id, num).then(res => {
+                    console.log(res.data.data, 'Cs');
+                    setClasses(res.data.data);
+                });
+            } else {
+                fetchLoginedFilteredVideoList(user_id, num).then(res => {
+                    console.log('success get');
+                    console.log(res.data.data, '123');
+                    setClasses(res.data.data);
+                });
+            }
+        } else {
+            if (Algo) {
+                if (Language) {
+                    fetchAlgoLangFilteredVideoList(Algo, Language, num).then(res => {
+                        console.log(res.data.data, 'language');
+                        setClasses(res.data.data);
+                        console.log(Classes, 'asdasd');
+                    });
+                } else {
+                    fetchAlgoFilteredVideoList(Algo, num).then(res => {
+                        console.log(res.data.data, 'algo');
+                        setClasses(res.data.data);
+                    });
+                }
+            } else if (Cs) {
+                fetchCsFilteredVideoList(Cs, num).then(res => {
+                    console.log(res.data.data, 'Cs');
+                    setClasses(res.data.data);
+                });
+            } else {
+                fetchFilteredVideoList(num).then(res => {
+                    console.log('success get');
+                    console.log(res.data.data, '123111');
+                    setClasses(res.data.data);
+                });
+            }
+        }
+    };
     const { SubMenu } = Menu;
     return (
         <div>
@@ -360,24 +355,31 @@ function ClassPage() {
                     {/* </Space> */}
                     <br></br>
                     {Page > 1 ? (
-                        <Button variant="outline-success" onClick={onPreviousHandler}>
+                        <Button
+                            variant="outline-success"
+                            onClick={() => onPreviousHandler(Page - 1)}
+                        >
                             이전페이지
                         </Button>
                     ) : (
                         <Button
                             variant="outline-success"
                             disabled={true}
-                            onClick={onPreviousHandler}
+                            onClick={() => onPreviousHandler(Page - 1)}
                         >
                             이전페이지
                         </Button>
                     )}{' '}
                     {Classes.length === 12 ? (
-                        <Button variant="outline-success" onClick={onNextHandler}>
+                        <Button variant="outline-success" onClick={() => onNextHandler(Page + 1)}>
                             다음페이지
                         </Button>
                     ) : (
-                        <Button variant="outline-success" disabled={true} onClick={onNextHandler}>
+                        <Button
+                            variant="outline-success"
+                            disabled={true}
+                            onClick={() => onNextHandler(Page + 1)}
+                        >
                             다음페이지
                         </Button>
                     )}

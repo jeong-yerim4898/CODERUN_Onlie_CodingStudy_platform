@@ -13,7 +13,7 @@ function VideoInfomation(props) {
     const [CommentContent, setCommentContent] = useState('');
 
     useEffect(() => {
-        console.log(props.VideoListId);
+        console.log(props.VideoListId, 11);
         setVideoComments(props.VideoComments);
     }, [props.VideoComments]);
 
@@ -21,7 +21,7 @@ function VideoInfomation(props) {
         return (
             <div
                 style={{
-                    height: '350px',
+                    height: '150px',
                     overflow: 'auto',
                     display: 'flex',
                     flexDirection: 'column',
