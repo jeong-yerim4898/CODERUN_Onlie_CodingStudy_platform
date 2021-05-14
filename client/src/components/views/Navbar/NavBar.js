@@ -19,7 +19,8 @@ function NavBar() {
 
     //기본 데이터 넣기
     const renderImageUrl = () => {
-        setimageUrl(`${SERVER}/image/profile/${user.login.user.id}`);
+        const date = new Date();
+        setimageUrl(`${SERVER}/image/profile/${user.login.user.id}` + '?' + date);
     };
 
     return (

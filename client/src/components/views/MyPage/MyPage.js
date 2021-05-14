@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import ChartistGraph from 'react-chartist';
 import { Button, Card, Container, Row, Col } from 'react-bootstrap';
+
 import { SERVER } from 'Config.js';
 import UploadedVideos from './UploadedVideos.js';
 import MyPlayList from './MyPlayList.js';
@@ -17,11 +18,12 @@ import './MyPage.css';
 function MyPage(props) {
     const [File, setFile] = useState('');
     const [PreviewUrl, setPreviewUrl] = useState('');
-    const nickname = props.user.login.user.name;
-    const email = props.user.login.user.email;
-    const img = props.user.login.user.profile;
-    const user_id = props.user.login.user.id;
+    const [ImageUrl, setImageUrl] = useState('');
 
+    const renderImageUrl = () => {
+        const date = new Date();
+        setImageUrl(props.user.login.user.profile + '?' + date);
+    };
     const deleteToken = () => {
         localStorage.removeItem('token');
         props.history.push('/account');
@@ -32,21 +34,32 @@ function MyPage(props) {
         deleteProfileImage(id).then(res => {
             console.log(res.data);
             console.log('good');
-
-            setPreviewUrl(`${SERVER}/image/profile/${user_id}`);
+            setPreviewUrl(`${SERVER}/image/profile/${props.user.login.user.id}`);
         });
-    };
-
-    const dropHandler = file => {
-        console.log(file);
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewUrl(reader.result);
-        };
     };
 
     const canclePreviewImg = () => {
         setPreviewUrl('');
+    };
+
+    const dropHandler = file => {
+        console.log(file);
+        // const reader = new FileReader();
+        // reader.onloadend = () => {
+        //     setPreviewUrl(reader.result);
+        // };
+        // reader.readAsDataURL(file[0]);
+        // setFile(file[0]);
+        let formData = new FormData();
+        formData.append('file', file[0]);
+        const user_id = props.user.login.user.id;
+        console.log(user_id);
+        createProfileImage(user_id, formData)
+            .then(res => {
+                console.log(res.data);
+                window.location.reload();
+            })
+            .catch(err => console.log(err));
     };
 
     return (
@@ -63,30 +76,57 @@ function MyPage(props) {
                         <main class="profile">
                             <div class="profile-bg"></div>
                             <section class="containerMyPage">
-                                <aside class="profile-image" src={img}>
-                                    <img
-                                        style={{
-                                            height: '70%',
-                                            width: `100%`,
-                                            marginTop: '10px',
-                                            borderRadius: '10px',
-                                        }}
-                                        src={img}
-                                    ></img>
-                                    <a href={'/update/user/' + user_id}>
+                                <aside class="profile-image">
+                                    <Dropzone onDrop={dropHandler}>
+                                        {({ getRootProps, getInputProps }) => (
+                                            <section>
+                                                <div
+                                                    style={{
+                                                        width: 280,
+                                                        height: 210,
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                    }}
+                                                    {...getRootProps()}
+                                                >
+                                                    <input {...getInputProps()} />
+                                                    <div
+                                                        className="profile-img"
+                                                        style={{ cursor: 'pointer' }}
+                                                    >
+                                                        <img
+                                                            style={{
+                                                                height: '70%',
+                                                                width: `100%`,
+                                                                marginTop: '10px',
+                                                                borderRadius: '10px',
+                                                            }}
+                                                            src={ImageUrl}
+                                                            onError={renderImageUrl}
+                                                        ></img>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        )}
+                                    </Dropzone>
+
+                                    <a href={'/update/user/' + props.user.login.user.id}>
                                         <FontAwesomeIcon icon={faUserEdit} className="camera" />
                                     </a>
                                     <FontAwesomeIcon
                                         style={{ cursor: 'pointer' }}
                                         icon={faTrashAlt}
                                         className="trash"
-                                        onClick={() => onDeleteProfileHandler(user_id)}
+                                        onClick={() =>
+                                            onDeleteProfileHandler(props.user.login.user.id)
+                                        }
                                     />
                                 </aside>
                                 <section class="profile-info">
                                     <h1 class="first-name"></h1>
-                                    <h1 class="second-name">{nickname}</h1>
-                                    <p>{email}</p>
+                                    <h1 class="second-name">{props.user.login.user.name}</h1>
+                                    <p>{props.user.login.user.email}</p>
                                     {/* 로그아웃 */}
                                     <a onClick={deleteToken}>
                                         <h2>LOG OUT</h2>
