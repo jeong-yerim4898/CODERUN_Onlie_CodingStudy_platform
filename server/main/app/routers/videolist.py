@@ -114,6 +114,7 @@ def get_video_list_data(
     videolistdata = (
         db.query(models.VideoListData.video_id, models.VideoListData.id, models.Video)
         .filter(models.VideoListData.video_list_id == video_list_id)
+        .filter(models.VideoListData.video_id == models.Video.id)
         .all()
     )
     return {"data": videolistdata}
