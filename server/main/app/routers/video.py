@@ -53,10 +53,10 @@ def get_video_filter_page(
     if algorithm_tag_id:
         if language_tag_id:
             v_data = (
-                db.query(models.Video, func.count(models.Like.id).label("likecnt"), models.User.name, models.User.profile)
+                db.query(models.Video, models.User.name, models.User.profile)
                 .join(models.AlgorithmUserTag, models.AlgorithmUserTag.video_id == models.Video.id)
                 .join(models.User, models.Video.user_id == models.User.id)
-                .join(models.Like, models.Like.video_id == models.Video.id)
+                # .join(models.Like, models.Like.video_id == models.Video.id)
                 .filter(models.AlgorithmUserTag.algorithm_tag_id == algorithm_tag_id)
                 .filter(models.Video.language_tag_id == language_tag_id)
                 .group_by(models.Video.id)
@@ -65,10 +65,10 @@ def get_video_filter_page(
             )
         else:
             v_data = (
-                db.query(models.Video, func.count(models.Like.id).label("likecnt"), models.User.name, models.User.profile)
+                db.query(models.Video, models.User.name, models.User.profile)
                 .join(models.AlgorithmUserTag, models.AlgorithmUserTag.video_id == models.Video.id)
                 .join(models.User, models.Video.user_id == models.User.id)
-                .join(models.Like, models.Like.video_id == models.Video.id)
+                # .join(models.Like, models.Like.video_id == models.Video.id)
                 .filter(models.AlgorithmUserTag.algorithm_tag_id == algorithm_tag_id)
                 .group_by(models.Video.id)
                 .order_by(models.Video.id.desc())
@@ -76,10 +76,10 @@ def get_video_filter_page(
             )
     elif subject_tag_id:
         v_data = (
-            db.query(models.Video, func.count(models.Like.id).label("likecnt"), models.User.name, models.User.profile)
+            db.query(models.Video, models.User.name, models.User.profile)
             .join(models.SubjectUserTag, models.SubjectUserTag.video_id == models.Video.id)
             .join(models.User, models.Video.user_id == models.User.id)
-            .join(models.Like, models.Like.video_id == models.Video.id)
+            # .join(models.Like, models.Like.video_id == models.Video.id)
             .filter(models.SubjectUserTag.subject_tag_id == subject_tag_id)
             .group_by(models.Video.id)
             .order_by(models.Video.id.desc())
@@ -87,9 +87,9 @@ def get_video_filter_page(
         )
     else:
         v_data = (
-            db.query(models.Video, func.count(models.Like.id).label("likecnt"), models.User.name, models.User.profile)
+            db.query(models.Video, models.User.name, models.User.profile)
             .join(models.User, models.Video.user_id == models.User.id)
-            .join(models.Like, models.Like.video_id == models.Video.id)
+            # .join(models.Like, models.Like.video_id == models.Video.id)
             .group_by(models.Video.id)
             .order_by(models.Video.id.desc())
             .all()
@@ -103,6 +103,7 @@ def get_video_filter_page(
             return_data[i].Video.likestatus = True
         else:
             return_data[i].Video.likestatus = False
+        return_data[i].Video.likecnt = len(db.query(models.Like).filter(models.Like.video_id == return_data[i].Video.id).all())
 
     return {"data": return_data, "page_cnt": (len(v_data)-1)//12 + 1}
 
