@@ -11,6 +11,7 @@ import ffmpeg
 
 # 로컬 라이브러리
 pth.append(path.dirname(path.abspath(path.dirname(__file__))))
+from . import raiseException
 from database import models
 from dependency import get_db
 from routers.user import get_current_user
@@ -25,7 +26,7 @@ def get_video(video: str):
     try:
         video = open(f"{parent_route}/videos/{video}", mode="rb")
     except:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     return StreamingResponse(video, media_type="vnd.apple.mpegurl")
 
 
@@ -43,9 +44,9 @@ def create_video(
     current_user = get_current_user(token, db)
     v_data = db.query(models.Video).filter(models.Video.id == video_id).first()
     if not v_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     if v_data.user_id != current_user.id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     with open(f"{parent_route}/videos/{video_id}_VIDEO.{file_extension}", "wb") as f:
         f.write(file)
 
@@ -79,9 +80,9 @@ def update_video(
     delete_video(video_id, token, db)
     v_data = db.query(models.Video).filter(models.Video.id == video_id).first()
     if not v_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     if v_data.user_id != current_user.id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     with open(f"{parent_route}/videos/{video_id}_VIDEO.{file_extension}", "wb") as f:
         f.write(file)
 
@@ -99,11 +100,11 @@ def delete_video(
     current_user = get_current_user(token, db)
     v_data = db.query(models.Video).filter(models.Video.id == video_id).first()
     if v_data.user_id != current_user.id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     try:
         remove(f"{parent_route}/videos/{video_id}_VIDEO.m3u8")
     except:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     try:
         i = 0
         while True:
