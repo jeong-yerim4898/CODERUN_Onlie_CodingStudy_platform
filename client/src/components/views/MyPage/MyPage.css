@@ -196,11 +196,18 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:800");
 @import url("https://fonts.googleapis.com/css?family=Montserrat");
 
+.statistics {
+  background: linear-gradient(270deg, #effcef, #ccedd2, #94d3ac);
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background-size: 100% 100%;
+}
 
 .mypage {
   font-family: "Montserrat", sans-serif;
-  background: linear-gradient(270deg, #009378, #8ed3c5, #75fae2);
-  background-size: 100% 100%;
+
   animation: backgroundAnimation 10s ease infinite;
   display: flex;
   justify-content: center;
@@ -213,6 +220,8 @@
 .profile {
   animation: loadProfile 0.6s ease-in-out;
   animation-fill-mode: both;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
   font-size: 0.9rem;
   display: flex;
   flex-direction: column;
@@ -254,6 +263,7 @@
   /* box-shadow: 0 25px 45px -20px rgba(255, 0, 47, 0.55),
     inset 0 0px 120px rgba(255, 0, 47, 0.75); */
   width: 45%;
+  height: 100%;
   flex: none;
   background-image: url("https://zephyo.github.io/22Days/code/3/graphics/profile.png");
   background-size: cover;
@@ -495,9 +505,10 @@ h1.second-name {
 }
 
 .profile-img {
-	-webkit-transition: opacity 1s;
-	transition: opacity 1s;
+  -webkit-transition: opacity 1s;
+  transition: opacity 1s;
 }
+
 .profile-img:hover {
   opacity: 50%;
 }
