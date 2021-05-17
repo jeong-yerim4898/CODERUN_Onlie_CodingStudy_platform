@@ -26,11 +26,7 @@ function CommunityList() {
             setListData(res.data.data);
         });
     };
-    const onSearchHandler = () => {
-        listArticle(PageCount, SearchData).then(res => {
-            setListData(res.data.data);
-        });
-    };
+
     const onNextHandler = () => {
         setPageCount(PageCount + 1);
         console.log(PageCount);

@@ -13,6 +13,8 @@ import { fetchCSTag, fetchAlgorithmTag, fetchLanguageTag } from '_api/Tag.js';
 import {
     fetchFilteredVideoList,
     fetchLoginedFilteredVideoList,
+    fetchSearchedVideoList,
+    fetchLoginedSearchedVideoList,
     fetchAlgoFilteredVideoList,
     fetchLoginedAlgoFilteredVideoList,
     fetchCsFilteredVideoList,
@@ -21,12 +23,13 @@ import {
     fetchLoginedAlgoLangFilteredVideoList,
 } from '_api/Video.js';
 
-import { Row, Col, Button, Card } from 'react-bootstrap';
+import { Row, Col, Button, Card, InputGroup, FormControl } from 'react-bootstrap';
 import { Menu } from 'antd';
 import { ApartmentOutlined, CalculatorOutlined } from '@ant-design/icons';
 
 function ClassPage(props) {
     let user = useSelector(state => state.user);
+    const user_id = user?.login?.user?.id;
     const history = useHistory();
 
     const [Algos, setAlgos] = useState([]);
@@ -36,6 +39,7 @@ function ClassPage(props) {
     const [Algo, setAlgo] = useState(0);
     const [Cs, setCs] = useState(0);
     const [Language, setLanguage] = useState(0);
+    const [Searched, setSearched] = useState('');
     const [Page, setPage] = useState(1);
     const [Classes, setClasses] = useState([]);
 
@@ -70,7 +74,7 @@ function ClassPage(props) {
         setAlgo(num);
         const count = 1;
         const algorithm_tag_id = num;
-        const user_id = user?.login?.user?.id;
+        // const user_id = user?.login?.user?.id;
         if (user_id) {
             fetchLoginedAlgoFilteredVideoList(algorithm_tag_id, user_id, count).then(res => {
                 console.log(res.data.data, 'algo');
@@ -156,9 +160,7 @@ function ClassPage(props) {
         }
     });
     const toWatchHandler = num => {
-        {
-            props.user?.login?.token ? history.push('/watch/' + num) : alert('로그인해주세요');
-        }
+        history.push('/watch/' + num);
     };
     const renderCards = Classes.map((classs, index) => {
         return (
@@ -200,7 +202,7 @@ function ClassPage(props) {
     const onNextHandler = num => {
         console.log(num);
         setPage(num);
-        const user_id = user?.login?.user?.id;
+        // const user_id = user?.login?.user?.id;
         if (user_id) {
             if (Algo) {
                 if (Language) {
@@ -220,6 +222,11 @@ function ClassPage(props) {
             } else if (Cs) {
                 fetchLoginedCsFilteredVideoList(Cs, user_id, num).then(res => {
                     console.log(res.data.data, 'Cs');
+                    setClasses(res.data.data);
+                });
+            } else if (Searched) {
+                fetchLoginedSearchedVideoList(user_id, Searched, num).then(res => {
+                    console.log(res.data.data, 'SEARCH');
                     setClasses(res.data.data);
                 });
             } else {
@@ -248,6 +255,11 @@ function ClassPage(props) {
                     console.log(res.data.data, 'Cs');
                     setClasses(res.data.data);
                 });
+            } else if (Searched) {
+                fetchSearchedVideoList(Searched, num).then(res => {
+                    console.log(res.data.data, 'SEARCH');
+                    setClasses(res.data.data);
+                });
             } else {
                 fetchFilteredVideoList(num).then(res => {
                     console.log('success get');
@@ -261,7 +273,7 @@ function ClassPage(props) {
     const onPreviousHandler = num => {
         console.log(num);
         setPage(num);
-        const user_id = user?.login?.user?.id;
+        // const user_id = user?.login?.user?.id;
         if (user_id) {
             if (Algo) {
                 if (Language) {
@@ -318,6 +330,19 @@ function ClassPage(props) {
             }
         }
     };
+    const onSearchHandler = event => {
+        // const user_id = user?.login?.user?.id;
+        setAlgo(0);
+        setCs(0);
+        setLanguage(0);
+        setSearched('event.currentTarget.value');
+        setPage(1);
+        if (user_id) {
+            fetchLoginedSearchedVideoList(user_id, event.currentTarget.value, 1);
+        } else {
+            fetchSearchedVideoList(event.currentTarget.value, 1);
+        }
+    };
     const { SubMenu } = Menu;
     return (
         <div>
@@ -349,6 +374,9 @@ function ClassPage(props) {
                     </Menu>
                 </Col>
                 <Col md={10}>
+                    <InputGroup className="mb-3">
+                        <FormControl placeholder="검색어를 입력하세요" onChange={onSearchHandler} />
+                    </InputGroup>
                     {renderButton}
                     {/* <Space size={2}> */}
                     <Row className="cardBoard">{renderCards}</Row>

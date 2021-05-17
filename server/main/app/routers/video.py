@@ -22,6 +22,7 @@ router = APIRouter()
 def get_video(
     count: int,
     search_text: Optional[str] = '',
+    user_id: Optional[int] = 0,
     db: Session = Depends(get_db),
 ):
 
@@ -38,6 +39,14 @@ def get_video(
     result = result.union(user_video).order_by(
         models.Video.created_date.desc()).all()
     return_result = result[(count-1)*12:count*12]
+
+    for i in range(len(return_result)):
+        if db.query(models.Like).filter(models.Like.user_id == user_id).filter(models.Like.video_id == return_result[i].Video.id).first():
+            return_result[i].Video.likestatus = True
+        else:
+            return_result[i].Video.likestatus = False
+        return_result[i].Video.likecnt = len(db.query(models.Like).filter(
+            models.Like.video_id == return_result[i].Video.id).all())
 
     return {"data": return_result, "page_cnt": (len(result)-1)//12 + 1}
 
