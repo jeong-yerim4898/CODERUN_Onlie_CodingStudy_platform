@@ -1,14 +1,3 @@
-/* .detail-board {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: pink;
-} */
-
-/* .pageboard {
-  margin-top: 55px;
-} */
-
 .colpage {
   border-width: 3px;
   border: 3px;
@@ -23,27 +12,18 @@
 }
 
 .cardBoard {
-  display: flex;
-  justify-content: start;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  /* justify-content: flex-start; */
   color: black;
 
   /* margin-left: 80px; */
 }
 
-.classAtag {
-  color: black;
-  text-decoration: none;
-}
-
-.classAtag:hover {
-  color: black;
-  text-decoration: none;
-}
-
 .classCard {
   border: none !important;
   border-radius: 30px !important;
-  font-family: "payboocMedium";
+
 
 }
 
@@ -62,6 +42,36 @@
   border-radius: 15% !important;
 }
 
+.ant-menu-submenu-active {
+  /* background-color: #effcef !important; */
+  color: #94d3ac !important;
+}
+
+.ant-menu-submenu-active i {
+  /* background-color: #effcef !important; */
+  color: #94d3ac !important;
+}
+
+.ant-menu-submenu>.ant-menu-submenu-title .ant-menu-submenu-arrow::before {
+  color: black !important;
+}
+
+.ant-menu-submenu>.ant-menu-submenu-title .ant-menu-submenu-arrow::after {
+  color: black !important;
+}
+
+.ant-menu-submenu-active>.ant-menu-submenu-title .ant-menu-submenu-arrow::before {
+  color: #94d3ac !important;
+}
+
+.ant-menu-submenu-active>.ant-menu-submenu-title .ant-menu-submenu-arrow::after {
+  color: #94d3ac !important;
+}
+
+.ant-menu-submenu-active span {
+  color: #94d3ac !important;
+}
+
 .ant-menu-item-selected {
   background-color: #effcef !important;
   color: #655c56 !important;
@@ -76,6 +86,10 @@
   color: #94d3ac !important;
 }
 
+.classBigMenu:hover {
+  color: #94d3ac !important;
+}
+
 .algoButton {
   background-color: #fc8a15 !important;
 
@@ -84,4 +98,9 @@
   border: none !important;
   margin-top: 0.5rem;
   margin-left: 0.5rem;
+}
+
+.classInput:focus {
+  border-color: #1ee494 !important;
+  box-shadow: 0 0 0 0.1rem #94d3ac !important;
 }

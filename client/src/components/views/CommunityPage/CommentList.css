@@ -1,0 +1,10 @@
+.CommentBackground {
+  background-color: white !important;
+}
+
+
+.iconCenter {
+  margin-left: auto;
+  margin-right: auto;
+  display: block !important;
+}

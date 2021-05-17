@@ -9,17 +9,23 @@ import {
     createComment,
     updatingComment,
 } from '_api/Board.js';
-import { ListGroup, Button, Badge, Form } from 'react-bootstrap';
+
+import './CommentList.css';
+import { CloseOutlined, EditOutlined, CheckOutlined, SendOutlined } from '@ant-design/icons';
+import { Image, ListGroup, Button, Form, Col } from 'react-bootstrap';
 
 function CommentList(props) {
     let user = useSelector(state => state.user);
 
+    const date = new Date();
     const ArticleId = props.ArticleId;
+
     const [Article, setArticle] = useState({});
     const [Comments, setComments] = useState([]);
     const [Comment, setComment] = useState([]);
     const [updateComment, setupdateComment] = useState('');
     const [UpdateNum, setUpdateNum] = useState(null);
+
     useEffect(() => {
         detailArticle(ArticleId).then(res => {
             setArticle(res.data.data);
@@ -34,17 +40,18 @@ function CommentList(props) {
     };
     const createCommentHandler = event => {
         event.preventDefault();
-        const article_id = ArticleId;
 
         const body = {
-            board_id: article_id,
+            board_id: ArticleId,
             content: Comment,
         };
 
         createComment(body).then(res => {
-            // console.log(res.data.data);
+            console.log(res.data.data);
             listComment(ArticleId).then(res => {
                 setComments(res.data.data);
+                console.log(ArticleId);
+                console.log(res.data.data, 11);
             });
         });
     };
@@ -57,6 +64,7 @@ function CommentList(props) {
                 setComments(res.data.data);
             });
         });
+        window.location.replace(`/community/detail/${ArticleId}`);
     };
     const onDeleteHander = idx => {
         deleteComment(idx).then(res => {
@@ -88,65 +96,80 @@ function CommentList(props) {
     };
     const renderComments = Comments.map((comment, index) => {
         return (
-            <ListGroup.Item key={index}>
-                {comment.user_id}
-                {comment.select ? <Badge variant="warning">채택</Badge> : console.log()}
+            <ListGroup.Item className="CommentBackground" key={index}>
+                {comment.BoardComment.select ? (
+                    <Image
+                        src={`${process.env.PUBLIC_URL}/img/winner.png`}
+                        style={{ width: 30, height: 30 }}
+                        roundedCircle
+                    ></Image>
+                ) : (
+                    console.log()
+                )}
+                <Image
+                    src={comment.profile + '?' + date}
+                    style={{ width: 30, height: 30 }}
+                    roundedCircle
+                ></Image>
+                {comment.name}{' '}
                 {!Article.select && Article.user_id === user?.login?.user?.id ? (
-                    <Button onClick={() => onselectHander(comment.id)}>채택하기</Button>
+                    <CheckOutlined onClick={() => onselectHander(comment.BoardComment.id)} />
                 ) : (
                     console.log()
-                )}
+                )}{' '}
+                {UpdateNum !== comment.BoardComment.id &&
+                comment.BoardComment.user_id === user?.login?.user?.id ? (
+                    <EditOutlined onClick={() => onUpdateCommentHander(comment.BoardComment.id)} />
+                ) : (
+                    console.log()
+                )}{' '}
                 {Article.user_id === user?.login?.user?.id ||
-                comment.user_id === user?.login?.user?.id ? (
-                    <Button variant="danger" onClick={() => onDeleteHander(comment.id)}>
-                        삭제
-                    </Button>
+                comment.BoardComment.user_id === user?.login?.user?.id ? (
+                    <CloseOutlined onClick={() => onDeleteHander(comment.BoardComment.id)} />
                 ) : (
                     console.log()
                 )}
-
-                {UpdateNum !== comment.id && comment.user_id === user?.login?.user?.id ? (
-                    <Button variant="success" onClick={() => onUpdateHander(comment.id)}>
-                        수정
-                    </Button>
-                ) : (
-                    console.log()
-                )}
-
                 <br />
                 <br />
-                {UpdateNum === comment.id ? (
+                {UpdateNum === comment.BoardComment.id ? (
                     <Form.Group>
                         <Form.Control
                             size="md"
                             type="text"
                             onChange={onCommentChangehandler}
-                            defaultValue={comment.content}
+                            defaultValue={comment.BoardComment.content}
                         />
-                        <Button variant="success" onClick={() => onUpdateCommentHander(comment.id)}>
+                        <Button
+                            variant="success"
+                            onClick={() => onUpdateCommentHander(comment.BoardComment.id)}
+                        >
                             수정하기
                         </Button>
                     </Form.Group>
                 ) : (
-                    <p>{comment.content}</p>
+                    <p>{comment.BoardComment.content}</p>
                 )}
             </ListGroup.Item>
         );
     });
     return (
-        <div>
+        <div className="CommentBg">
             <h4>댓글</h4>
             <Form>
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Control
-                        type="textarea"
-                        placeholder="댓글을 작성하세요"
-                        onChange={commentHandler}
-                    />
-                </Form.Group>
-                <Button variant="primary" type="submit" onClick={createCommentHandler}>
-                    댓글작성
-                </Button>
+                <Form.Row>
+                    <Col xs={11}>
+                        <Form.Control
+                            type="textarea"
+                            placeholder="댓글을 작성하세요"
+                            onChange={commentHandler}
+                        />
+                    </Col>
+                    <Col>
+                        <Button variant="success" type="submit" onClick={createCommentHandler}>
+                            작 성
+                        </Button>
+                    </Col>
+                </Form.Row>
             </Form>
             <ListGroup>{renderComments}</ListGroup>
         </div>

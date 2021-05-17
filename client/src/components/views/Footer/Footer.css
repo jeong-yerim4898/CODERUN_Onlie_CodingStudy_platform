@@ -34,14 +34,14 @@
 
 .Team {
   font-size: 20px;
-  font-family: 'payboocMedium';
+
   opacity: 0.7;
 }
 
 
 .TeamMember {
   font-size: 14px;
-  font-family: 'payboocMedium';
+
   opacity: 0.8;
 }
 
@@ -54,7 +54,7 @@
 .ContactUs {
   font-size: 14px;
   color: grey;
-  font-family: 'payboocMedium';
+
   text-align: end;
 }
 

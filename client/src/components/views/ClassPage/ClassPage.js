@@ -164,38 +164,38 @@ function ClassPage(props) {
     };
     const renderCards = Classes.map((classs, index) => {
         return (
-            <Col className="colcard" span={5}>
-                <Card
-                    key={index}
-                    onClick={() => toWatchHandler(classs.Video.id)}
-                    className="shadow classCard"
-                    style={{ width: 240, height: 320 }}
-                >
-                    <Card.Img
-                        className="classImg"
-                        variant="top"
-                        src={classs.Video.thumbnail}
-                        style={{ height: 180 }}
-                    />
-                    <Card.Body>
-                        <Card.Title className="classTitle" style={{ fontFamily: 'payboocMedium' }}>
-                            {classs.Video.title}
-                        </Card.Title>
-                        {/* 유저네임 */}
-                        <Card.Text>{classs.name}</Card.Text>
-                        {classs.Video.likestatus ? (
-                            <Card.Text>
-                                <FontAwesomeIcon style={{ color: '#1ee494' }} icon={fasHeart} />{' '}
-                                {classs.Video.likecnt}
-                            </Card.Text>
-                        ) : (
-                            <Card.Text>
-                                <FontAwesomeIcon style={{ color: '#1ee494' }} icon={farHeart} />{' '}
-                                {classs.Video.likecnt}
-                            </Card.Text>
-                        )}
-                    </Card.Body>
-                </Card>
+            <Col className="colcard" span={3}>
+                <Col span={3}>
+                    <Card
+                        key={index}
+                        onClick={() => toWatchHandler(classs.Video.id)}
+                        className="shadow classCard"
+                        style={{ width: 240, height: 320 }}
+                    >
+                        <Card.Img
+                            className="classImg"
+                            variant="top"
+                            src={classs.Video.thumbnail}
+                            style={{ height: 180 }}
+                        />
+                        <Card.Body>
+                            <Card.Title className="classTitle">{classs.Video.title}</Card.Title>
+                            {/* 유저네임 */}
+                            <Card.Text>{classs.name}</Card.Text>
+                            {classs.Video.likestatus ? (
+                                <Card.Text>
+                                    <FontAwesomeIcon style={{ color: '#1ee494' }} icon={fasHeart} />{' '}
+                                    {classs.Video.likecnt}
+                                </Card.Text>
+                            ) : (
+                                <Card.Text>
+                                    <FontAwesomeIcon style={{ color: '#1ee494' }} icon={farHeart} />{' '}
+                                    {classs.Video.likecnt}
+                                </Card.Text>
+                            )}
+                        </Card.Body>
+                    </Card>
+                </Col>
             </Col>
         );
     });
@@ -268,6 +268,7 @@ function ClassPage(props) {
                 });
             }
         }
+        window.scrollTo(0, 0);
     };
 
     const onPreviousHandler = num => {
@@ -329,6 +330,7 @@ function ClassPage(props) {
                 });
             }
         }
+        window.scrollTo(0, 0);
     };
     const onSearchHandler = event => {
         // const user_id = user?.login?.user?.id;
@@ -358,13 +360,14 @@ function ClassPage(props) {
                     <Menu
                         // onClick={this.handleClick}
                         style={{ color: '#94d3ac' }}
+                        className="classBigMenu"
                         // defaultSelectedKeys={['1']}
                         defaultOpenKeys={['sub1', 'sub2']}
                         mode="inline"
                     >
                         <SubMenu
                             key="sub1"
-                            style={{ color: '#94d3ac' }}
+                            style={{ color: 'black' }}
                             icon={<CalculatorOutlined />}
                             title="Algorithm"
                         >
@@ -372,7 +375,7 @@ function ClassPage(props) {
                         </SubMenu>
                         <SubMenu
                             key="sub2"
-                            style={{ color: '#94d3ac' }}
+                            style={{ color: 'black' }}
                             icon={<ApartmentOutlined />}
                             title="Computer Science"
                         >
@@ -381,43 +384,55 @@ function ClassPage(props) {
                     </Menu>
                 </Col>
                 <Col md={10}>
-                    <InputGroup className="mb-3">
-                        <FormControl placeholder="검색어를 입력하세요" onChange={onSearchHandler} />
-                    </InputGroup>
+                    <br></br>
+                    <div style={{ marginLeft: '20px', width: '400px' }}>
+                        <InputGroup className="mb-3">
+                            <FormControl
+                                className="classInput"
+                                placeholder="검색어를 입력하세요"
+                                onChange={onSearchHandler}
+                            />
+                        </InputGroup>
+                    </div>
                     {renderButton}
                     {/* <Space size={2}> */}
                     <Row className="cardBoard">{renderCards}</Row>
                     {/* </Space> */}
                     <br></br>
-                    {Page > 1 ? (
-                        <Button
-                            variant="outline-success"
-                            onClick={() => onPreviousHandler(Page - 1)}
-                        >
-                            이전페이지
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="outline-success"
-                            disabled={true}
-                            onClick={() => onPreviousHandler(Page - 1)}
-                        >
-                            이전페이지
-                        </Button>
-                    )}{' '}
-                    {Classes.length === 12 ? (
-                        <Button variant="outline-success" onClick={() => onNextHandler(Page + 1)}>
-                            다음페이지
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="outline-success"
-                            disabled={true}
-                            onClick={() => onNextHandler(Page + 1)}
-                        >
-                            다음페이지
-                        </Button>
-                    )}
+                    <div style={{ marginRight: '30px', float: 'right' }}>
+                        {Page > 1 ? (
+                            <Button
+                                variant="outline-success"
+                                onClick={() => onPreviousHandler(Page - 1)}
+                            >
+                                이전페이지
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="outline-success"
+                                disabled={true}
+                                onClick={() => onPreviousHandler(Page - 1)}
+                            >
+                                이전페이지
+                            </Button>
+                        )}{' '}
+                        {Classes.length === 12 ? (
+                            <Button
+                                variant="outline-success"
+                                onClick={() => onNextHandler(Page + 1)}
+                            >
+                                다음페이지
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="outline-success"
+                                disabled={true}
+                                onClick={() => onNextHandler(Page + 1)}
+                            >
+                                다음페이지
+                            </Button>
+                        )}
+                    </div>
                 </Col>
             </Row>
         </div>
