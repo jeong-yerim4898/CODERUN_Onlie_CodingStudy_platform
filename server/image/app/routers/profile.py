@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 
 # 로컬 라이브러리
 pth.append(path.dirname(path.abspath(path.dirname(__file__))))
+from . import raiseException
 from database import models
 from dependency import get_db
 from routers.user import get_current_user
@@ -40,7 +41,7 @@ def create_profile(
 ):
     current_user = get_current_user(token, db)
     if current_user.id != user_id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     with open(f"{parent_route}/assets/profile/profile_{user_id}.png", "wb") as f:
         f.write(file)
     return FileResponse(f"{parent_route}/assets/profile/profile_{user_id}.png")
@@ -54,9 +55,9 @@ def delete_profile(
 ):
     current_user = get_current_user(token, db)
     if current_user.id != user_id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     try:
         remove(f"{parent_route}/assets/profile/profile_{user_id}.png")
         return {"delete": user_id}
     except:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
