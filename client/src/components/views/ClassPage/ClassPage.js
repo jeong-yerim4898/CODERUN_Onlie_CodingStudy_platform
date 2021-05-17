@@ -332,15 +332,22 @@ function ClassPage(props) {
     };
     const onSearchHandler = event => {
         // const user_id = user?.login?.user?.id;
+        console.log(event.currentTarget.value);
         setAlgo(0);
         setCs(0);
         setLanguage(0);
-        setSearched('event.currentTarget.value');
+        setSearched(event.currentTarget.value);
         setPage(1);
         if (user_id) {
-            fetchLoginedSearchedVideoList(user_id, event.currentTarget.value, 1);
+            console.log(1);
+            fetchLoginedSearchedVideoList(user_id, event.currentTarget.value, 1).then(res => {
+                setClasses(res.data.data);
+            });
         } else {
-            fetchSearchedVideoList(event.currentTarget.value, 1);
+            console.log(2);
+            fetchSearchedVideoList(event.currentTarget.value, 1).then(res => {
+                setClasses(res.data.data);
+            });
         }
     };
     const { SubMenu } = Menu;
