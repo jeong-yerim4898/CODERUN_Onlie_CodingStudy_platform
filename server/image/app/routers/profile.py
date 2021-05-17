@@ -28,7 +28,7 @@ def get_profile(
     try:
         open(f"{parent_route}/assets/profile/profile_{user_id}.png")
         return FileResponse(f"{parent_route}/assets/profile/profile_{user_id}.png")
-    except:
+    except Exception:
         return FileResponse(f"{parent_route}/assets/profile/profile_default.png")
 
 
@@ -59,5 +59,5 @@ def delete_profile(
     try:
         remove(f"{parent_route}/assets/profile/profile_{user_id}.png")
         return {"delete": user_id}
-    except:
+    except Exception:
         raise raiseException.Raise_404_Error()
