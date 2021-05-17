@@ -28,7 +28,7 @@ def get_thumbnail(
     try:
         open(f"{parent_route}/assets/thumbnail/thumbnail_{video_id}.png")
         return FileResponse(f"{parent_route}/assets/thumbnail/thumbnail_{video_id}.png")
-    except:
+    except Exception:
         return FileResponse(f"{parent_route}/assets/thumbnail/thumbnail_default.png")
 
 
@@ -65,5 +65,5 @@ def delete_thumbnail(
     try:
         remove(f"{parent_route}/assets/thumbnail/thumbnail_{video_id}.png")
         return {"delete": video_id}
-    except:
+    except Exception:
         raise raiseException.Raise_404_Error()
