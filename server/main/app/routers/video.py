@@ -181,7 +181,7 @@ def post_video(
         v_data.subject_user_tag
         v_data.algorithm_user_tag
         return {"data": v_data}
-    except:
+    except Exception:
         db.delete(v_data)
         db.commit()
     raise raiseException.Raise_422_Error()

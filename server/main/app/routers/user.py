@@ -205,11 +205,11 @@ def validate_email(email: str):
         raise raiseException.Raise_422_Error()
     try:
         email.split("@")[1].split(".")[0][0]
-    except:
+    except Exception:
         raise raiseException.Raise_422_Error()
     try:
         email.split("@")[1].split(".")[1][0]
-    except:
+    except Exception:
         raise raiseException.Raise_422_Error()
 
 
