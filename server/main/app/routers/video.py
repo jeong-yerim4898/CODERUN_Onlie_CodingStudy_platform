@@ -201,25 +201,9 @@ def update_video(
         raise HTTPException(status_code=401, detail="Incorrect user")
     v_data.title = data.title
     v_data.content = data.content
-    v_data.language_tag_id = data.language_tag_id
-    try:
-        v_data.subject_user_tag = []
-        v_data.algorithm_user_tag = []
-        for i in data.algorithm_tag_ids:
-            sut_data = models.AlgorithmUserTag(
-                video_id=v_data.id, algorithm_tag_id=i)
-            db.add(sut_data)
-        for i in data.subject_tag_ids:
-            aut_data = models.SubjectUserTag(
-                video_id=v_data.id, subject_tag_id=i)
-            db.add(aut_data)
-        db.commit()
-        db.refresh(v_data)
-        v_data.subject_user_tag
-        v_data.algorithm_user_tag
-        return {"data": v_data}
-    except:
-        raise HTTPException(status_code=422, detail="Unprocessable entity")
+    db.commit()
+    db.refresh(v_data)
+    return {"data": v_data}
 
 
 @router.delete("/api/video/delete/{video_id}", tags=["video"], description="동영상 게시물 삭제")
