@@ -135,6 +135,7 @@ def get_board_comment(
     get_current_user(token, db)
     bc_data = (
         db.query(models.BoardComment, models.User.name, models.User.profile)
+        .join(models.User, models.BoardComment.user_id == models.User.id)
         .filter(models.BoardComment.board_id == board_id)
         .all()
     )
