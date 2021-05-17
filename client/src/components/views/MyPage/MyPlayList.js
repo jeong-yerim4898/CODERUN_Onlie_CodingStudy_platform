@@ -84,7 +84,6 @@ function MyPlayList(props) {
         watchPlaylist(video_list_id)
             .then(res => {
                 console.log(res.data.data[0].video_id);
-
                 history.push({
                     pathname: '/watch/' + res.data.data[0].video_id,
                     state: { playlistId: video_list_id },

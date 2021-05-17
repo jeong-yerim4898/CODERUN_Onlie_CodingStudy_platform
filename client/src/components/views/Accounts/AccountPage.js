@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Footer from 'components/views/Footer/Footer';
 import './AccountPage.css';
 import { Modal, Button } from 'react-bootstrap';
 
@@ -166,126 +167,135 @@ function LoginPage(props) {
         setVisible2(true);
     };
     return (
-        <div className="account-body">
-            <Modal show={Visible} onHide={handleCancel}>
-                <Modal.Header closeButton>
-                    <Modal.Title>이메일 인증</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p style={{ fontSize: '25px', fontWeight: 'bold' }}>{ModalText}</p>
-                </Modal.Body>
-                <p>인증메일을 받지 못하였나요?</p>
-                <button class="modal_button" onClick={sendEmail}>
-                    인증메일 요청
-                </button>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCancel}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleOk}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-            <Modal show={Visible2} onHide={handleCancel}>
-                <Modal.Header closeButton>
-                    <Modal.Title>임시 비밀번호 발급</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p style={{ fontSize: '25px', fontWeight: 'bold' }}>이메일을 입력해주세요.</p>
-                </Modal.Body>
-                <input
-                    type="email"
-                    style={{
-                        backgroundColor: '#eee',
-                        border: 'none',
-                        padding: '12px 15px',
-                        margin: '0rem 10% 1rem 10%',
-                        width: '80%',
-                    }}
-                    placeholder="Email"
-                    onChange={findEmail}
-                />
-
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCancel}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handelFindEmail}>
-                        보내기
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
-            <div className="container" id="container">
-                <div className="form-container sign-up-container">
-                    <form action="#">
-                        <h1>Create Account</h1>
-
-                        <div style={{ display: 'flex', width: '100%' }}>
-                            <input
-                                id="email"
-                                type="email"
-                                placeholder="Email"
-                                onChange={ValidEmail}
-                            />
-                            <button id="check-btn" onClick={OverlapEmail}>
-                                중복확인
-                            </button>
-                        </div>
-                        <input type="text" placeholder="Nickname" onChange={NicknameHandler} />
-                        <input type="password" placeholder="Password" onChange={passwordHandler} />
-                        <input
-                            id="passwordConfirm"
-                            type="password"
-                            placeholder="PasswordConfirm"
-                            onChange={passwordConfirmHandler}
-                        />
-
-                        <button onClick={postSignup}>Sign Up</button>
-                    </form>
-                </div>
-                <div class="form-container sign-in-container">
-                    <form action="#">
-                        <h1>Sign in</h1>
-
-                        <input type="email" placeholder="Email" onChange={loginEmail} />
-                        <input
-                            id="login_pw"
-                            type="password"
-                            placeholder="Password"
-                            onChange={loginPassword}
-                        />
-                        <p class="findPW-text" onClick={openPasswordModal}>
-                            비밀번호 찾고 싶어?
+        <div>
+            <div className="account-body">
+                <Modal show={Visible} onHide={handleCancel}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>이메일 인증</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p style={{ fontSize: '25px', fontWeight: 'bold' }}>{ModalText}</p>
+                    </Modal.Body>
+                    <p>인증메일을 받지 못하였나요?</p>
+                    <button class="modal_button" onClick={sendEmail}>
+                        인증메일 요청
+                    </button>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCancel}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={handleOk}>
+                            Save Changes
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+                <Modal show={Visible2} onHide={handleCancel}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>임시 비밀번호 발급</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p style={{ fontSize: '25px', fontWeight: 'bold' }}>
+                            이메일을 입력해주세요.
                         </p>
-                        <button onClick={postLogin}>Sign In</button>
-                    </form>
-                </div>
-                <div class="overlay-container">
-                    <div class="overlay">
-                        <div class="overlay-panel overlay-left">
-                            <h1>코드:RUN 입장</h1>
-                            <p>어서 로그인 해줭!</p>
-                            <button className="ghost" id="signIn" onClick={accountclick}>
-                                Sign In
-                            </button>
-                        </div>
+                    </Modal.Body>
+                    <input
+                        type="email"
+                        style={{
+                            backgroundColor: '#eee',
+                            border: 'none',
+                            padding: '12px 15px',
+                            margin: '0rem 10% 1rem 10%',
+                            width: '80%',
+                        }}
+                        placeholder="Email"
+                        onChange={findEmail}
+                    />
 
-                        <div class="overlay-panel overlay-right">
-                            <h1>
-                                코드:RUN은<br></br>
-                                처음이지?
-                            </h1>
-                            <p>너의 상세한 정보가 궁금해</p>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCancel}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={handelFindEmail}>
+                            보내기
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
 
-                            <button className="ghost" id="signUp" onClick={accountclick}>
-                                Sign Up
-                            </button>
+                <div className="container" id="container">
+                    <div className="form-container sign-up-container">
+                        <form action="#">
+                            <h1>Create Account</h1>
+
+                            <div style={{ display: 'flex', width: '100%' }}>
+                                <input
+                                    id="email"
+                                    type="email"
+                                    placeholder="Email"
+                                    onChange={ValidEmail}
+                                />
+                                <button id="check-btn" onClick={OverlapEmail}>
+                                    중복확인
+                                </button>
+                            </div>
+                            <input type="text" placeholder="Nickname" onChange={NicknameHandler} />
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                onChange={passwordHandler}
+                            />
+                            <input
+                                id="passwordConfirm"
+                                type="password"
+                                placeholder="PasswordConfirm"
+                                onChange={passwordConfirmHandler}
+                            />
+
+                            <button onClick={postSignup}>Sign Up</button>
+                        </form>
+                    </div>
+                    <div class="form-container sign-in-container">
+                        <form action="#">
+                            <h1>Sign in</h1>
+
+                            <input type="email" placeholder="Email" onChange={loginEmail} />
+                            <input
+                                id="login_pw"
+                                type="password"
+                                placeholder="Password"
+                                onChange={loginPassword}
+                            />
+                            <p class="findPW-text" onClick={openPasswordModal}>
+                                비밀번호 찾고 싶어?
+                            </p>
+                            <button onClick={postLogin}>Sign In</button>
+                        </form>
+                    </div>
+                    <div class="overlay-container">
+                        <div class="overlay">
+                            <div class="overlay-panel overlay-left">
+                                <h1>코드:RUN 입장</h1>
+                                <p>어서 로그인 해줭!</p>
+                                <button className="ghost" id="signIn" onClick={accountclick}>
+                                    Sign In
+                                </button>
+                            </div>
+
+                            <div class="overlay-panel overlay-right">
+                                <h1>
+                                    코드:RUN은<br></br>
+                                    처음이지?
+                                </h1>
+                                <p>너의 상세한 정보가 궁금해</p>
+
+                                <button className="ghost" id="signUp" onClick={accountclick}>
+                                    Sign Up
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer></Footer>
         </div>
     );
 }

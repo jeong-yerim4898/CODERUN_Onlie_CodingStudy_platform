@@ -13,7 +13,7 @@ function VideoInfomation(props) {
     const [CommentContent, setCommentContent] = useState('');
 
     useEffect(() => {
-        console.log(props.VideoListId, 11);
+        console.log(props.VideoListId !== undefined, 11);
         setVideoComments(props.VideoComments);
     }, [props.VideoComments]);
 
@@ -21,10 +21,11 @@ function VideoInfomation(props) {
         return (
             <div
                 style={{
-                    height: '150px',
+                    height: '320px',
                     overflow: 'auto',
                     display: 'flex',
                     flexDirection: 'column',
+                    marginTop: '20px',
                 }}
             >
                 <InfiniteScroll dataLength={VideoComments.length}>
@@ -83,29 +84,38 @@ function VideoInfomation(props) {
     };
 
     return (
-        <div>
+        <div style={{ marginRight: '1.5rem' }}>
             <VideoInfo
                 VideoListId={props.VideoListId}
                 video={VideoDetail.data}
                 like={VideoDetail.like_status}
             />
 
-            <div style={{ display: 'flex' }}>
-                <Input
-                    className="comment-input"
-                    placeholder="댓글을 입력해주세요."
-                    onPressEnter={EnterComment}
-                    onChange={changeContent}
-                    value={CommentContent}
-                ></Input>
-                <Button onClick={sendVideoComment}>작성</Button>
-            </div>
-            {VideoComments.length === 0 ? (
-                <div>
-                    <p>아직 댓글이 없어요 ㅠㅠ</p>
-                </div>
+            {props.VideoListId !== undefined ? (
+                <div></div>
             ) : (
-                renderComment()
+                <div>
+                    <div style={{ display: 'flex' }}>
+                        <Input
+                            style={{ marginRight: '10px' }}
+                            className="comment-input"
+                            placeholder="댓글을 입력해주세요."
+                            onPressEnter={EnterComment}
+                            onChange={changeContent}
+                            value={CommentContent}
+                        ></Input>
+                        <Button className="comment-input-btn" onClick={sendVideoComment}>
+                            작성
+                        </Button>
+                    </div>
+                    {VideoComments.length === 0 ? (
+                        <div>
+                            <p>아직 댓글이 없어요 ㅠㅠ</p>
+                        </div>
+                    ) : (
+                        renderComment()
+                    )}
+                </div>
             )}
         </div>
     );

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Input, Button } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
+import './VideoComment.css';
+//api
 import { updateVideoComment } from '_api/Video';
 
 function VideoComment(props) {
@@ -72,17 +74,39 @@ function VideoComment(props) {
     };
     return (
         <div>
-            <div style={{ display: 'flex' }}>
+            <div
+                className="comment-container"
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: '70px',
+                    paddingBottom: '10px',
+                    paddingTop: '10px',
+                    paddingLeft: '20px',
+                }}
+            >
                 <img
                     src={props.Videocomment.user.profile}
                     style={{ height: `50px`, width: '50px', borderRadius: '50%' }}
                 />
-                <div style={{ width: '60%' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <h4>{props.Videocomment.user.name}</h4>
+                <div
+                    style={{
+                        width: '100%',
+                        height: '55px',
+                        paddingLeft: '20px',
+                        paddingRight: '20px',
+                    }}
+                >
+                    <div
+                        style={{ display: 'flex', justifyContent: 'space-between', height: '25px' }}
+                    >
+                        <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+                            {props.Videocomment.user.name}
+                        </p>
                         {props.Videocomment.user.id == user.login.user.id ? (
-                            <div>
+                            <div style={{ display: 'flex' }}>
                                 <EditOutlined
+                                    style={{ marginRight: '10px' }}
                                     className={props.Videocomment.id + 'comment-update-icon'}
                                     onClick={updateComment}
                                 />
@@ -93,16 +117,28 @@ function VideoComment(props) {
                                 <div
                                     className={props.Videocomment.id + 'comment-update' + ' hidden'}
                                 >
-                                    <Input onChange={handlerUpdate} />
-                                    <Button onClick={sendCommentUpdate}>수정완료</Button>
-                                    <Button onClick={cancleCommentUpdate}>취소</Button>
+                                    <Input
+                                        className="comment-update-input"
+                                        onChange={handlerUpdate}
+                                    />
+                                    <Button
+                                        className="comment-update-btn1"
+                                        onClick={sendCommentUpdate}
+                                    >
+                                        수정완료
+                                    </Button>
+                                    <Button
+                                        className="comment-update-btn2"
+                                        onClick={cancleCommentUpdate}
+                                    >
+                                        취소
+                                    </Button>
                                 </div>
                             </div>
                         ) : (
                             <div></div>
                         )}
                     </div>
-
                     <p className={props.Videocomment.id + 'comment-content'}>{comment}</p>
                 </div>
             </div>

@@ -6,14 +6,13 @@ import VideoInfomation from './Sections/VideoInfomation';
 
 //api
 import { fetchVideoDetail, fetchVideoComments } from '_api/Video';
-import AddtoPlaylist from './AddtoPlaylist.js';
-import { Link } from 'react-router-dom';
 
 function WatchPage(props) {
     const getParams = props.location?.state?.playlistId;
     const video_id = props.match.params.id;
     const [VideoDetail, setVideoDetail] = useState({});
     const [VideoComments, setVideoComments] = useState([]);
+    console.log('params?' + getParams);
 
     useEffect(() => {
         const videoData = async () => {
@@ -28,7 +27,6 @@ function WatchPage(props) {
                     });
 
                 const res2 = await fetchVideoComments(video_id);
-
                 setVideoComments(res2.data.data);
             } catch (err) {
                 console.log(err);
@@ -38,9 +36,9 @@ function WatchPage(props) {
     }, []);
 
     return (
-        <div>
+        <div style={{ marginTop: '2.5rem' }}>
             <Row>
-                <Col xs={12} md={8} lg={8} xl={8}>
+                <Col xs={12} md={9} lg={9} xl={9}>
                     {VideoDetail.data === undefined ? (
                         console.log('yet')
                     ) : (
@@ -49,7 +47,7 @@ function WatchPage(props) {
                         </div>
                     )}
                 </Col>
-                <Col xs={12} md={4} lg={4} xl={4}>
+                <Col xs={12} md={3} lg={3} xl={3}>
                     {VideoDetail.data === undefined ? (
                         console.log('yet')
                     ) : (
