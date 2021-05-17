@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 # 로컬 라이브러리
 pth.append(path.dirname(path.abspath(path.dirname(__file__))))
+from . import raiseException
 from database import models, schemas
 from dependency import get_db
 from routers.user import get_current_user
@@ -56,9 +57,9 @@ def update_video_list(
         db.query(models.VideoList).filter(models.VideoList.id == data.video_list_id).first()
     )
     if not vl_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     if current_user.id != vl_data.user_id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     vl_data.title = data.title
     db.commit()
     db.refresh(vl_data)
@@ -80,9 +81,9 @@ def delete_video_list(
         db.query(models.VideoList).filter(models.VideoList.id == video_list_id).first()
     )
     if not vl_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     if current_user.id != vl_data.user_id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     db.delete(vl_data)
     db.commit()
     return {"delete": video_list_id}
@@ -96,7 +97,7 @@ def check_videolist(user_id, id, db):
         .first()
     )
     if not check:
-        raise HTTPException(status_code=404, detail="Incorrect route")
+        raise raiseException.Raise_404_Error()
 
 
 @router.get(
@@ -131,7 +132,7 @@ def create_video_list_data(
     current_user = get_current_user(token, db)
     check_videolist(current_user.id, data.video_list_id, db)
     if not db.query(models.Video).filter(models.Video.id == data.video_id).first():
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     vld_data = models.VideoListData(video_list_id=data.video_list_id, video_id=data.video_id)
     db.add(vld_data)
     db.commit()
@@ -156,7 +157,7 @@ def delete_video_list_data(
         .first()
     )
     if not vld_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     check_videolist(current_user.id, vld_data.video_list_id, db)
     db.delete(vld_data)
     db.commit()

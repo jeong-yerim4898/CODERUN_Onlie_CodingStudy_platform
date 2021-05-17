@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 # 로컬 라이브러리
 pth.append(path.dirname(path.abspath(path.dirname(__file__))))
+from . import raiseException
 from database import models, schemas
 from dependency import get_db
 from routers.user import get_current_user
@@ -18,25 +19,17 @@ router = APIRouter()
 
 
 @router.get("/api/board/search", tags=["board"], description="게시판 글 조회")
-def get_baord(
+def get_board(
     count: int,
     search_text: Optional[str] = '',
     db: Session = Depends(get_db),
 ):
-    
     title_board = db.query(models.Board, models.User.name, models.User.profile).join(models.User, models.Board.user_id == models.User.id).filter(models.Board.title.ilike(f'%{search_text}%'))
     content_board = db.query(models.Board, models.User.name, models.User.profile).join(models.User, models.Board.user_id == models.User.id).filter(models.Board.content.ilike(f'%{search_text}%'))
-
-
     result = title_board.union(content_board)
-
-    
     user_board = db.query(models.Board, models.User.name, models.User.profile).join(models.User, models.Board.user_id == models.User.id).filter(models.User.name.ilike(f'%{search_text}%'))
-
     result = result.union(user_board).order_by(models.Board.created_date.desc()).all()
     return_result = result[(count-1)*10:count*10]
-    
-
     return {"data": return_result, "page_cnt": (len(result)-1)//10 + 1}
 
 
@@ -68,7 +61,7 @@ def get_board_detail(
     # get_current_user(token, db)
     board_data = db.query(models.Board).filter(models.Board.id == board_id).first()
     if not board_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     return {"data": board_data}
 
 
@@ -81,9 +74,9 @@ def update_board(
     current_user = get_current_user(token, db)
     board_data = db.query(models.Board).filter(models.Board.id == data.board_id).first()
     if not board_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     if current_user.id != board_data.user_id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     board_data.title = data.title
     board_data.content = data.content
     db.commit()
@@ -100,9 +93,9 @@ def delete_board(
     current_user = get_current_user(token, db)
     board_data = db.query(models.Board).filter(models.Board.id == board_id).first()
     if not board_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     if current_user.id != board_data.user_id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     db.delete(board_data)
     db.commit()
     return {"delete": board_id}
@@ -151,9 +144,9 @@ def update_board_comment(
     current_user = get_current_user(token, db)
     board_comment_data = db.query(models.BoardComment).filter(models.BoardComment.id == data.board_comment_id).first()
     if not board_comment_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     if current_user.id != board_comment_data.user_id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     board_comment_data.content = data.content
     db.commit()
     db.refresh(board_comment_data)
@@ -169,9 +162,9 @@ def delete_board_comment(
     current_user = get_current_user(token, db)
     board_comment_data = db.query(models.BoardComment).filter(models.BoardComment.id == board_comment_id).first()
     if not board_comment_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     if current_user.id != board_comment_data.user_id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     db.delete(board_comment_data)
     db.commit()
     return {"delete": board_comment_id}
@@ -186,11 +179,9 @@ def select_comment(
     current_user = get_current_user(token, db)
     current_board_comment = db.query(models.BoardComment).filter(models.BoardComment.id == data.board_comment_id).first()
     current_board = db.query(models.Board).filter(models.Board.id == current_board_comment.board_id).first()
-    if current_board.user_id != current_user.id:
-        raise HTTPException(status_code=401, detail="권한이 없습니다.")
-    if current_board.select:
-        raise HTTPException(status_code=401, detail="이미 채택된 게시글입니다.")
-
+    if current_board.user_id != current_user.id or current_board.select:
+        raise raiseException.Raise_401_Error()
+    
     current_board.select = True
     current_board_comment.select = True
     db.commit()
