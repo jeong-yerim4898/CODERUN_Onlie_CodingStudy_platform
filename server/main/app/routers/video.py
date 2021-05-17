@@ -1,4 +1,7 @@
 # 표준 라이브러리
+from routers.user import get_current_user
+from dependency import get_db
+from database import models, schemas
 from os import path
 from sys import path as pth
 from typing import Optional
@@ -10,12 +13,33 @@ from sqlalchemy.orm import Session
 
 # 로컬 라이브러리
 pth.append(path.dirname(path.abspath(path.dirname(__file__))))
-from database import models, schemas
-from dependency import get_db
-from routers.user import get_current_user
 
 
 router = APIRouter()
+
+
+@router.get("/api/video/search", tags=["video"], description="비디오 검색")
+def get_video(
+    count: int,
+    search_text: Optional[str] = '',
+    db: Session = Depends(get_db),
+):
+
+    title_video = db.query(models.Video, models.User.name, models.User.profile).join(
+        models.User, models.Video.user_id == models.User.id).filter(models.Video.title.ilike(f'%{search_text}%'))
+    content_video = db.query(models.Video, models.User.name, models.User.profile).join(
+        models.User, models.Video.user_id == models.User.id).filter(models.Video.content.ilike(f'%{search_text}%'))
+
+    result = title_video.union(content_video)
+
+    user_video = db.query(models.Video, models.User.name, models.User.profile).join(
+        models.User, models.Video.user_id == models.User.id).filter(models.User.name.ilike(f'%{search_text}%'))
+
+    result = result.union(user_video).order_by(
+        models.Video.created_date.desc()).all()
+    return_result = result[(count-1)*12:count*12]
+
+    return {"data": return_result, "page_cnt": (len(result)-1)//12 + 1}
 
 
 @router.get("/api/video/detail/{video_id}", tags=["video"], description="동영상 디테일 보기")
@@ -48,7 +72,6 @@ def get_video_filter_page(
     user_id: Optional[int] = 0,
     db: Session = Depends(get_db),
 ):
-
 
     if algorithm_tag_id:
         if language_tag_id:
@@ -94,7 +117,6 @@ def get_video_filter_page(
             .order_by(models.Video.id.desc())
             .all()
         )
-    
 
     return_data = v_data[(count-1)*12:count*12]
 
@@ -103,7 +125,8 @@ def get_video_filter_page(
             return_data[i].Video.likestatus = True
         else:
             return_data[i].Video.likestatus = False
-        return_data[i].Video.likecnt = len(db.query(models.Like).filter(models.Like.video_id == return_data[i].Video.id).all())
+        return_data[i].Video.likecnt = len(db.query(models.Like).filter(
+            models.Like.video_id == return_data[i].Video.id).all())
 
     return {"data": return_data, "page_cnt": (len(v_data)-1)//12 + 1}
 
@@ -126,10 +149,12 @@ def post_video(
     db.refresh(v_data)
     try:
         for i in data.algorithm_tag_ids:
-            sut_data = models.AlgorithmUserTag(video_id=v_data.id, algorithm_tag_id=i)
+            sut_data = models.AlgorithmUserTag(
+                video_id=v_data.id, algorithm_tag_id=i)
             db.add(sut_data)
         for i in data.subject_tag_ids:
-            aut_data = models.SubjectUserTag(video_id=v_data.id, subject_tag_id=i)
+            aut_data = models.SubjectUserTag(
+                video_id=v_data.id, subject_tag_id=i)
             db.add(aut_data)
         v_data.thumbnail = f"https://www.코드런.com/image/thumbnail/{v_data.id}"
         db.commit()
@@ -150,7 +175,8 @@ def update_video(
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
-    v_data = db.query(models.Video).filter(models.Video.id == data.video_id).first()
+    v_data = db.query(models.Video).filter(
+        models.Video.id == data.video_id).first()
     if not v_data:
         raise HTTPException(status_code=404, detail="No content")
     if current_user.id != v_data.user_id:
@@ -162,10 +188,12 @@ def update_video(
         v_data.subject_user_tag = []
         v_data.algorithm_user_tag = []
         for i in data.algorithm_tag_ids:
-            sut_data = models.AlgorithmUserTag(video_id=v_data.id, algorithm_tag_id=i)
+            sut_data = models.AlgorithmUserTag(
+                video_id=v_data.id, algorithm_tag_id=i)
             db.add(sut_data)
         for i in data.subject_tag_ids:
-            aut_data = models.SubjectUserTag(video_id=v_data.id, subject_tag_id=i)
+            aut_data = models.SubjectUserTag(
+                video_id=v_data.id, subject_tag_id=i)
             db.add(aut_data)
         db.commit()
         db.refresh(v_data)
@@ -213,9 +241,12 @@ def get_video_comment(
     )
     for i in range(len(vc_data)):
         vc_data[i].user
-        if vc_data[i].user.password: del vc_data[i].user.password
-        if vc_data[i].user.active: del vc_data[i].user.active
-        if vc_data[i].user.join_date: del vc_data[i].user.join_date
+        if vc_data[i].user.password:
+            del vc_data[i].user.password
+        if vc_data[i].user.active:
+            del vc_data[i].user.active
+        if vc_data[i].user.join_date:
+            del vc_data[i].user.join_date
     return {"data": vc_data}
 
 
@@ -231,14 +262,17 @@ def post_video_comment(
         user_id=current_user.id, video_id=data.video_id, content=data.content
     )
     print(vc_data)
-    
+
     db.add(vc_data)
     db.commit()
     db.refresh(vc_data)
     vc_data.user
-    if vc_data.user.password: del vc_data.user.password
-    if vc_data.user.active: del vc_data.user.active
-    if vc_data.user.join_date: del vc_data.user.join_date
+    if vc_data.user.password:
+        del vc_data.user.password
+    if vc_data.user.active:
+        del vc_data.user.active
+    if vc_data.user.join_date:
+        del vc_data.user.join_date
     return {"data": vc_data}
 
 
@@ -262,9 +296,12 @@ def update_video_comment(
     db.commit()
     db.refresh(vc_data)
     vc_data.user
-    if vc_data.user.password: del vc_data.user.password
-    if vc_data.user.active: del vc_data.user.active
-    if vc_data.user.join_date: del vc_data.user.join_date
+    if vc_data.user.password:
+        del vc_data.user.password
+    if vc_data.user.active:
+        del vc_data.user.active
+    if vc_data.user.join_date:
+        del vc_data.user.join_date
     return {"data": vc_data}
 
 
@@ -301,11 +338,13 @@ def video_like(
 ):
     current_user = get_current_user(token, db)
     if not current_user:
-        raise HTTPException(status_code=401, detail="Not Allowed. Please Login")
+        raise HTTPException(
+            status_code=401, detail="Not Allowed. Please Login")
     v_data = db.query(models.Video).filter(models.Video.id == video_id).first()
     if not v_data:
         raise HTTPException(status_code=404, detail="No Content")
-    current_video_like_data = db.query(models.Like).filter(models.Like.user_id == current_user.id).filter(models.Like.video_id == v_data.id).first()
+    current_video_like_data = db.query(models.Like).filter(
+        models.Like.user_id == current_user.id).filter(models.Like.video_id == v_data.id).first()
 
     if not current_video_like_data:
         vl_data = models.Like(
