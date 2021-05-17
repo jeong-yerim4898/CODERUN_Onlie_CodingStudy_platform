@@ -10,7 +10,7 @@ export function postVideoContentUpload(video_info) {
 
 // 비디오 업로드 (비디오)
 export function postVideoUpload(video_id, file_extension, video_info) {
-    return axios.post(`${VIDEO_SERVER}/video/create/${video_id}/${file_extension}`, video_info, {
+    return axios.post(`${SERVER}/video/create/${video_id}/${file_extension}`, video_info, {
         headers: { token: `${ACCESS_TOKEN}`, 'Content-Type': 'multipart/form-data' },
     });
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactHLS from 'react-hls';
 import './ShowVideo.css';
-import { VIDEO_SERVER } from 'Config.js';
+import { SERVER } from 'Config.js';
 function ShowVideo(props) {
     //props.match.params.id
     const classId = props.classId;
@@ -12,7 +12,7 @@ function ShowVideo(props) {
                 className="videoarea"
                 width={'95%'}
                 height={650}
-                url={`${VIDEO_SERVER}/video/${classId}_VIDEO.m3u8`}
+                url={`${SERVER}/video/${classId}_VIDEO.m3u8`}
             />
         </div>
     );
