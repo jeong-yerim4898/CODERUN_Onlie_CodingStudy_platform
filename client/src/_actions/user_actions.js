@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LOGIN_USER, SIGNUP_USER, UPDATE_USER } from './types';
+import { LOGIN_USER, SIGNUP_USER, UPDATE_USER, LOGOUT_USER } from './types';
 import { SERVER, ACCESS_TOKEN } from 'Config.js';
 
 export function loginUser(dataToSubmit) {
@@ -23,6 +23,10 @@ export function signupUser(dataToSumbmit) {
         payload: request,
     };
 }
+
+export const logoutUser = () => ({
+    type: LOGOUT_USER,
+});
 
 export function updateUser(dataToSubmit) {
     const request = axios
