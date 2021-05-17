@@ -1,55 +1,204 @@
-.banner {
-  position: relative;
-  text-align: center;
-  display: flex;
+@font-face {
+  font-family: 'SEBANG_Gothic_Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2104@1.0/SEBANG_Gothic_Bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 
-.bannervd {
-  position: absolute;
-  background: #232a34;
-}
-
-
-.bannerment {
-  /* display: grid; */
-  z-index: 1;
-  height: 600px;
+.mainPage {
+  position: fixed;
+  height: 100%;
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /* max-width: 540px; */
+  background-color: white;
+  z-index: 3;
+  transform-style: flat;
+}
+
+.backImage {
+  position: fixed;
+  width: 100%;
+  z-index: 0;
+  opacity: 0.7;
+}
+
+.backImage2 {
+  position: fixed;
+  width: 100%;
+  height: 150%;
+  z-index: 0;
+  opacity: 0.7;
+}
+
+.backImage3 {
+  position: fixed;
+  width: 100%;
+  height: 200%;
+  z-index: 0;
+  opacity: 0.7;
+}
+
+.buttonChangeMainPageUpIndex {
+  position: fixed;
+  top: 40%;
+  right: 20px;
+  z-index: 3;
+  font-size: 40px;
+  cursor: pointer;
 }
 
 
-.bannertitle {
-  color: #fff;
-  font-size: 48px;
-  line-height: 48px;
-  font-weight: 700;
-  letter-spacing: 1.4px;
-  margin-bottom: 16px;
+.buttonChangeMainPageDownIndex {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  z-index: 3;
+  font-size: 40px;
+  cursor: pointer;
 }
 
 
-.bannersubtitle {
-  color: #fff;
-  font-size: 42px;
-  line-height: 1.1;
-  font-weight: 600;
-  margin-top: 16px;
-  margin-bottom: 16px;
+.specificMainPage {
+  position: fixed;
+  width: 100%;
+  height: 100%;
 }
 
 
-.GetStartedBtn {
-  width: 150px;
+.mainBanner {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+
+.animateCodeRun {
+  position: absolute;
+  font-family: "SEBANG_Gothic_Bold";
+  right: 18%;
+  top: 28%;
+  font-size: 4.5rem;
+}
+
+@keyframes translateLocation {
+  from {
+    left: -10%;
+  }
+
+  to {
+    opacity: 1;
+    left: 0%;
+  }
+}
+
+.animateCodeRun1 {
+  position: relative;
+  animation-delay: 0s;
+  animation-duration: 0.5s;
+  opacity: 0;
+  animation-name: translateLocation;
+  animation-iteration-count: initial;
+  animation-direction: initial;
+  animation-fill-mode: forwards;
+  cursor: default;
+}
+
+.animateCodeRun2 {
+  position: relative;
+  animation-delay: 0.4s;
+  animation-duration: 0.5s;
+  opacity: 0;
+  animation-name: translateLocation;
+  animation-iteration-count: initial;
+  animation-direction: initial;
+  animation-fill-mode: forwards;
+  cursor: default;
+}
+
+.animateCodeRun3 {
+  position: relative;
+  animation-delay: 0.8s;
+  animation-duration: 0.5s;
+  opacity: 0;
+  animation-name: translateLocation;
+  animation-iteration-count: initial;
+  animation-direction: initial;
+  animation-fill-mode: forwards;
+  cursor: default;
+}
+
+.animateCodeRun4 {
+  position: relative;
+  animation-delay: 1.2s;
+  animation-duration: 0.5s;
+  opacity: 0;
+  animation-name: translateLocation;
+  animation-iteration-count: initial;
+  animation-direction: initial;
+  animation-fill-mode: forwards;
+  cursor: default;
+}
+
+.animateCodeRun5 {
+  position: relative;
+  animation-delay: 1.6s;
+  animation-duration: 0.5s;
+  opacity: 0;
+  animation-name: translateLocation;
+  animation-iteration-count: initial;
+  animation-direction: initial;
+  animation-fill-mode: forwards;
+  cursor: default;
+}
+
+.animateCodeRun6 {
+  position: relative;
+  animation-delay: 2.0s;
+  animation-duration: 0.5s;
+  opacity: 0;
+  animation-name: translateLocation;
+  animation-iteration-count: initial;
+  animation-direction: initial;
+  animation-fill-mode: forwards;
+  cursor: default;
+}
+
+.animateCodeRun7 {
+  position: relative;
+  animation-delay: 2.4s;
+  animation-duration: 0.5s;
+  opacity: 0;
+  animation-name: translateLocation;
+  animation-iteration-count: initial;
+  animation-direction: initial;
+  animation-fill-mode: forwards;
+  cursor: default;
+}
+
+.animateCodeRun8 {
+  position: relative;
+  animation-delay: 2.8s;
+  animation-duration: 0.5s;
+  opacity: 0;
+  animation-name: translateLocation;
+  animation-iteration-count: initial;
+  animation-direction: initial;
+  animation-fill-mode: forwards;
+  cursor: default;
+}
+
+
+.startBack {
+  position: absolute;
+  font-family: "SEBANG_Gothic_Bold";
+  right: 19.3%;
+  top: 46%;
+}
+
+
+.getStartedBtn {
   height: 50px;
+  width: 300px;
   margin-top: 16px;
   border-radius: 30px;
   background: #01bf71;
@@ -58,4 +207,33 @@
   outline: none;
   border: none;
   cursor: pointer;
+}
+
+.getStartedBtn:hover {
+  transform: scale(1.05);
+  transition-duration: 0.5s;
+  opacity: 0.8;
+}
+
+.buttonChangeMainPageUpIndex:hover {
+  transform: scale(1.05);
+  transition-duration: 0.5s;
+  opacity: 0.8;
+}
+
+.buttonChangeMainPageDownIndex:hover {
+  transform: scale(1.05);
+  transition-duration: 0.5s;
+  opacity: 0.8;
+}
+
+.imageCodeRun {
+  position: absolute;
+  left: 10%;
+  top: 20%;
+}
+
+.specificImageCodeRun {
+  width: 35%;
+  border-radius: 20%;
 }

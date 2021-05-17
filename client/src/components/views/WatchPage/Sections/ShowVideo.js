@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactHLS from 'react-hls';
 import './ShowVideo.css';
-import { SERVER } from 'Config.js';
+import { VIDEO_SERVER } from 'Config.js';
 function ShowVideo(props) {
     //props.match.params.id
     const classId = props.classId;
