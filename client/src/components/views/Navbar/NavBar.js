@@ -13,7 +13,7 @@ import NavBarSearch from './NavBarSearch.js';
 
 import { SERVER } from 'Config.js';
 
-function NavBar() {
+function NavBar(props) {
     let user = useSelector(state => state.user);
     const [imageUrl, setimageUrl] = useState('');
 

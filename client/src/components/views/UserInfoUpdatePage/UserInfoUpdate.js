@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './UserInfoUpdate.css';
+import Footer from 'components/views/Footer/Footer';
 import { PlusOutlined } from '@ant-design/icons';
 import Dropzone from 'react-dropzone';
 import { SERVER } from 'Config.js';
@@ -65,11 +66,12 @@ function UserInfoUpdate(props) {
     };
 
     return (
-        <div class="update-container">
-            <div class="user-update-container">
-                <h1>Update User Info</h1>
-                {/* <Avatar size={150}> */}
-                {/* {PreviewUrl.length === 0 ? (
+        <div>
+            <div class="update-container">
+                <div class="user-update-container">
+                    <h1>Update User Info</h1>
+                    {/* <Avatar size={150}> */}
+                    {/* {PreviewUrl.length === 0 ? (
                     <Dropzone onDrop={dropHandler}>
                         {({ getRootProps, getInputProps }) => (
                             <section>
@@ -115,26 +117,28 @@ function UserInfoUpdate(props) {
                         <img style={{ height: '210px', width: '280px' }} src={PreviewUrl}></img>
                     </div>
                 )} */}
-                {/* </Avatar> */}
-                <input
-                    defaultValue={props.user.login.user.name}
-                    class="update-nickname"
-                    onChange={NicknameHandler}
-                />
-                <input
-                    type="password"
-                    placeholder="새로운 비밀번호"
-                    class="update-password"
-                    onChange={passwordHandler}
-                />
-                <input
-                    type="password"
-                    placeholder="새로운 비밀번호 확인"
-                    class="update-password-confirm"
-                    onChange={passwordConfirmHandler}
-                />
-                <button onClick={submitInfo}>submit</button>
+                    {/* </Avatar> */}
+                    <input
+                        defaultValue={props.user.login.user.name}
+                        class="update-nickname"
+                        onChange={NicknameHandler}
+                    />
+                    <input
+                        type="password"
+                        placeholder="새로운 비밀번호"
+                        class="update-password"
+                        onChange={passwordHandler}
+                    />
+                    <input
+                        type="password"
+                        placeholder="새로운 비밀번호 확인"
+                        class="update-password-confirm"
+                        onChange={passwordConfirmHandler}
+                    />
+                    <button onClick={submitInfo}>submit</button>
+                </div>
             </div>
+            <Footer></Footer>
         </div>
     );
 }

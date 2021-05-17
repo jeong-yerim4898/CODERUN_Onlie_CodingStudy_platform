@@ -10,12 +10,12 @@ function VideoContent(props) {
     };
     return (
         <div>
-            {/* <StyledInput
+            <StyledInput
                 showCount
                 maxLength={props.maxlength}
                 onChange={onChange}
                 rows={props.row}
-            /> */}
+            />
             <TextArea showCount maxLength={props.maxlength} onChange={onChange} rows={props.row} />
         </div>
     );

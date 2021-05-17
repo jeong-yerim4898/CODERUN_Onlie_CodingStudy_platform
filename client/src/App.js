@@ -2,7 +2,7 @@
 import React, { Suspense } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, useParams } from 'react-router-dom';
 import Auth from 'hoc/auth';
 import AccountPage from './components/views/Accounts/AccountPage';
 import AccountSuccess from './components/views/Accounts/AccountSuccess';
@@ -11,7 +11,6 @@ import CommunityPage from './components/views/CommunityPage/CommunityPage';
 import CommunityUpload from './components/views/CommunityPage/CommunityUpload';
 import CommunityDetail from './components/views/CommunityPage/CommunityDetail';
 import CommunityUpdate from './components/views/CommunityPage/CommunityUpdate';
-import Footer from './components/views/Footer/Footer';
 import MainPage from './components/views/MainPage/MainPage';
 import MyPage from './components/views/MyPage/MyPage';
 import NavBar from './components/views/Navbar/NavBar';
@@ -28,10 +27,13 @@ import NotFoundPage from './components/views/NotFoundPage/NotFoundPage';
         Route 할때 /image,/api,/video,/streaming 넣어서 적기 X
   */
 function App() {
+    const params = document.location.href;
+    console.log(params);
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <BrowserRouter>
                 <NavBar></NavBar>
+
                 <Switch>
                     <Route exact path="/account" component={Auth(AccountPage, false)}></Route>
                     <Route exact path="/" component={Auth(MainPage, null)}></Route>
@@ -72,7 +74,6 @@ function App() {
 
                     <Route path="*" component={NotFoundPage} />
                 </Switch>
-                <Footer></Footer>
             </BrowserRouter>
         </Suspense>
     );

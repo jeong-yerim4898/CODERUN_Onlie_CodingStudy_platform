@@ -1,4 +1,5 @@
 import React from 'react';
+import Footer from 'components/views/Footer/Footer';
 import Video from './videos/video.mp4';
 import './MainPage.css';
 import MainPageSearch from './MainPageSearch.js';

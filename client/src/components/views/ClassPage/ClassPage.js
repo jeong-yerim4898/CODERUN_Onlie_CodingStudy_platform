@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import './ClassPage.css';
 import 'antd/dist/antd.css';
-
+import Footer from 'components/views/Footer/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as fasHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
@@ -167,7 +167,7 @@ function ClassPage(props) {
         }
     });
     const toWatchHandler = num => {
-        history.push('/watch/' + num);
+        props.history.push('/watch/' + num);
     };
     const renderCards = Classes.map((classs, index) => {
         return (
@@ -438,6 +438,7 @@ function ClassPage(props) {
                     </div>
                 </Col>
             </Row>
+            <Footer></Footer>
         </div>
     );
 }

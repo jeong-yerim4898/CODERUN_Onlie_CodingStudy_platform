@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-
+import Footer from 'components/views/Footer/Footer';
 import { detailArticle, deleteArticle } from '_api/Board.js';
 import { Button, Col, Row, Image } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
@@ -83,6 +83,7 @@ function CommunityDetail(props) {
                     </div>
                 </Col>
             </Row>
+            <Footer></Footer>
         </div>
     );
 }

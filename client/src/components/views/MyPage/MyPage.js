@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // import ChartistGraph from 'react-chartist';
+import Footer from 'components/views/Footer/Footer';
 import { Button, Card, Container, Row, Col } from 'react-bootstrap';
 
 import { SERVER } from 'Config.js';
@@ -63,37 +64,33 @@ function MyPage(props) {
     };
 
     return (
-        <div className="mypage">
-            <Container fluid>
-                <Row>
-                    {/* 나의 재생 리스트 */}
-                    <Col md="6">
-                        <MyPlayList />
-                        {/* <MyPlayListCreateForm /> */}
-                    </Col>
-                    {/* 사용자프로필 */}
-                    <Col md="6">
-                        <main class="profile">
-                            <div class="profile-bg"></div>
-                            <section class="containerMyPage">
-                                <aside class="profile-image">
-                                    <Dropzone onDrop={dropHandler}>
-                                        {({ getRootProps, getInputProps }) => (
-                                            <section>
-                                                <div
-                                                    style={{
-                                                        width: 280,
-                                                        height: 210,
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                    }}
-                                                    {...getRootProps()}
-                                                >
-                                                    <input {...getInputProps()} />
+        <div>
+            <div className="mypage">
+                <Container fluid>
+                    <Row>
+                        {/* 나의 재생 리스트 */}
+                        <Col md="6">
+                            <MyPlayList />
+                            {/* <MyPlayListCreateForm /> */}
+                        </Col>
+                        {/* 사용자프로필 */}
+                        <Col md="6">
+                            <main class="profile">
+                                <div class="profile-bg"></div>
+                                <section class="containerMyPage">
+                                    <aside class="profile-image">
+                                        <Dropzone onDrop={dropHandler}>
+                                            {({ getRootProps, getInputProps }) => (
+                                                <section>
                                                     <div
-                                                        className="profile-img"
-                                                        style={{ cursor: 'pointer' }}
+                                                        style={{
+                                                            width: 280,
+                                                            height: 210,
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                        }}
+                                                        {...getRootProps()}
                                                     >
                                                         <img
                                                             style={{
@@ -108,55 +105,56 @@ function MyPage(props) {
                                                             onError={renderImageUrl}
                                                         ></img>
                                                     </div>
-                                                </div>
-                                            </section>
-                                        )}
-                                    </Dropzone>
+                                                </section>
+                                            )}
+                                        </Dropzone>
 
-                                    <a href={'/update/user/' + props.user.login.user.id}>
-                                        <FontAwesomeIcon icon={faUserEdit} className="camera" />
-                                    </a>
-                                    <FontAwesomeIcon
-                                        style={{ cursor: 'pointer' }}
-                                        icon={faTrashAlt}
-                                        className="trash"
-                                        onClick={() =>
-                                            onDeleteProfileHandler(props.user.login.user.id)
-                                        }
-                                    />
-                                </aside>
-                                <section class="profile-info">
-                                    <h1 class="first-name"></h1>
-                                    <h1 class="second-name">{props.user.login.user.name}</h1>
-                                    <p>{props.user.login.user.email}</p>
-                                    {/* 로그아웃 */}
-                                    <a onClick={deleteToken}>
-                                        <h2>LOG OUT</h2>
-                                    </a>
+                                        <a href={'/update/user/' + props.user.login.user.id}>
+                                            <FontAwesomeIcon icon={faUserEdit} className="camera" />
+                                        </a>
+                                        <FontAwesomeIcon
+                                            style={{ cursor: 'pointer' }}
+                                            icon={faTrashAlt}
+                                            className="trash"
+                                            onClick={() =>
+                                                onDeleteProfileHandler(props.user.login.user.id)
+                                            }
+                                        />
+                                    </aside>
+                                    <section class="profile-info">
+                                        <h1 class="first-name"></h1>
+                                        <h1 class="second-name">{props.user.login.user.name}</h1>
+                                        <p>{props.user.login.user.email}</p>
+                                        {/* 로그아웃 */}
+                                        <a onClick={deleteToken}>
+                                            <h2>LOG OUT</h2>
+                                        </a>
+                                    </section>
                                 </section>
-                            </section>
-                            <section class="statistics">
-                                <button class="icon arrow left"></button>
-                                <button class="icon arrow right"></button>
-                                <p>
-                                    <strong>29</strong> Followers
-                                </p>
-                                <p>
-                                    <strong>184</strong> Following
-                                </p>
-                                <p>
-                                    <strong>6</strong> Likes
-                                </p>
-                            </section>
-                            <button class="icon close"></button>
-                        </main>
-                    </Col>
-                </Row>
-                <Row>
-                    {/* 내가 올린 동영상들 */}
-                    <UploadedVideos />
-                </Row>
-            </Container>
+                                <section class="statistics">
+                                    <button class="icon arrow left"></button>
+                                    <button class="icon arrow right"></button>
+                                    <p>
+                                        <strong>29</strong> Followers
+                                    </p>
+                                    <p>
+                                        <strong>184</strong> Following
+                                    </p>
+                                    <p>
+                                        <strong>6</strong> Likes
+                                    </p>
+                                </section>
+                                <button class="icon close"></button>
+                            </main>
+                        </Col>
+                    </Row>
+                    <Row>
+                        {/* 내가 올린 동영상들 */}
+                        <UploadedVideos />
+                    </Row>
+                </Container>
+            </div>
+            <Footer></Footer>
         </div>
     );
 }
