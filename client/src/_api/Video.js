@@ -39,12 +39,14 @@ export function fetchLoginedFilteredVideoList(user_id, count) {
 
 // 비디오 검색 가져오기
 export function fetchSearchedVideoList(data, count) {
-    return axios.get(`${SERVER}/api/video/search?${count}&search_text=${data}`);
+    return axios.get(`${SERVER}/api/video/search?count=${count}&search_text=${data}`);
 }
 
 // 비디오 검색 가져오기 (로그인)
 export function fetchLoginedSearchedVideoList(user_id, data, count) {
-    return axios.get(`${SERVER}/api/video/search?${count}&search_text=${data}%user_id=${user_id}`);
+    return axios.get(
+        `${SERVER}/api/video/search?count=${count}&search_text=${data}&user_id=${user_id}`,
+    );
 }
 
 // 비디오 가져오기(알고만)
