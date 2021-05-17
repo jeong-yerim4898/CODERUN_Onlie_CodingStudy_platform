@@ -8,7 +8,7 @@ from typing import Optional
 
 # 서드파티 라이브러리
 from fastapi import APIRouter, Depends, HTTPException, Header
-from sqlalchemy import func, case
+from sqlalchemy import func, case, desc
 from sqlalchemy.orm import Session
 
 # 로컬 라이브러리
@@ -49,6 +49,15 @@ def get_video(
             models.Like.video_id == return_result[i].Video.id).all())
 
     return {"data": return_result, "page_cnt": (len(result)-1)//12 + 1}
+
+
+@router.get("/api/video/recommend",  tags=["video"], description="추천 동영상 top 5")
+def get_recommend_video(
+    db: Session = Depends(get_db),
+):
+    t = db.query(models.Video, func.count(models.Like.id).label("likecnt")).outerjoin(models.Like).group_by(models.Video.id).order_by(desc("likecnt")).limit(5).subquery('t')
+    v_data = db.query(t, models.User.name, models.User.profile).join(models.User).all()
+    return {"data": v_data}
 
 
 @router.get("/api/video/detail/{video_id}", tags=["video"], description="동영상 디테일 보기")
