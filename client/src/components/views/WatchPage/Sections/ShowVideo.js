@@ -12,7 +12,7 @@ function ShowVideo(props) {
                 className="videoarea"
                 width={'95%'}
                 height={650}
-                url={`${SERVER}/video/${classId}_VIDEO.m3u8`}
+                url={`${VIDEO_SERVER}/video/${classId}_VIDEO.m3u8`}
             />
         </div>
     );
