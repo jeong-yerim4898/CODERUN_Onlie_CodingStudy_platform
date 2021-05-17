@@ -17,6 +17,7 @@ import yagmail
 
 # 로컬 라이브러리
 pth.append(path.dirname(path.abspath(path.dirname(__file__))))
+from . import raiseException
 from database import models, schemas
 from dependency import get_db
 
@@ -112,7 +113,7 @@ def login(data: schemas.LoginBase, db: Session = Depends(get_db)):
         if current_user.active:
             return {"user": current_user, "token": jwt_token}
         return {"user": current_user}
-    raise HTTPException(status_code=401, detail="Incorrect user")
+    raise raiseException.Raise_401_Error()
 
 
 @router.post("/api/newpassword", tags=["user"], description="비밀번호 찾기 -> 새 비밀번호 주기")
@@ -160,7 +161,7 @@ def send_new_password(to_email: str, temp_pw: str, user_id: int):
 def check_duplicate_email(email: str, db: Session = Depends(get_db)):
     e_mail = db.query(models.User).filter(models.User.email == email).first()
     if e_mail:
-        raise HTTPException(status_code=400, detail="Duplicated e-mail")
+        raise raiseException.Raise_400_Error()
     return {"data": email}
 
 
@@ -175,9 +176,9 @@ def resend_confirm_email(
         return {"data": "fail"}
     u_data.security_count += 1
     if not u_data:
-        raise HTTPException(status_code=404, detail="No content(user)")
+        raise raiseException.Raise_404_Error()
     if u_data.active:
-        raise HTTPException(status_code=400, detail="Already verified")
+        raise raiseException.Raise_400_Error()
     background_tasks.add_task(confirm_email, to_email=email, user_id=u_data.id)
     db.commit()
     return {"data": "success"}
@@ -201,20 +202,20 @@ def confirm_email(to_email: str, user_id: int):
 
 def validate_email(email: str):
     if "@" not in email or "." not in email:
-        raise HTTPException(status_code=422, detail="Incorrect e-mail form")
+        raise raiseException.Raise_422_Error()
     try:
         email.split("@")[1].split(".")[0][0]
     except:
-        raise HTTPException(status_code=422, detail="Incorrect e-mail form")
+        raise raiseException.Raise_422_Error()
     try:
         email.split("@")[1].split(".")[1][0]
     except:
-        raise HTTPException(status_code=422, detail="Incorrect e-mail form")
+        raise raiseException.Raise_422_Error()
 
 
 def validate_password(password: str):
     if len(password) != 64:
-        raise HTTPException(status_code=422, detail="Need to secure password")
+        raise raiseException.Raise_422_Error()
 
 
 @router.get(
@@ -229,7 +230,7 @@ def redirect_site(email: str, user_id: int, db: Session = Depends(get_db)):
             u_data.active = True
             db.commit()
             return RedirectResponse("https://www.코드런.com/account/success")
-    raise HTTPException(status_code=400, detail="Incorrect route")
+    raise raiseException.Raise_400_Error()
 
 
 @router.get(
@@ -247,7 +248,7 @@ def redirect_site_pw(
             u_data.password = pw
             db.commit()
             return RedirectResponse("https://www.코드런.com/account")
-    raise HTTPException(status_code=400, detail="Incorrect route")
+    raise raiseException.Raise_400_Error()
 
 
 @router.get("/api/user/data/{user_id}", tags=["user"], description="유저 상세 정보 조회")
@@ -263,7 +264,7 @@ def get_user_data(
         del u_data.security_count
         del u_data.active
         return {"data": u_data}
-    raise HTTPException(status_code=404, detail="No content")
+    raise raiseException.Raise_404_Error()
 
 
 @router.put("/api/user/data/update", tags=["user"], description="유저 정보 수정")
@@ -283,4 +284,4 @@ def update_user_data(
         del u_data.password
         del u_data.security_count
         return {"user": u_data}
-    raise HTTPException(status_code=404, detail="No content")
+    raise raiseException.Raise_404_Error()

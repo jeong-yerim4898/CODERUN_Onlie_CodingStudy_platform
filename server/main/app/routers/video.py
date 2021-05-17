@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 
 # 로컬 라이브러리
 pth.append(path.dirname(path.abspath(path.dirname(__file__))))
+from . import raiseException
 
 
 router = APIRouter()
@@ -69,7 +70,7 @@ def get_video_detail(
     current_user = get_current_user(token, db)
     v_data = db.query(models.Video).filter(models.Video.id == video_id).first()
     if not v_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     v_data.subject_user_tag
     v_data.algorithm_user_tag
     like_cnt = len(v_data.like)
@@ -183,7 +184,7 @@ def post_video(
     except:
         db.delete(v_data)
         db.commit()
-    raise HTTPException(status_code=422, detail="Unprocessable entity")
+    raise raiseException.Raise_422_Error()
 
 
 @router.put("/api/video/update", tags=["video"], description="동영상 게시물 수정")
@@ -196,9 +197,9 @@ def update_video(
     v_data = db.query(models.Video).filter(
         models.Video.id == data.video_id).first()
     if not v_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     if current_user.id != v_data.user_id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     v_data.title = data.title
     v_data.content = data.content
     db.commit()
@@ -215,9 +216,9 @@ def delete_video(
     current_user = get_current_user(token, db)
     v_data = db.query(models.Video).filter(models.Video.id == video_id).first()
     if not v_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     if current_user.id != v_data.user_id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     db.delete(v_data)
     db.commit()
     return {"delete": video_id}
@@ -226,7 +227,7 @@ def delete_video(
 def check_video(id, db):
     check = db.query(models.Video).filter(models.Video.id == id).first()
     if not check:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
 
 
 @router.get("/api/video/comment/{video_id}", tags=["video"], description="동영상 댓글 보기")
@@ -291,9 +292,9 @@ def update_video_comment(
         .first()
     )
     if not vc_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     if current_user.id != vc_data.user_id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     vc_data.content = data.content
     db.commit()
     db.refresh(vc_data)
@@ -324,9 +325,9 @@ def delete_video_comment(
         .first()
     )
     if not vc_data:
-        raise HTTPException(status_code=404, detail="No content")
+        raise raiseException.Raise_404_Error()
     if current_user.id != vc_data.user_id:
-        raise HTTPException(status_code=401, detail="Incorrect user")
+        raise raiseException.Raise_401_Error()
     db.delete(vc_data)
     db.commit()
     return {"delete": video_comment_id}
@@ -340,11 +341,10 @@ def video_like(
 ):
     current_user = get_current_user(token, db)
     if not current_user:
-        raise HTTPException(
-            status_code=401, detail="Not Allowed. Please Login")
+        raise raiseException.Raise_401_Error()
     v_data = db.query(models.Video).filter(models.Video.id == video_id).first()
     if not v_data:
-        raise HTTPException(status_code=404, detail="No Content")
+        raise raiseException.Raise_404_Error()
     current_video_like_data = db.query(models.Like).filter(
         models.Like.user_id == current_user.id).filter(models.Like.video_id == v_data.id).first()
 
