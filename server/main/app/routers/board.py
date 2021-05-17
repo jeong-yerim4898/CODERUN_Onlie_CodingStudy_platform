@@ -59,7 +59,7 @@ def get_board_detail(
     db: Session = Depends(get_db),
 ):
     # get_current_user(token, db)
-    board_data = db.query(models.Board).filter(models.Board.id == board_id).first()
+    board_data = db.query(models.Board, models.User.name, models.User.profile).join(models.User, models.User.id == models.Board.user_id).filter(models.Board.id == board_id).first()
     if not board_data:
         raise raiseException.Raise_404_Error()
     return {"data": board_data}
