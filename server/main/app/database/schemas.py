@@ -33,9 +33,6 @@ class VideoUpdateBase(BaseModel):
     video_id: int
     title: str
     content: Optional[str] = None
-    language_tag_id: Optional[int] = None
-    algorithm_tag_ids: Optional[list] = []
-    subject_tag_ids: Optional[list] = []
 
 
 class VideoCommentBase(BaseModel):
