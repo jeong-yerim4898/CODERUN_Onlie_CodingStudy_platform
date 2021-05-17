@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '_actions/user_actions';
 // import ChartistGraph from 'react-chartist';
 import Footer from 'components/views/Footer/Footer';
 import { Button, Card, Container, Row, Col } from 'react-bootstrap';
@@ -17,6 +19,7 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import './MyPage.css';
 
 function MyPage(props) {
+    const dispatch = useDispatch();
     const [File, setFile] = useState('');
     const [PreviewUrl, setPreviewUrl] = useState('');
     const [ImageUrl, setImageUrl] = useState('');
@@ -26,6 +29,7 @@ function MyPage(props) {
         setImageUrl(props.user.login.user.profile + '?' + date);
     };
     const deleteToken = () => {
+        dispatch(logoutUser());
         localStorage.removeItem('token');
         props.history.push('/account');
     };
