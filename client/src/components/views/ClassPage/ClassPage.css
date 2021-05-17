@@ -6,7 +6,7 @@
 }
 
 .colcard {
-  /* margin-top: 10px; */
+
   margin-left: 0px;
   margin-right: 10px;
 }
@@ -14,10 +14,9 @@
 .cardBoard {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
-  /* justify-content: flex-start; */
+
   color: black;
 
-  /* margin-left: 80px; */
 }
 
 .classCard {
@@ -38,17 +37,17 @@
 }
 
 .classImg {
-  /* margin-bottom: 15px; */
+
   border-radius: 15% !important;
 }
 
 .ant-menu-submenu-active {
-  /* background-color: #effcef !important; */
+
   color: #94d3ac !important;
 }
 
 .ant-menu-submenu-active i {
-  /* background-color: #effcef !important; */
+
   color: #94d3ac !important;
 }
 

@@ -30,8 +30,10 @@ import { ApartmentOutlined, CalculatorOutlined } from '@ant-design/icons';
 function ClassPage(props) {
     let user = useSelector(state => state.user);
     const user_id = user?.login?.user?.id;
+
     const history = useHistory();
 
+    const [Cnts, setCnts] = useState(0);
     const [Algos, setAlgos] = useState([]);
     const [Css, setCss] = useState([]);
     const [languages, setlanguages] = useState([]);
@@ -53,19 +55,23 @@ function ClassPage(props) {
         fetchLanguageTag().then(res => {
             setlanguages(res.data.data);
         });
-        const user_id = user?.login?.user?.id;
-        if (user_id) {
-            fetchLoginedFilteredVideoList(user_id, Page).then(res => {
-                console.log('success get');
-                console.log(res.data.data, 'userEffect');
-                setClasses(res.data.data);
-            });
+        if (props.location?.state?.playlist) {
+            setClasses(props.location?.state?.playlist);
+            setSearched(props.location?.state?.search);
+            setCnts(props.location?.state?.cnt);
         } else {
-            fetchFilteredVideoList(Page).then(res => {
-                console.log('success get');
-                console.log(res.data.data, 'userEffect');
-                setClasses(res.data.data);
-            });
+            if (user_id) {
+                fetchLoginedFilteredVideoList(user_id, Page).then(res => {
+                    setCnts(res.data.page_cnt);
+                    setClasses(res.data.data);
+                });
+            } else {
+                fetchFilteredVideoList(Page).then(res => {
+                    setCnts(res.data.page_cnt);
+                    setCnts(res.data.page_cnt);
+                    setClasses(res.data.data);
+                });
+            }
         }
     }, []);
 
@@ -73,16 +79,17 @@ function ClassPage(props) {
         setCs(0);
         setAlgo(num);
         const count = 1;
+        setPage(count);
         const algorithm_tag_id = num;
         // const user_id = user?.login?.user?.id;
         if (user_id) {
             fetchLoginedAlgoFilteredVideoList(algorithm_tag_id, user_id, count).then(res => {
-                console.log(res.data.data, 'algo');
+                setCnts(res.data.page_cnt);
                 setClasses(res.data.data);
             });
         } else {
             fetchAlgoFilteredVideoList(algorithm_tag_id, count).then(res => {
-                console.log(res.data.data, 'algo');
+                setCnts(res.data.page_cnt);
                 setClasses(res.data.data);
             });
         }
@@ -91,17 +98,18 @@ function ClassPage(props) {
     const onCsHandler = num => {
         setAlgo(0);
         setCs(num);
+        setPage(count);
         const count = 1;
         const subject_tag_id = num;
         const user_id = user?.login?.user?.id;
         if (user_id) {
             fetchLoginedCsFilteredVideoList(subject_tag_id, user_id, count).then(res => {
-                console.log(res.data.data, 'Cs');
+                setCnts(res.data.page_cnt);
                 setClasses(res.data.data);
             });
         } else {
             fetchCsFilteredVideoList(subject_tag_id, count).then(res => {
-                console.log(res.data.data, 'Cs');
+                setCnts(res.data.page_cnt);
                 setClasses(res.data.data);
             });
         }
@@ -109,38 +117,37 @@ function ClassPage(props) {
 
     const onLanguageHandler = num => {
         setLanguage(num);
+        setPage(count);
         const count = 1;
         const user_id = user?.login?.user?.id;
         if (user_id) {
             fetchLoginedAlgoLangFilteredVideoList(Algo, num, user_id, count).then(res => {
-                console.log(res.data.data, 'language');
+                setCnts(res.data.page_cnt);
                 setClasses(res.data.data);
-                console.log(Classes, 'asdasd');
             });
         } else {
             fetchAlgoLangFilteredVideoList(Algo, num, count).then(res => {
-                console.log(res.data.data, 'language');
+                setCnts(res.data.page_cnt);
                 setClasses(res.data.data);
-                console.log(Classes, 'asdasd');
             });
         }
     };
 
-    const renderAlgo = Algos.map((Algo, index) => {
+    const renderAlgo = Algos.map((algo, index) => {
         return (
-            <Menu.Item className="classmenu" onClick={() => onAlgoHandler(Algo.id)} key={index}>
-                {Algo.algorithm_name}
+            <Menu.Item className="classmenu" onClick={() => onAlgoHandler(algo.id)} key={index}>
+                {algo.algorithm_name}
             </Menu.Item>
         );
     });
-    const renderCs = Css.map((Cs, index) => {
+    const renderCs = Css.map((cs, index) => {
         return (
             <Menu.Item
                 className="classmenu"
-                onClick={() => onCsHandler(Cs.id)}
+                onClick={() => onCsHandler(cs.id)}
                 key={index + Algos.length}
             >
-                {Cs.subject_name}
+                {cs.subject_name}
             </Menu.Item>
         );
     });
@@ -208,31 +215,29 @@ function ClassPage(props) {
                 if (Language) {
                     fetchLoginedAlgoLangFilteredVideoList(Algo, Language, user_id, num).then(
                         res => {
-                            console.log(res.data.data, 'language');
+                            setCnts(res.data.page_cnt);
                             setClasses(res.data.data);
-                            console.log(Classes, 'asdasd');
                         },
                     );
                 } else {
                     fetchLoginedAlgoFilteredVideoList(Algo, user_id, num).then(res => {
-                        console.log(res.data.data, 'algo');
+                        setCnts(res.data.page_cnt);
                         setClasses(res.data.data);
                     });
                 }
             } else if (Cs) {
                 fetchLoginedCsFilteredVideoList(Cs, user_id, num).then(res => {
-                    console.log(res.data.data, 'Cs');
+                    setCnts(res.data.page_cnt);
                     setClasses(res.data.data);
                 });
             } else if (Searched) {
                 fetchLoginedSearchedVideoList(user_id, Searched, num).then(res => {
-                    console.log(res.data.data, 'SEARCH');
+                    setCnts(res.data.page_cnt);
                     setClasses(res.data.data);
                 });
             } else {
                 fetchLoginedFilteredVideoList(user_id, num).then(res => {
-                    console.log('success get');
-                    console.log(res.data.data, '123');
+                    setCnts(res.data.page_cnt);
                     setClasses(res.data.data);
                 });
             }
@@ -240,30 +245,28 @@ function ClassPage(props) {
             if (Algo) {
                 if (Language) {
                     fetchAlgoLangFilteredVideoList(Algo, Language, num).then(res => {
-                        console.log(res.data.data, 'language');
+                        setCnts(res.data.page_cnt);
                         setClasses(res.data.data);
-                        console.log(Classes, 'asdasd');
                     });
                 } else {
                     fetchAlgoFilteredVideoList(Algo, num).then(res => {
-                        console.log(res.data.data, 'algo');
+                        setCnts(res.data.page_cnt);
                         setClasses(res.data.data);
                     });
                 }
             } else if (Cs) {
                 fetchCsFilteredVideoList(Cs, num).then(res => {
-                    console.log(res.data.data, 'Cs');
+                    setCnts(res.data.page_cnt);
                     setClasses(res.data.data);
                 });
             } else if (Searched) {
                 fetchSearchedVideoList(Searched, num).then(res => {
-                    console.log(res.data.data, 'SEARCH');
+                    setCnts(res.data.page_cnt);
                     setClasses(res.data.data);
                 });
             } else {
                 fetchFilteredVideoList(num).then(res => {
-                    console.log('success get');
-                    console.log(res.data.data, '1231111');
+                    setCnts(res.data.page_cnt);
                     setClasses(res.data.data);
                 });
             }
@@ -280,26 +283,25 @@ function ClassPage(props) {
                 if (Language) {
                     fetchLoginedAlgoLangFilteredVideoList(Algo, Language, user_id, num).then(
                         res => {
-                            console.log(res.data.data, 'language');
+                            setCnts(res.data.page_cnt);
                             setClasses(res.data.data);
                             console.log(Classes, 'asdasd');
                         },
                     );
                 } else {
                     fetchLoginedAlgoFilteredVideoList(Algo, user_id, num).then(res => {
-                        console.log(res.data.data, 'algo');
+                        setCnts(res.data.page_cnt);
                         setClasses(res.data.data);
                     });
                 }
             } else if (Cs) {
                 fetchLoginedCsFilteredVideoList(Cs, user_id, num).then(res => {
-                    console.log(res.data.data, 'Cs');
+                    setCnts(res.data.page_cnt);
                     setClasses(res.data.data);
                 });
             } else {
                 fetchLoginedFilteredVideoList(user_id, num).then(res => {
-                    console.log('success get');
-                    console.log(res.data.data, '123');
+                    setCnts(res.data.page_cnt);
                     setClasses(res.data.data);
                 });
             }
@@ -307,25 +309,24 @@ function ClassPage(props) {
             if (Algo) {
                 if (Language) {
                     fetchAlgoLangFilteredVideoList(Algo, Language, num).then(res => {
-                        console.log(res.data.data, 'language');
+                        setCnts(res.data.page_cnt);
                         setClasses(res.data.data);
                         console.log(Classes, 'asdasd');
                     });
                 } else {
                     fetchAlgoFilteredVideoList(Algo, num).then(res => {
-                        console.log(res.data.data, 'algo');
+                        setCnts(res.data.page_cnt);
                         setClasses(res.data.data);
                     });
                 }
             } else if (Cs) {
                 fetchCsFilteredVideoList(Cs, num).then(res => {
-                    console.log(res.data.data, 'Cs');
+                    setCnts(res.data.page_cnt);
                     setClasses(res.data.data);
                 });
             } else {
                 fetchFilteredVideoList(num).then(res => {
-                    console.log('success get');
-                    console.log(res.data.data, '123111');
+                    setCnts(res.data.page_cnt);
                     setClasses(res.data.data);
                 });
             }
@@ -344,11 +345,13 @@ function ClassPage(props) {
             console.log(1);
             fetchLoginedSearchedVideoList(user_id, event.currentTarget.value, 1).then(res => {
                 setClasses(res.data.data);
+                setCnts(res.data.page_cnt);
             });
         } else {
             console.log(2);
             fetchSearchedVideoList(event.currentTarget.value, 1).then(res => {
                 setClasses(res.data.data);
+                setCnts(res.data.page_cnt);
             });
         }
     };
@@ -356,7 +359,7 @@ function ClassPage(props) {
     return (
         <div>
             <Row>
-                <Col md={2}>
+                <Col xs={2}>
                     <Menu
                         // onClick={this.handleClick}
                         style={{ color: '#94d3ac' }}
@@ -383,7 +386,7 @@ function ClassPage(props) {
                         </SubMenu>
                     </Menu>
                 </Col>
-                <Col md={10}>
+                <Col xs={10}>
                     <br></br>
                     <div style={{ marginLeft: '20px', width: '400px' }}>
                         <InputGroup className="mb-3">
@@ -416,7 +419,7 @@ function ClassPage(props) {
                                 이전페이지
                             </Button>
                         )}{' '}
-                        {Classes.length === 12 ? (
+                        {Classes.length === 12 && Cnts !== Page ? (
                             <Button
                                 variant="outline-success"
                                 onClick={() => onNextHandler(Page + 1)}

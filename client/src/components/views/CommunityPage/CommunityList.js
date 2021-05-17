@@ -16,12 +16,14 @@ function CommunityList(props) {
     const [ListData, setListData] = useState([]);
 
     const [SearchData, setSearchData] = useState('');
+    const [Cnts, setCnts] = useState(0);
     const [PageCount, setPageCount] = useState(1);
 
     useEffect(() => {
         console.log(user);
         initialListArticle(PageCount).then(res => {
-            console.log(res.data.data);
+            setCnts(res.data.page_cnt);
+            console.log(res.data.page_cnt);
             setListData(res.data.data);
         });
     }, []);
@@ -29,7 +31,7 @@ function CommunityList(props) {
     const onSearchDataHandler = event => {
         setSearchData(event.currentTarget.value);
         listArticle(PageCount, event.currentTarget.value).then(res => {
-            console.log(res.data.data);
+            setCnts(res.data.page_cnt);
             setListData(res.data.data);
         });
     };
@@ -39,13 +41,13 @@ function CommunityList(props) {
         console.log(num);
         if (SearchData) {
             listArticle(num, SearchData).then(res => {
-                console.log(res.data.data);
+                setCnts(res.data.page_cnt);
                 setListData(res.data.data);
             });
         } else {
             console.log(num);
             initialListArticle(num).then(res => {
-                console.log(res.data.data, 'initialListArticlenext');
+                setCnts(res.data.page_cnt);
                 setListData(res.data.data);
             });
         }
@@ -56,13 +58,13 @@ function CommunityList(props) {
         console.log(num);
         if (SearchData) {
             listArticle(num, SearchData).then(res => {
-                console.log(res.data.data);
+                setCnts(res.data.page_cnt);
                 setListData(res.data.data);
             });
         } else {
             console.log(num);
             initialListArticle(num).then(res => {
-                console.log(res.data.data, 'initialListArticlepre');
+                setCnts(res.data.page_cnt);
                 setListData(res.data.data);
             });
         }
@@ -71,7 +73,7 @@ function CommunityList(props) {
     const RenderList = ListData.map((data, index) => {
         return (
             <a className="articleAtag" href={'/community/detail/' + data.Board.id} key={index}>
-                <ListGroup className="classList" horizontal={true}>
+                <ListGroup className="communityList" horizontal={true}>
                     <ListGroup.Item
                         style={{ width: 300, textAlign: 'left' }}
                         className="articleItem"
@@ -83,7 +85,7 @@ function CommunityList(props) {
                         ></Image>
                         {data.name}
                     </ListGroup.Item>
-                    <ListGroup.Item className="articleItem">
+                    <ListGroup.Item className="articleItem contentItem">
                         {data.Board.select ? (
                             <Image
                                 src={`${process.env.PUBLIC_URL}/img/winner.png`}
@@ -102,7 +104,7 @@ function CommunityList(props) {
     return (
         <div>
             <Row>
-                <Col md={{ span: 8, offset: 2 }}>
+                <Col xs={{ span: 8, offset: 2 }}>
                     <InputGroup className="mb-3">
                         <FormControl
                             placeholder="검색어를 입력하세요"
@@ -110,6 +112,7 @@ function CommunityList(props) {
                         />
                     </InputGroup>
                     {RenderList}
+                    <br></br>
                     <div style={{ float: ' right' }}>
                         {PageCount > 1 ? (
                             <Button
@@ -127,7 +130,7 @@ function CommunityList(props) {
                                 이전페이지
                             </Button>
                         )}{' '}
-                        {ListData.length === 10 ? (
+                        {ListData.length === 10 && Cnts !== PageCount ? (
                             <Button
                                 variant="outline-success"
                                 onClick={() => onNextHandler(PageCount + 1)}

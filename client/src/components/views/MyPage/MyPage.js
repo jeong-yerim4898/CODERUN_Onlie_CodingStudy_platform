@@ -97,9 +97,11 @@ function MyPage(props) {
                                                     >
                                                         <img
                                                             style={{
-                                                                height: '70%',
+                                                                height: 210,
+                                                                objectFit: 'cover',
                                                                 width: `100%`,
-                                                                marginTop: '10px',
+                                                                marginTop: '5px',
+                                                                marginLeft: '2px',
                                                                 borderRadius: '10px',
                                                             }}
                                                             src={ImageUrl}
