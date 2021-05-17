@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { detailArticle, deleteArticle } from '_api/Board.js';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Image } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
+import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import CommentList from './CommentList';
+
+import './CommunityDetail.css';
 
 function CommunityDetail(props) {
     const [Article, setArticle] = useState({});
@@ -28,29 +31,56 @@ function CommunityDetail(props) {
     };
     return (
         <div>
+            <br></br>
+            <br></br>
             <Row>
-                <Col md={{ span: 8, offset: 2 }}>
-                    <h1>
-                        {Article.title}{' '}
-                        {Article.select ? <Button variant="warning">채택</Button> : console.log()}
-                    </h1>
-                    <h2>{Article.content}</h2>
-                    {Article.user_id === user.login.user.id ? (
-                        <div>
-                            <Link to={`update/${props.match.params.id}`}>
-                                <Button variant="success">수정</Button>
-                            </Link>
-                            <Button variant="danger" onClick={deleteHandler}>
-                                삭제
-                            </Button>
-                        </div>
-                    ) : (
-                        console.log()
-                    )}
+                <Col>
+                    <div>
+                        <Col md={{ span: 8, offset: 2 }}>
+                            <h1>
+                                {Article.title}{' '}
+                                {Article.select ? (
+                                    <Image
+                                        src={`${process.env.PUBLIC_URL}/img/winner.png`}
+                                        style={{ width: 60, height: 60, float: 'right' }}
+                                        roundedCircle
+                                    ></Image>
+                                ) : (
+                                    console.log()
+                                )}
+                            </h1>
+                            <hr></hr>
+                            <h2>
+                                {Article.content}
+                                {Article.user_id === user.login.user.id ? (
+                                    <div style={{ float: 'right' }}>
+                                        <Link
+                                            style={{ color: 'black', width: 50 }}
+                                            to={`update/${props.match.params.id}`}
+                                        >
+                                            <EditOutlined style={{ fontSize: '100%' }} />
+                                        </Link>{' '}
+                                        <CloseOutlined
+                                            style={{ fontSize: '100%' }}
+                                            onClick={deleteHandler}
+                                        />
+                                    </div>
+                                ) : (
+                                    console.log()
+                                )}
+                            </h2>
 
-                    <br />
-                    <CommentList ArticleId={props.match.params.id} />
-                    <br />
+                            <br></br>
+                        </Col>
+                    </div>
+                    <br></br>
+                    <div className="CommentBg">
+                        <Col md={{ span: 8, offset: 2 }}>
+                            <br />
+                            <CommentList ArticleId={props.match.params.id} />
+                            <br />
+                        </Col>
+                    </div>
                 </Col>
             </Row>
         </div>

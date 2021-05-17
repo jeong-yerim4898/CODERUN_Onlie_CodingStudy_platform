@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-import { ListGroup, Row, Col, InputGroup, FormControl, Button, Image } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
-import './CommunityList.css';
 import { listArticle, initialListArticle } from '_api/Board.js';
 
-function CommunityList() {
+import { ListGroup, Row, Col, InputGroup, FormControl, Button, Image } from 'react-bootstrap';
+import './CommunityList.css';
+
+function CommunityList(props) {
     const history = useHistory();
+    const date = new Date();
+    let user = useSelector(state => state.user);
+
     const [ListData, setListData] = useState([]);
 
     const [SearchData, setSearchData] = useState('');
     const [PageCount, setPageCount] = useState(1);
 
     useEffect(() => {
+        console.log(user);
         initialListArticle(PageCount).then(res => {
             console.log(res.data.data);
             setListData(res.data.data);
@@ -27,48 +34,67 @@ function CommunityList() {
         });
     };
 
-    const onNextHandler = () => {
-        setPageCount(PageCount + 1);
-        console.log(PageCount);
+    const onNextHandler = num => {
+        setPageCount(num);
+        console.log(num);
         if (SearchData) {
-            listArticle(PageCount, SearchData).then(res => {
+            listArticle(num, SearchData).then(res => {
                 console.log(res.data.data);
                 setListData(res.data.data);
             });
         } else {
-            initialListArticle(PageCount).then(res => {
+            console.log(num);
+            initialListArticle(num).then(res => {
                 console.log(res.data.data, 'initialListArticlenext');
                 setListData(res.data.data);
             });
         }
+        window.scrollTo(0, 0);
     };
-    const onPreviousHandler = () => {
-        setPageCount(PageCount - 1);
-        console.log(PageCount);
+    const onPreviousHandler = num => {
+        setPageCount(num);
+        console.log(num);
         if (SearchData) {
-            listArticle(PageCount, SearchData).then(res => {
+            listArticle(num, SearchData).then(res => {
                 console.log(res.data.data);
                 setListData(res.data.data);
             });
         } else {
-            initialListArticle(PageCount).then(res => {
+            console.log(num);
+            initialListArticle(num).then(res => {
                 console.log(res.data.data, 'initialListArticlepre');
                 setListData(res.data.data);
             });
         }
-    };
-    const onArticleHandler = num => {
-        history.push(`/detail/${num}`);
+        window.scrollTo(0, 0);
     };
     const RenderList = ListData.map((data, index) => {
         return (
             <a className="articleAtag" href={'/community/detail/' + data.Board.id} key={index}>
-                <ListGroup horizontal={true}>
-                    <ListGroup.Item className="articleItem">
-                        <Image src={data.profile} style={{ width: 25 }} roundedCircle></Image>
+                <ListGroup className="classList" horizontal={true}>
+                    <ListGroup.Item
+                        style={{ width: 300, textAlign: 'left' }}
+                        className="articleItem"
+                    >
+                        <Image
+                            src={data.profile + '?' + date}
+                            style={{ width: 30, height: 30 }}
+                            roundedCircle
+                        ></Image>
                         {data.name}
                     </ListGroup.Item>
-                    <ListGroup.Item className="articleItem">{data.Board.content}</ListGroup.Item>
+                    <ListGroup.Item className="articleItem">
+                        {data.Board.select ? (
+                            <Image
+                                src={`${process.env.PUBLIC_URL}/img/winner.png`}
+                                style={{ width: 30, height: 30 }}
+                                roundedCircle
+                            ></Image>
+                        ) : (
+                            console.log()
+                        )}{' '}
+                        {data.Board.content}
+                    </ListGroup.Item>
                 </ListGroup>
             </a>
         );
@@ -84,24 +110,47 @@ function CommunityList() {
                         />
                     </InputGroup>
                     {RenderList}
-                    {PageCount > 1 ? (
-                        <Button variant="warning" onClick={onPreviousHandler}>
-                            이전페이지
-                        </Button>
-                    ) : (
-                        <Button variant="warning" disabled={true} onClick={onPreviousHandler}>
-                            이전페이지
-                        </Button>
-                    )}
-                    {ListData.count === 10 ? (
-                        <Button variant="info" onClick={onNextHandler}>
-                            다음페이지
-                        </Button>
-                    ) : (
-                        <Button variant="info" disabled={true} onClick={onNextHandler}>
-                            다음페이지
-                        </Button>
-                    )}
+                    <div style={{ float: ' right' }}>
+                        {PageCount > 1 ? (
+                            <Button
+                                variant="outline-success"
+                                onClick={() => onPreviousHandler(PageCount - 1)}
+                            >
+                                이전페이지
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="outline-success"
+                                disabled={true}
+                                onClick={() => onPreviousHandler(PageCount - 1)}
+                            >
+                                이전페이지
+                            </Button>
+                        )}{' '}
+                        {ListData.length === 10 ? (
+                            <Button
+                                variant="outline-success"
+                                onClick={() => onNextHandler(PageCount + 1)}
+                            >
+                                다음페이지
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="outline-success"
+                                disabled={true}
+                                onClick={() => onNextHandler(PageCount + 1)}
+                            >
+                                다음페이지
+                            </Button>
+                        )}{' '}
+                        {user ? (
+                            <Link to="community/upload/">
+                                <Button variant="outline-success">글쓰기</Button>
+                            </Link>
+                        ) : (
+                            console.log()
+                        )}
+                    </div>
                 </Col>
             </Row>
         </div>
