@@ -103,12 +103,12 @@ def delete_video(
         raise raiseException.Raise_401_Error()
     try:
         remove(f"{parent_route}/videos/{video_id}_VIDEO.m3u8")
-    except:
+    except Exception:
         raise raiseException.Raise_404_Error()
     try:
         i = 0
         while True:
             remove(f"{parent_route}/videos/{video_id}_VIDEO{i}.ts")
             i += 1
-    except:
+    except Exception:
         return {"delete": video_id}
