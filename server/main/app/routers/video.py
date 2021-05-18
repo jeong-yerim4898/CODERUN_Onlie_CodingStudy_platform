@@ -220,8 +220,8 @@ def delete_video(
         raise raiseException.Raise_404_Error()
     if current_user.id != v_data.user_id:
         raise raiseException.Raise_401_Error()
-    requests.delete(f"https://www.코드런.com/image/thumbnail/delete/{video_id}")
-    requests.delete(f"https://www.코드런.com/video/delete/{video_id}")
+    requests.delete(f"https://www.코드런.com/image/thumbnail/delete/{video_id}", headers={'token': token})
+    requests.delete(f"https://www.coderun.shop/video/delete/{video_id}", headers={'token': token})
     db.delete(v_data)
     db.commit()
     return {"delete": video_id}
