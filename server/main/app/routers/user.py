@@ -12,6 +12,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException
 from fastapi.responses import RedirectResponse
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 import yagmail
 
@@ -285,3 +286,14 @@ def update_user_data(
         del u_data.security_count
         return {"user": u_data}
     raise raiseException.Raise_404_Error()
+
+
+@router.get("/api/user/profile/log/{user_id}", tags=["user"], description="유저 프로필 정보 조회")
+def get_user_profile_info(
+    user_id: int, 
+    db: Session = Depends(get_db),
+):
+    video_cnt = len(db.query(models.Video).join(models.User, models.User.id == models.Video.user_id).filter(models.Video.user_id == user_id).all())
+    videolist_cnt = len(db.query(models.VideoList).join(models.User, models.User.id == models.VideoList.user_id).filter(models.VideoList.user_id == user_id).all())
+    select_cnt = len(db.query(models.BoardComment).join(models.User, models.User.id == models.BoardComment.user_id).filter(models.BoardComment.select == True).filter(models.BoardComment.user_id == user_id).all())
+    return {"video_cnt": video_cnt, "videolist_cnt": videolist_cnt, "select_cnt": select_cnt}
