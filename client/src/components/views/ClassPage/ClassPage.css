@@ -6,7 +6,6 @@
 }
 
 .colcard {
-
   margin-left: 0px;
   margin-right: 10px;
 }
@@ -27,6 +26,13 @@
 
 .classTitle {
   font-weight: bold !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.classTitle:hover {
+  overflow: unset;
 }
 
 .classCard:hover {
