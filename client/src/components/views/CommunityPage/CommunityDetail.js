@@ -14,7 +14,8 @@ function CommunityDetail(props) {
     const num = props.match.params.id;
     const [Article, setArticle] = useState({});
     const history = useHistory();
-    let user = useSelector(state => state.user);
+    let user = props.user;
+    // console.log(user.login.user);
     console.log(Article.Board?.created_date);
     console.log(Article.Board?.updated_date);
     useEffect(() => {
@@ -79,7 +80,7 @@ function CommunityDetail(props) {
                                 <hr></hr>
                                 <h2>
                                     {Article.Board?.content}
-                                    {Article.Board?.user_id === user.login.user.id ? (
+                                    {Article.Board?.user_id === user.login?.user?.id ? (
                                         <div style={{ float: 'right' }}>
                                             <Link
                                                 style={{ color: 'black', width: 50 }}
