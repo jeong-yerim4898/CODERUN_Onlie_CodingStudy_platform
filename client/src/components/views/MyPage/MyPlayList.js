@@ -9,6 +9,7 @@ import {
     watchPlaylist,
     fetchPlaylist,
 } from '_api/Playlist.js';
+import './MyPlayList.css';
 import { ListGroup, Button, Form, Card, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -56,10 +57,14 @@ function MyPlayList(props) {
     };
 
     const onUpdateHander = idx => {
+        const deletebtn = document.getElementsByClassName(idx + 'mypage-playlist-delete');
+        deletebtn[0].classList.add('hidden');
         setUpdateNum(idx);
     };
 
-    const onUpdatePlaylistHander = event => {
+    const onUpdatePlaylistHander = idx => {
+        const deletebtn = document.getElementsByClassName(idx + 'mypage-playlist-delete');
+        deletebtn[0].classList.remove('hidden');
         const body = {
             video_list_id: video_list_id,
             title: updatePlaylist,
@@ -73,13 +78,18 @@ function MyPlayList(props) {
         });
     };
 
+    const onCanclePlaylistHander = idx => {
+        const deletebtn = document.getElementsByClassName(idx + 'mypage-playlist-delete');
+        deletebtn[0].classList.remove('hidden');
+        setUpdateNum(null);
+    };
+
     const onPlaylistChangehandler = e => {
         setupdatePlaylist(e.currentTarget.value);
     };
 
     const gotoWatchpage = num => {
         const video_list_id = num;
-        // console.log(first_video);
 
         watchPlaylist(video_list_id)
             .then(res => {
@@ -105,47 +115,68 @@ function MyPlayList(props) {
         return (
             <div>
                 <Col span={5}>
-                    <Card style={{ width: '18rem' }} key={idx}>
+                    <Card className="shadow classCard" style={{ width: '18rem' }} key={idx}>
                         <Card.Img variant="top" src={`${SERVER}/image/thumbnail/${video_id}`} />
                         <Card.Body>
                             <Card.Title>{playlist.title}</Card.Title>
                             <Card.Text>
-                                <Button onClick={() => gotoWatchpage(playlist.id)}>
+                                <Button
+                                    style={{ backgroundColor: '#009378', borderColor: '#009378' }}
+                                    onClick={() => gotoWatchpage(playlist.id)}
+                                >
                                     Go to Watch
                                 </Button>
                             </Card.Text>
                         </Card.Body>
                         <Card.Body>
+                            <div style={{ display: 'flex' }}>
+                                {UpdateNum === playlist.id ? (
+                                    console.log('수정')
+                                ) : (
+                                    <Button
+                                        variant="outline-dark"
+                                        onClick={() => onUpdateHander(playlist.id)}
+                                    >
+                                        수정
+                                    </Button>
+                                )}
+                                <div className={playlist.id + 'mypage-playlist-delete'}>
+                                    <Button
+                                        variant="outline-dark"
+                                        onClick={() => onDeleteHander(playlist.id)}
+                                    >
+                                        삭제
+                                    </Button>
+                                </div>
+                            </div>
+
                             {UpdateNum === playlist.id ? (
-                                console.log('수정')
-                            ) : (
-                                <Button
-                                    variant="outline-dark"
-                                    onClick={() => onUpdateHander(playlist.id)}
-                                >
-                                    수정
-                                </Button>
-                            )}
-                            <Button
-                                variant="outline-dark"
-                                onClick={() => onDeleteHander(playlist.id)}
-                            >
-                                삭제
-                            </Button>
-                            {UpdateNum === playlist.id ? (
-                                <Form.Group>
+                                <Form.Group style={{ display: 'flex' }}>
                                     <Form.Control
                                         size="md"
                                         type="text"
                                         onChange={onPlaylistChangehandler}
-                                        defaultValue={playlist.content}
+                                        defaultValue={playlist.title}
                                     />
-                                    <Button
-                                        variant="outline-success"
-                                        onClick={() => onUpdatePlaylistHander(playlist.id)}
-                                    >
-                                        수정하기
-                                    </Button>
+                                    <div>
+                                        <Button
+                                            style={{ padding: '4px' }}
+                                            variant="outline-success"
+                                            onClick={() => onUpdatePlaylistHander(playlist.id)}
+                                        >
+                                            수정하기
+                                        </Button>
+                                    </div>
+
+                                    <div className={playlist.id + 'mypage-playlist-delete'}>
+                                        <Button
+                                            style={{ padding: '4px' }}
+                                            variant="outline-success"
+                                            onClick={() => onCanclePlaylistHander(playlist.id)}
+                                        >
+                                            취소하기
+                                        </Button>
+                                    </div>
                                 </Form.Group>
                             ) : (
                                 <p>{playlist.content}</p>
@@ -158,18 +189,24 @@ function MyPlayList(props) {
     });
 
     return (
-        <div style={{ width: '90%', margin: 'auto' }}>
+        <div style={{ width: '90%', margin: 'auto', marginTop: '2rem' }}>
+            <hr />
             <div className="mypage-card-title">
                 <h1 style={{ fontWeight: 'bold' }}>마이 플레이리스트</h1>
             </div>
             <Form>
-                <Form.Group controlId="formBasicEmail">
+                <Form.Group controlId="formBasicEmail" style={{ display: 'flex' }}>
                     <Form.Control
                         type="textarea"
                         placeholder="리스트 제목을 입력하세요."
                         onChange={playlistHandler}
                     />
-                    <Button variant="outline-success" type="submit" onClick={createPlaylistHandler}>
+                    <Button
+                        variant="outline-success"
+                        type="submit"
+                        onClick={createPlaylistHandler}
+                        style={{ marginLeft: '20px' }}
+                    >
                         +
                     </Button>
                 </Form.Group>

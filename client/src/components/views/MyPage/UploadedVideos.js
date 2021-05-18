@@ -18,12 +18,12 @@ function UploadedVideos(props) {
     const renderCards = Classes.map((classs, index) => {
         return (
             <div>
-                <Col className="colcard" span={5}>
+                <Col span={5}>
                     <Card
                         hoverable
                         onClick={() => toWatchHandler(classs.id)}
                         className="shadow classCard"
-                        style={{ width: 240, height: 300 }}
+                        style={{ width: 240, height: 300, marginLeft: '20px' }}
                         cover={
                             <img
                                 className="classImg"
@@ -44,11 +44,12 @@ function UploadedVideos(props) {
     });
 
     return (
-        <div className="mypage-uploadvideo-container">
+        <div className="mypage-uploadvideo-container" style={{ marginTop: '2rem' }}>
+            <hr />
             <div className="mypage-card-title">
                 <h1 style={{ fontWeight: 'bold' }}>내가 업로드한 동영상</h1>
             </div>
-            <Row className="board">{Classes.length > 0 ? renderCards : null}</Row>
+            <Row>{Classes.length > 0 ? renderCards : null}</Row>
 
             <Row>
                 <Col lg={11}></Col>

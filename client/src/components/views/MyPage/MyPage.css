@@ -8,6 +8,13 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:800");
 @import url("https://fonts.googleapis.com/css?family=Montserrat");
 
+@font-face {
+  font-family: 'Cafe24Danjunghae';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Danjunghae.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .statistics {
   background: linear-gradient(270deg, #effcef, #ccedd2, #94d3ac);
   margin-left: 0 !important;
@@ -20,8 +27,6 @@
 .mypage {
   font-family: "Montserrat", sans-serif;
   animation: backgroundAnimation 10s ease infinite;
-  /* justify-content: center;
-  align-items: center; */
   width: 100%;
   height: 100%;
   margin: 0;
@@ -38,7 +43,8 @@
   position: relative;
   max-height: 600px;
   max-width: 700px;
-  margin-right: 0;
+  margin-top: 5%;
+ 
 }
 
 .profile-bg {
@@ -71,8 +77,6 @@
   animation-fill-mode: both;
   position: relative;
   border-radius: 10px;
-  /* box-shadow: 0 25px 45px -20px rgba(255, 0, 47, 0.55),
-    inset 0 0px 120px rgba(255, 0, 47, 0.75); */
   width: 45%;
   flex: none;
   background-image: url("https://zephyo.github.io/22Days/code/3/graphics/profile.png");
@@ -80,15 +84,6 @@
   background-position: center;
 }
 
-/* .profile-image::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  opacity: 0.8;
-  mix-blend-mode: screen;
-} */
 
 .camera {
   color: black;
@@ -320,7 +315,9 @@ h1.second-name {
 	--iterations: 1;
 }
 /* •·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•· */
-
+.reveal-text {
+  font-family: 'Cafe24Danjunghae';
+}
 
 .reveal-text,
 .reveal-text::after {
@@ -344,7 +341,7 @@ h1.second-name {
 	font-size: 10vw;
 	-webkit-animation-name: clip-text;
 	        animation-name: clip-text;
-	color: #1ee494;
+	color: #383838;
 	white-space: nowrap;
 	cursor: default
 	
@@ -358,7 +355,7 @@ h1.second-name {
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background-color: #ff6969;
+		background-color: #7fbe88;
 		transform: scaleX(0);
 		transform-origin: 0 50%;
 		pointer-events: none;

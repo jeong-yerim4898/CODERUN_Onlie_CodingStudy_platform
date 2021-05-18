@@ -91,6 +91,14 @@ function MyPage(props) {
             <div className="mypage">
                 <Row>
                     <Col lg={6}>
+                        <div
+                            className="mypage-logo-container"
+                            style={{ display: 'flex', marginTop: '10%', marginLeft: '20%' }}
+                        >
+                            <h1 class="reveal-text">코드:런</h1>
+                        </div>
+                    </Col>
+                    <Col lg={6}>
                         <main class="profile">
                             <div class="profile-bg"></div>
                             <div class="containerMyPage">
@@ -170,11 +178,6 @@ function MyPage(props) {
                             </section>
                             <button class="icon close"></button>
                         </main>
-                    </Col>
-                    <Col lg={6}>
-                        <div className="mypage-logo-container" style={{ display: 'flex' }}>
-                            <h1 class="reveal-text">코드:런</h1>
-                        </div>
                     </Col>
                 </Row>
 

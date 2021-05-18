@@ -35,9 +35,9 @@ function AddtoPlaylist(props) {
             video_list_id: SelectPlaylist,
             video_id: video_id,
         };
-        console.log(body);
         createPlaylistdata(body).then(res => {
             setaddtoPlaylist(res.data.data);
+            setShow(false);
             setUpdateNum(null);
         });
     };

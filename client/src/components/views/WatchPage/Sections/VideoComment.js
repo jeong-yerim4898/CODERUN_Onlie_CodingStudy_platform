@@ -120,6 +120,7 @@ function VideoComment(props) {
                                     <Input
                                         className="comment-update-input"
                                         onChange={handlerUpdate}
+                                        defaultValue={props.Videocomment.content}
                                     />
                                     <Button
                                         className="comment-update-btn1"
