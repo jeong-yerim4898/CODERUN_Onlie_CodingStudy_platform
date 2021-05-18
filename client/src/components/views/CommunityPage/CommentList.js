@@ -22,13 +22,13 @@ function CommentList(props) {
 
     const [Article, setArticle] = useState({});
     const [Comments, setComments] = useState([]);
-    const [Comment, setComment] = useState([]);
+    const [Comment, setComment] = useState('');
     const [updateComment, setupdateComment] = useState('');
     const [UpdateNum, setUpdateNum] = useState(null);
 
     useEffect(() => {
         detailArticle(ArticleId).then(res => {
-            setArticle(res.data.data);
+            setArticle(res.data.data.Board);
         });
         listComment(ArticleId).then(res => {
             setComments(res.data.data);
@@ -39,19 +39,15 @@ function CommentList(props) {
         setComment(event.currentTarget.value);
     };
     const createCommentHandler = event => {
-        event.preventDefault();
-
         const body = {
             board_id: ArticleId,
             content: Comment,
         };
 
         createComment(body).then(res => {
-            console.log(res.data.data);
+            setComment('');
             listComment(ArticleId).then(res => {
                 setComments(res.data.data);
-                console.log(ArticleId);
-                console.log(res.data.data, 11);
             });
         });
     };
@@ -160,11 +156,13 @@ function CommentList(props) {
                     <Col xs={11}>
                         <Form.Control
                             type="textarea"
-                            className="commentInput"
+                            className="commentInput Submit"
                             placeholder="댓글을 작성하세요"
                             onChange={commentHandler}
                         />
                     </Col>
+                    <br></br>
+                    <br></br>
                     <Col>
                         <Button variant="success" type="submit" onClick={createCommentHandler}>
                             작 성

@@ -12,17 +12,21 @@ import './CommunityDetail.css';
 function CommunityDetail(props) {
     const date = new Date();
     const num = props.match.params.id;
-
     const [Article, setArticle] = useState({});
     const history = useHistory();
     let user = useSelector(state => state.user);
-
+    console.log(Article.Board?.created_date);
+    console.log(Article.Board?.updated_date);
     useEffect(() => {
         detailArticle(num).then(res => {
             setArticle(res.data.data);
         });
     }, []);
-
+    const create_date = new Date(Article.Board?.created_date);
+    const year = create_date.getFullYear();
+    const month = create_date.getMonth();
+    const day = create_date.getDate();
+    const created_date = `${year}년 ${month}월 ${day}일`;
     const deleteHandler = event => {
         event.preventDefault();
         const article_id = props.match.params.id;
@@ -43,21 +47,35 @@ function CommunityDetail(props) {
                                 <h1>
                                     {Article.Board?.title}{' '}
                                     {Article.Board?.select ? (
-                                        <Image
-                                            src={`${process.env.PUBLIC_URL}/img/winner.png`}
-                                            style={{ width: 80, height: 80, float: 'right' }}
-                                            roundedCircle
-                                        ></Image>
+                                        <span
+                                            style={{
+                                                backgroundColor: '#655c56',
+                                                color: '#fc8a15',
+                                                float: 'right',
+                                            }}
+                                            class="badge"
+                                        >
+                                            채택
+                                        </span>
                                     ) : (
                                         console.log()
                                     )}
                                 </h1>
                                 <Image
                                     src={Article.profile + '?' + date}
-                                    style={{ width: 30, height: 30 }}
+                                    style={{ width: 40, height: 40 }}
                                     roundedCircle
                                 ></Image>
                                 {Article.name}
+                                <p style={{ color: 'grey' }}>
+                                    {created_date}
+                                    {Article.Board?.created_date === Article.Board?.updated_date ? (
+                                        <div></div>
+                                    ) : (
+                                        <p style={{ color: 'black', float: 'right' }}>수정됨</p>
+                                    )}
+                                </p>
+
                                 <hr></hr>
                                 <h2>
                                     {Article.Board?.content}
