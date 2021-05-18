@@ -78,7 +78,7 @@ function VideoInfo(props) {
                             <div>
                                 {data.video_id === props.video.id ? (
                                     <ListGroup
-                                        onClick={() => onPlayListHander(data.Video.id)}
+                                        onClick={() => onPlayListHander(data.Video)}
                                         className="classListItem"
                                         horizontal={true}
                                         key={idx}
@@ -96,7 +96,7 @@ function VideoInfo(props) {
                                     </ListGroup>
                                 ) : (
                                     <ListGroup
-                                        onClick={() => onPlayListHander(data.Video.id)}
+                                        onClick={() => onPlayListHander(data.Video)}
                                         style={{ cursor: 'pointer' }}
                                         horizontal={true}
                                         key={idx}
