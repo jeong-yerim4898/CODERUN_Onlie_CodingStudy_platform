@@ -19,4 +19,4 @@ EXPOSE 80
 EXPOSE 443
 CMD ["nginx", "-g", "daemon", "off;"]
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8002"]
-
+RUN service nginx restart
