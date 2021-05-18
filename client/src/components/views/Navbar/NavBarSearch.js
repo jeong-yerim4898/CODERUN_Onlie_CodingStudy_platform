@@ -4,6 +4,7 @@ import { useHistory } from 'react-router';
 
 import { fetchSearchedVideoList, fetchLoginedSearchedVideoList } from '_api/Video.js';
 
+import './NavBarSearch.css';
 import { Input } from 'antd';
 
 function NavBarSearch(props) {
@@ -44,7 +45,8 @@ function NavBarSearch(props) {
     return (
         <div>
             <Search
-                placeholder="input search text"
+                className="navbarInput"
+                placeholder="검색어를 입력하세요"
                 onChange={onChangeHandler}
                 style={{ width: 200 }}
                 value={SearchTerm}

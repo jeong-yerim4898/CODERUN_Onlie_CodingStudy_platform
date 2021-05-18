@@ -10,15 +10,16 @@ import CommentList from './CommentList';
 import './CommunityDetail.css';
 
 function CommunityDetail(props) {
+    const date = new Date();
+    const num = props.match.params.id;
+
     const [Article, setArticle] = useState({});
     const history = useHistory();
     let user = useSelector(state => state.user);
+
     useEffect(() => {
-        console.log(user.login.user.id);
-        detailArticle(props.match.params.id).then(res => {
-            console.log(res.data.data);
+        detailArticle(num).then(res => {
             setArticle(res.data.data);
-            console.log(Article);
         });
     }, []);
 
@@ -29,60 +30,69 @@ function CommunityDetail(props) {
             props.history.push('/community');
         });
     };
+
     return (
         <div>
-            <br></br>
-            <br></br>
-            <Row>
-                <Col>
-                    <div>
-                        <Col md={{ span: 8, offset: 2 }}>
-                            <h1>
-                                {Article.title}{' '}
-                                {Article.select ? (
-                                    <Image
-                                        src={`${process.env.PUBLIC_URL}/img/winner.png`}
-                                        style={{ width: 60, height: 60, float: 'right' }}
-                                        roundedCircle
-                                    ></Image>
-                                ) : (
-                                    console.log()
-                                )}
-                            </h1>
-                            <hr></hr>
-                            <h2>
-                                {Article.content}
-                                {Article.user_id === user.login.user.id ? (
-                                    <div style={{ float: 'right' }}>
-                                        <Link
-                                            style={{ color: 'black', width: 50 }}
-                                            to={`update/${props.match.params.id}`}
-                                        >
-                                            <EditOutlined style={{ fontSize: '100%' }} />
-                                        </Link>{' '}
-                                        <CloseOutlined
-                                            style={{ fontSize: '100%' }}
-                                            onClick={deleteHandler}
-                                        />
-                                    </div>
-                                ) : (
-                                    console.log()
-                                )}
-                            </h2>
+            <div>
+                <br></br>
+                <br></br>
+                <Row>
+                    <Col>
+                        <div>
+                            <Col md={{ span: 8, offset: 2 }}>
+                                <h1>
+                                    {Article.Board?.title}{' '}
+                                    {Article.Board?.select ? (
+                                        <Image
+                                            src={`${process.env.PUBLIC_URL}/img/winner.png`}
+                                            style={{ width: 80, height: 80, float: 'right' }}
+                                            roundedCircle
+                                        ></Image>
+                                    ) : (
+                                        console.log()
+                                    )}
+                                </h1>
+                                <Image
+                                    src={Article.profile + '?' + date}
+                                    style={{ width: 30, height: 30 }}
+                                    roundedCircle
+                                ></Image>
+                                {Article.name}
+                                <hr></hr>
+                                <h2>
+                                    {Article.Board?.content}
+                                    {Article.Board?.user_id === user.login.user.id ? (
+                                        <div style={{ float: 'right' }}>
+                                            <Link
+                                                style={{ color: 'black', width: 50 }}
+                                                to={`update/${props.match.params.id}`}
+                                            >
+                                                <EditOutlined style={{ fontSize: '100%' }} />
+                                            </Link>{' '}
+                                            <CloseOutlined
+                                                style={{ fontSize: '100%' }}
+                                                onClick={deleteHandler}
+                                            />
+                                        </div>
+                                    ) : (
+                                        console.log()
+                                    )}
+                                </h2>
 
-                            <br></br>
-                        </Col>
-                    </div>
-                    <br></br>
-                    <div className="CommentBg">
-                        <Col md={{ span: 8, offset: 2 }}>
-                            <br />
-                            <CommentList ArticleId={props.match.params.id} />
-                            <br />
-                        </Col>
-                    </div>
-                </Col>
-            </Row>
+                                <br></br>
+                            </Col>
+                        </div>
+                        <br></br>
+                        <div className="CommentBg">
+                            <Col md={{ span: 8, offset: 2 }}>
+                                <br />
+                                <CommentList ArticleId={props.match.params.id} />
+                                <br />
+                            </Col>
+                        </div>
+                    </Col>
+                </Row>
+            </div>
         </div>
     );
 }

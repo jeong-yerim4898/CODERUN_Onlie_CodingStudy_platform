@@ -42,15 +42,19 @@
   z-index: 1;
   width: 100%;
 }
+
 .NavMenu-right {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
+  float: right;
   align-items: center;
   /* list-style: none; */
   /* margin-left: 40px; */
   height: 80px;
   z-index: 1;
   width: 100%;
+
+
 }
 
 
@@ -59,8 +63,8 @@
 } */
 
 .NavItem-right {
-  
-  margin-right:1rem;
+  float: right;
+  margin-right: 1rem;
 }
 
 
@@ -77,7 +81,7 @@
 
 
 .NavLink:hover {
-  border-bottom : 3px solid #01bf71;
+  border-bottom: 3px solid #01bf71;
 }
 
 
@@ -97,10 +101,3 @@
 .sidebar {
   background: #000;
 }
-
-
-
-
-
-
-

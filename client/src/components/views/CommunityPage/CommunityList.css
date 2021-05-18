@@ -16,6 +16,7 @@
 
 .contentItem {
   width: 800px;
+  text-align: left;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -27,4 +28,9 @@
   border-bottom: solid 1px;
   border-color: rgb(151, 150, 150) !important;
   border-radius: 0;
+}
+
+.communityInput:focus {
+  border-color: #1ee494 !important;
+  box-shadow: 0 0 0 0.1rem #94d3ac !important;
 }
