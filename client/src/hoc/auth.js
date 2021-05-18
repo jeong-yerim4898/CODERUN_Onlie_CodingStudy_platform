@@ -9,10 +9,11 @@ import { useSelector } from 'react-redux';
 export default function (SpecificComponent, option) {
     const AuthenticationCheck = props => {
         let user = useSelector(state => state.user);
+        console.log('auth', user.login === undefined);
         let isAuth = localStorage.getItem('token');
 
         //Not Loggined in Status
-        if (isAuth === null) {
+        if (isAuth === null || user.login === undefined) {
             if (option) {
                 props.history.push('/account');
             }

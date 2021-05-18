@@ -1,83 +1,55 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import { Space, Input, Card, Row, Col } from 'antd';
 import './UploadedVideos.css';
-import ProfileImage from './images/실전리액트프로그래밍.PNG';
 
-function UploadedVideos() {
-    const Classes = [
-        {
-            title: '1',
-            algorithm_tag_id: 'DP',
-            type: 'C/C++',
-        },
-        {
-            title: '2',
-            algorithm_tag_id: 'DP',
-            type: 'Java',
-        },
-        {
-            title: '3',
-            algorithm_tag_id: 'DFS/ BFS',
-            type: 'Java',
-        },
-        {
-            title: '4',
-            algorithm_tag_id: '그래프',
-            type: 'C/C++',
-        },
-        {
-            title: '5',
-            algorithm_tag_id: '그래프',
-            type: 'python',
-        },
-        {
-            title: '6',
-            algorithm_tag_id: '최단경로',
-            type: 'python',
-        },
-        {
-            title: '7',
-            algorithm_tag_id: '최단경로',
-            type: 'python',
-        },
-        {
-            title: '8',
-            algorithm_tag_id: '그리디',
-            type: 'C/C++',
-        },
-        {
-            title: '9',
-            algorithm_tag_id: '그리디',
-            type: 'C/C++',
-        },
-        {
-            title: '10',
-            algorithm_tag_id: 'DFS/ BFS',
-            type: 'C/C++',
-        },
-    ];
-    // const [Classes, setClasses] = useState(Classses);
-    // console.log(Classes);
+function UploadedVideos(props) {
+    const history = useHistory();
+    const [Classes, setClasses] = useState(props.VideoArray);
+
+    useEffect(() => {
+        setClasses(props.VideoArray);
+    }, [props.VideoArray]);
+
+    const toWatchHandler = num => {
+        history.push('/watch/' + num);
+    };
+
     const renderCards = Classes.map((classs, index) => {
         return (
-            <a href={'/watch/' + index} key={index}>
+            <div>
                 <Col className="colcard" span={5}>
                     <Card
                         hoverable
-                        style={{ width: 240 }}
-                        cover={<img alt="example" src={ProfileImage} />}
-                        title={classs.title}
+                        onClick={() => toWatchHandler(classs.id)}
+                        className="shadow classCard"
+                        style={{ width: 240, height: 300 }}
+                        cover={
+                            <img
+                                className="classImg"
+                                style={{ width: '100%', height: '210px' }}
+                                alt="example"
+                                src={classs.thumbnail}
+                            />
+                        }
                         bordered={false}
-                    ></Card>
+                    >
+                        <p className="classTitle " style={{ fontSize: '18px' }}>
+                            {classs.title}
+                        </p>
+                    </Card>
                 </Col>
-            </a>
+            </div>
         );
     });
 
     return (
-        <div>
-            <h1 className="uploadedvideo">내가 업로드한 동영상</h1>
-            <Row className="board">{renderCards}</Row>
+        <div className="mypage-uploadvideo-container">
+            <div className="mypage-card-title">
+                <h1 style={{ fontWeight: 'bold' }}>내가 업로드한 동영상</h1>
+            </div>
+            <Row className="board">{Classes.length > 0 ? renderCards : null}</Row>
+
             <Row>
                 <Col lg={11}></Col>
                 <Col lg={2}>
