@@ -14,7 +14,6 @@
 .cardBoard {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
-
   color: black;
 
 }

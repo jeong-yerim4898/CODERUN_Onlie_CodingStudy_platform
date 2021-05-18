@@ -17,3 +17,13 @@ export function deleteProfileImage(user_id) {
         headers: { token: ACCESS_TOKEN },
     });
 }
+// 마이페이지 개엔 통계자료
+export function profileStatistics(user_id) {
+    return axios.get(`${SERVER}/api/user/profile/log/${user_id}`);
+}
+// 마이페이지 내가 올린 비디오 목록
+export function profileMyVideos(user_id) {
+    return axios.get(`${SERVER}/api/user/data/${user_id}`, {
+        headers: { token: `${ACCESS_TOKEN}` },
+    });
+}

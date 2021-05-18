@@ -31,8 +31,6 @@ function ClassPage(props) {
     let user = useSelector(state => state.user);
     const user_id = user?.login?.user?.id;
 
-    const history = useHistory();
-
     const [Cnts, setCnts] = useState(0);
     const [Algos, setAlgos] = useState([]);
     const [Css, setCss] = useState([]);
