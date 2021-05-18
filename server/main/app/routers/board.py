@@ -161,10 +161,13 @@ def delete_board_comment(
 ):
     current_user = get_current_user(token, db)
     board_comment_data = db.query(models.BoardComment).filter(models.BoardComment.id == board_comment_id).first()
+    board_data = db.query(models.Board).filter(models.Board.id == board_comment_data.board_id).first()
     if not board_comment_data:
         raise raiseException.Raise_404_Error()
     if current_user.id != board_comment_data.user_id:
         raise raiseException.Raise_401_Error()
+    if board_data.select == True:
+        board_data.select = False
     db.delete(board_comment_data)
     db.commit()
     return {"delete": board_comment_id}
