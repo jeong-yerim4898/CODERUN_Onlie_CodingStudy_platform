@@ -8,6 +8,7 @@ RUN rm /etc/nginx/sites-enabled/default
 COPY ./default /etc/nginx/sites-enabled/default
 COPY ./sslkey/fullchain.pem fullchain.pem
 COPY ./sslkey/privkey.pem privkey.pem
+COPY ./index.html index.html
 RUN service nginx restart
 COPY ./requirements.txt requirements.txt
 COPY ./.env .env
