@@ -117,8 +117,8 @@ function ClassPage(props) {
 
     const onLanguageHandler = num => {
         setLanguage(num);
-        setPage(count);
         const count = 1;
+        setPage(count);
         const user_id = user?.login?.user?.id;
         if (user_id) {
             fetchLoginedAlgoLangFilteredVideoList(Algo, num, user_id, count).then(res => {
@@ -202,6 +202,7 @@ function ClassPage(props) {
                             )}
                         </Card.Body>
                     </Card>
+                    <br></br>
                 </Col>
             </Col>
         );

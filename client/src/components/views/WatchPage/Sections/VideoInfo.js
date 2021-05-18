@@ -26,6 +26,7 @@ function VideoInfo(props) {
     const [VideoContentUpdate, setVideoContentUpdate] = useState('');
 
     useEffect(() => {
+        console.log(props);
         fetchPlaylist(props.VideoListId).then(res => {
             console.log(res.data.data);
             setClassList(res.data.data);
@@ -70,30 +71,55 @@ function VideoInfo(props) {
                         flexDirection: 'column',
                     }}
                 >
+                    <hr></hr>
+                    <p>재생목록</p>
                     <InfiniteScroll dataLength={ClassList.length}>
                         {ClassList.map((data, idx) => (
-                            <ListGroup
-                                onClick={() => onPlayListHander(data.Video)}
-                                style={{ cursor: 'pointer' }}
-                                horizontal={true}
-                                key={idx}
-                            >
-                                <ListGroup.Item className="articleItem">
-                                    <Image
-                                        src={data.Video.thumbnail}
-                                        style={{ width: 60, height: 45 }}
-                                    ></Image>
-                                </ListGroup.Item>
+                            <div>
+                                {data.video_id === props.video.id ? (
+                                    <ListGroup
+                                        onClick={() => onPlayListHander(data.Video.id)}
+                                        className="classListItem"
+                                        horizontal={true}
+                                        key={idx}
+                                    >
+                                        <ListGroup.Item className="classListItem">
+                                            <Image
+                                                src={data.Video.thumbnail}
+                                                style={{ width: 60, height: 45 }}
+                                            ></Image>
+                                        </ListGroup.Item>
 
-                                <ListGroup.Item
-                                    style={{ textAlign: 'center' }}
-                                    className="articleItem"
-                                >
-                                    {data.Video.title}
-                                </ListGroup.Item>
-                            </ListGroup>
+                                        <ListGroup.Item className="classListItem">
+                                            {data.Video.title}
+                                        </ListGroup.Item>
+                                    </ListGroup>
+                                ) : (
+                                    <ListGroup
+                                        onClick={() => onPlayListHander(data.Video.id)}
+                                        style={{ cursor: 'pointer' }}
+                                        horizontal={true}
+                                        key={idx}
+                                    >
+                                        <ListGroup.Item className="articleItem">
+                                            <Image
+                                                src={data.Video.thumbnail}
+                                                style={{ width: 60, height: 45 }}
+                                            ></Image>
+                                        </ListGroup.Item>
+
+                                        <ListGroup.Item
+                                            style={{ textAlign: 'center' }}
+                                            className="articleItem"
+                                        >
+                                            {data.Video.title}
+                                        </ListGroup.Item>
+                                    </ListGroup>
+                                )}
+                            </div>
                         ))}
                     </InfiniteScroll>
+                    <hr></hr>
                 </div>
             );
         } else {
@@ -253,7 +279,6 @@ function VideoInfo(props) {
                             </div>
                         ) : null}
 
-                        <br />
                         {renderList()}
                     </div>
                     <div class="right col"></div>
