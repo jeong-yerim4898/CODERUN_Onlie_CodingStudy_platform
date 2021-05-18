@@ -160,6 +160,7 @@ function CommentList(props) {
                     <Col xs={11}>
                         <Form.Control
                             type="textarea"
+                            className="commentInput"
                             placeholder="댓글을 작성하세요"
                             onChange={commentHandler}
                         />

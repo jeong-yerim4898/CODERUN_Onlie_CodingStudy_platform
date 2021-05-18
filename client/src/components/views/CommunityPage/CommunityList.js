@@ -21,11 +21,15 @@ function CommunityList(props) {
 
     useEffect(() => {
         console.log(user);
-        initialListArticle(PageCount).then(res => {
-            setCnts(res.data.page_cnt);
-            console.log(res.data.page_cnt);
-            setListData(res.data.data);
-        });
+        initialListArticle(PageCount)
+            .then(res => {
+                setCnts(res.data.page_cnt);
+                console.log(res.data.page_cnt);
+                setListData(res.data.data);
+            })
+            .catch(err => {
+                history.push('/account');
+            });
     }, []);
 
     const onSearchDataHandler = event => {
@@ -95,7 +99,7 @@ function CommunityList(props) {
                         ) : (
                             console.log()
                         )}{' '}
-                        {data.Board.content}
+                        {data.Board.title}
                     </ListGroup.Item>
                 </ListGroup>
             </a>
@@ -107,6 +111,7 @@ function CommunityList(props) {
                 <Col xs={{ span: 8, offset: 2 }}>
                     <InputGroup className="mb-3">
                         <FormControl
+                            className="communityInput"
                             placeholder="검색어를 입력하세요"
                             onChange={onSearchDataHandler}
                         />

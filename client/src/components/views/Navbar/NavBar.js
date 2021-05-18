@@ -53,9 +53,14 @@ function NavBar(props) {
                     </Nav>
                     <Nav className="NavMenu-right">
                         {/* 검색창 */}
-                        <Nav.Item className="NavItem-right">
-                            <NavBarSearch />
-                        </Nav.Item>
+                        {window.location.href.split('/')[3] === 'class' ? (
+                            <div></div>
+                        ) : (
+                            <Nav.Item className="NavItem-right">
+                                <NavBarSearch />
+                            </Nav.Item>
+                        )}
+
                         {/* 동영상업로드 버튼 */}
                         <Nav.Item className="NavItem-right">
                             <Button variant="outline-info" href="/upload/video">
