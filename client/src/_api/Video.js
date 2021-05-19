@@ -128,3 +128,7 @@ export function updateVideoComment(comment) {
         headers: { token: `${ACCESS_TOKEN}` },
     });
 }
+// 베스트 비디오 5개
+export function fetchBestVideos() {
+    return axios.get(`${SERVER}/api/video/recommend`);
+}

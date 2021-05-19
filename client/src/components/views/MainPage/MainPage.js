@@ -1,19 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './MainPage.css';
 import BestClasses from './BestClasses.js';
 import SelectCourse from './SelectCourse.js';
 import { UpCircleOutlined, DownCircleOutlined } from '@ant-design/icons';
 import BackImage from './images/back.png';
+// api
+import { fetchBestVideos } from '_api/Video';
 
 function MainPage(props) {
     const [mainPageIndex, setMainPageIndex] = useState(0);
     const [message, setMessage] = useState('');
+    const [BestVideos, setBestVideos] = useState([]);
     const messages = [
         '인생은 "한강 뷰"아니면 "한강 물"이다.',
         '빨리 공부하러 안 가고 뭐하냐?',
         '싸탈은 지능순',
         '풀기 전에 생각했나요?',
     ];
+
+    useEffect(() => {
+        fetchBestVideos()
+            .then(res => setBestVideos(res.data.data))
+            .catch(err => console.log(err));
+    }, []);
 
     const changeMainPageIndex = function (idx) {
         if (idx < 0) {
@@ -99,7 +108,11 @@ function MainPage(props) {
             <div className="transitionMainPage3 transitionMainPage">
                 <div className="specificMainPage">
                     <img className="backImage2" src={BackImage} />
-                    <BestClasses className="specificBestClasses" {...props} />
+                    <BestClasses
+                        className="specificBestClasses"
+                        {...props}
+                        BestVideos={BestVideos}
+                    />
                 </div>
             </div>
             <div className="transitionMainPage2 transitionMainPage">
