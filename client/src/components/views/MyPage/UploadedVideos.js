@@ -23,7 +23,7 @@ function UploadedVideos(props) {
                         hoverable
                         onClick={() => toWatchHandler(classs.id)}
                         className="shadow classCard"
-                        style={{ width: 240, height: 300, marginLeft: '20px' }}
+                        style={{ width: 240, height: 300, marginLeft: '20px', marginTop: '20px' }}
                         cover={
                             <img
                                 className="classImg"
@@ -49,15 +49,7 @@ function UploadedVideos(props) {
             <div className="mypage-card-title">
                 <h1 style={{ fontWeight: 'bold' }}>내가 업로드한 동영상</h1>
             </div>
-            <Row>{Classes.length > 0 ? renderCards : null}</Row>
-
-            <Row>
-                <Col lg={11}></Col>
-                <Col lg={2}>
-                    <button className="loadmorebtn">Load More</button>
-                </Col>
-                <Col lg={11}></Col>
-            </Row>
+            <Row style={{ marginBottom: '20px' }}>{Classes.length > 0 ? renderCards : null}</Row>
         </div>
     );
 }
