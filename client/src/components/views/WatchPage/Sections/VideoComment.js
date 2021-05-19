@@ -10,6 +10,7 @@ function VideoComment(props) {
     let user = useSelector(state => state.user);
     const [comment, setcomment] = useState('');
     const [commentUpdate, setcommentUpdate] = useState('');
+    const [imageUrl, setimageUrl] = useState('');
 
     useEffect(() => {
         setcomment(props.Videocomment.content);
@@ -72,6 +73,11 @@ function VideoComment(props) {
         updateIcon[0].classList.remove('hidden');
         deleteIcon[0].classList.remove('hidden');
     };
+
+    const renderImageUrl = url => {
+        const date = new Date();
+        setimageUrl(props.Videocomment.user.profile + '?' + date);
+    };
     return (
         <div>
             <div
@@ -86,8 +92,9 @@ function VideoComment(props) {
                 }}
             >
                 <img
-                    src={props.Videocomment.user.profile}
+                    src={imageUrl}
                     style={{ height: `50px`, width: '50px', borderRadius: '50%' }}
+                    onError={renderImageUrl}
                 />
                 <div
                     style={{

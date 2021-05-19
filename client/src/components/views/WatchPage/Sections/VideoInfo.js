@@ -5,6 +5,8 @@ import AddtoPlaylist from '../AddtoPlaylist.js';
 import { Modal, Button } from 'react-bootstrap';
 import { Input } from 'antd';
 import './VideoInfo.scss';
+import './VideoInfo.css';
+
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { ListGroup, Image } from 'react-bootstrap';
 import { HeartOutlined, HeartTwoTone, DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -194,7 +196,11 @@ function VideoInfo(props) {
                     <Button variant="secondary" onClick={handleCancel}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleOk}>
+                    <Button
+                        variant="primary"
+                        onClick={handleOk}
+                        style={{ backgroundColor: 'green', borderColor: 'green' }}
+                    >
                         Save Changes
                     </Button>
                 </Modal.Footer>
@@ -207,7 +213,11 @@ function VideoInfo(props) {
                                 <h4>
                                     <strong>비디오 수정</strong>
                                 </h4>
-                                <Input defaultValue={VideoTitle} onChange={changeTitle}></Input>
+                                <Input
+                                    className="watch-videoupdate-title"
+                                    defaultValue={VideoTitle}
+                                    onChange={changeTitle}
+                                ></Input>
                             </div>
                         ) : (
                             <h2>
@@ -223,6 +233,7 @@ function VideoInfo(props) {
                                     maxLength={500}
                                     onChange={changeContent}
                                     rows={5}
+                                    className="watch-videoupdate-content"
                                 />
                             ) : (
                                 <div>
@@ -274,8 +285,25 @@ function VideoInfo(props) {
                                     marginTop: '30px',
                                 }}
                             >
-                                <Button onClick={updateVideoInfo}>수정완료</Button>
-                                <Button onClick={updateCancle}>취소</Button>
+                                <Button
+                                    onClick={updateVideoInfo}
+                                    style={{
+                                        marginRight: '8px',
+                                        backgroundColor: 'green',
+                                        borderColor: 'green',
+                                    }}
+                                >
+                                    수정완료
+                                </Button>
+                                <Button
+                                    onClick={updateCancle}
+                                    style={{
+                                        backgroundColor: 'green',
+                                        borderColor: 'green',
+                                    }}
+                                >
+                                    취소
+                                </Button>
                             </div>
                         ) : null}
 

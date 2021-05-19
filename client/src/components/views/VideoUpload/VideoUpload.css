@@ -66,3 +66,11 @@
   100% { left: 100px; top:0; }
 }
 
+.video-upload-input textarea:focus {
+	border-color: rgb(252, 138, 21);
+	box-shadow: 0 0 0 2px rgb(252 138 21 / 20%);
+}
+.video-upload-input textarea:hover {
+	border-color: #fc8a15;
+}
+

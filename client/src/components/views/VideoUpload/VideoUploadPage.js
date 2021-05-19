@@ -336,7 +336,7 @@ function VideoUpload(props) {
                 />
                 <button
                     className="pulse"
-                    style={{ position: 'absolute', right: '10px', top: '60%' }}
+                    // style={{ position: 'absolute', right: '10px', top: '60%' }}
                     onClick={postVideo}
                 >
                     제출

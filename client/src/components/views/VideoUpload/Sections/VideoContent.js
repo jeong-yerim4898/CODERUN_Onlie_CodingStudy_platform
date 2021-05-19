@@ -1,6 +1,5 @@
 import React from 'react';
 import { Input } from 'antd';
-import { StyledInput } from '../VideoUploadStyled';
 
 function VideoContent(props) {
     const { TextArea } = Input;
@@ -10,13 +9,13 @@ function VideoContent(props) {
     };
     return (
         <div>
-            <StyledInput
+            <TextArea
+                className="video-upload-input"
                 showCount
                 maxLength={props.maxlength}
                 onChange={onChange}
                 rows={props.row}
             />
-            <TextArea showCount maxLength={props.maxlength} onChange={onChange} rows={props.row} />
         </div>
     );
 }
