@@ -1,4 +1,8 @@
 # 표준 라이브러리
+from routers.user import get_current_user
+from dependency import get_db
+from database import models, schemas
+from . import raiseException
 from os import path
 from sys import path as pth
 from typing import Optional
@@ -9,10 +13,6 @@ from sqlalchemy.orm import Session
 
 # 로컬 라이브러리
 pth.append(path.dirname(path.abspath(path.dirname(__file__))))
-from . import raiseException
-from database import models, schemas
-from dependency import get_db
-from routers.user import get_current_user
 
 
 router = APIRouter()
@@ -24,14 +24,17 @@ def get_board(
     search_text: Optional[str] = '',
     db: Session = Depends(get_db),
 ):
-    title_board = db.query(models.Board, models.User.name, models.User.profile).join(models.User, models.Board.user_id == models.User.id).filter(models.Board.title.ilike(f'%{search_text}%'))
-    content_board = db.query(models.Board, models.User.name, models.User.profile).join(models.User, models.Board.user_id == models.User.id).filter(models.Board.content.ilike(f'%{search_text}%'))
+    title_board = db.query(models.Board, models.User.name, models.User.profile).join(
+        models.User, models.Board.user_id == models.User.id).filter(models.Board.title.ilike(f'%{search_text}%'))
+    content_board = db.query(models.Board, models.User.name, models.User.profile).join(
+        models.User, models.Board.user_id == models.User.id).filter(models.Board.content.ilike(f'%{search_text}%'))
     result = title_board.union(content_board)
-    user_board = db.query(models.Board, models.User.name, models.User.profile).join(models.User, models.Board.user_id == models.User.id).filter(models.User.name.ilike(f'%{search_text}%'))
-    result = result.union(user_board).order_by(models.Board.created_date.desc()).all()
+    user_board = db.query(models.Board, models.User.name, models.User.profile).join(
+        models.User, models.Board.user_id == models.User.id).filter(models.User.name.ilike(f'%{search_text}%'))
+    result = result.union(user_board).order_by(
+        models.Board.created_date.desc()).all()
     return_result = result[(count-1)*10:count*10]
     return {"data": return_result, "page_cnt": (len(result)-1)//10 + 1}
-
 
 
 @router.post("/api/board", tags=["board"], description="게시판 글 작성")
@@ -58,8 +61,9 @@ def get_board_detail(
     token: Optional[str] = Header(None),
     db: Session = Depends(get_db),
 ):
-    # get_current_user(token, db)
-    board_data = db.query(models.Board, models.User.name, models.User.profile).join(models.User, models.User.id == models.Board.user_id).filter(models.Board.id == board_id).first()
+    get_current_user(token, db)
+    board_data = db.query(models.Board, models.User.name, models.User.profile).join(
+        models.User, models.User.id == models.Board.user_id).filter(models.Board.id == board_id).first()
     if not board_data:
         raise raiseException.Raise_404_Error()
     return {"data": board_data}
@@ -72,7 +76,8 @@ def update_board(
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
-    board_data = db.query(models.Board).filter(models.Board.id == data.board_id).first()
+    board_data = db.query(models.Board).filter(
+        models.Board.id == data.board_id).first()
     if not board_data:
         raise raiseException.Raise_404_Error()
     if current_user.id != board_data.user_id:
@@ -91,7 +96,8 @@ def delete_board(
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
-    board_data = db.query(models.Board).filter(models.Board.id == board_id).first()
+    board_data = db.query(models.Board).filter(
+        models.Board.id == board_id).first()
     if not board_data:
         raise raiseException.Raise_404_Error()
     if current_user.id != board_data.user_id:
@@ -142,7 +148,8 @@ def update_board_comment(
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
-    board_comment_data = db.query(models.BoardComment).filter(models.BoardComment.id == data.board_comment_id).first()
+    board_comment_data = db.query(models.BoardComment).filter(
+        models.BoardComment.id == data.board_comment_id).first()
     if not board_comment_data:
         raise raiseException.Raise_404_Error()
     if current_user.id != board_comment_data.user_id:
@@ -160,8 +167,10 @@ def delete_board_comment(
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
-    board_comment_data = db.query(models.BoardComment).filter(models.BoardComment.id == board_comment_id).first()
-    board_data = db.query(models.Board).filter(models.Board.id == board_comment_data.board_id).first()
+    board_comment_data = db.query(models.BoardComment).filter(
+        models.BoardComment.id == board_comment_id).first()
+    board_data = db.query(models.Board).filter(
+        models.Board.id == board_comment_data.board_id).first()
     if not board_comment_data:
         raise raiseException.Raise_404_Error()
     if current_user.id != board_comment_data.user_id:
@@ -180,11 +189,13 @@ def select_comment(
     db: Session = Depends(get_db),
 ):
     current_user = get_current_user(token, db)
-    current_board_comment = db.query(models.BoardComment).filter(models.BoardComment.id == data.board_comment_id).first()
-    current_board = db.query(models.Board).filter(models.Board.id == current_board_comment.board_id).first()
+    current_board_comment = db.query(models.BoardComment).filter(
+        models.BoardComment.id == data.board_comment_id).first()
+    current_board = db.query(models.Board).filter(
+        models.Board.id == current_board_comment.board_id).first()
     if current_board.user_id != current_user.id or current_board.select:
         raise raiseException.Raise_401_Error()
-    
+
     current_board.select = True
     current_board_comment.select = True
     db.commit()
