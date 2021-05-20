@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../VideoUpload.scss';
 
 function VideoTag(props) {
     const animateButton = e => {
         e.preventDefault();
-        //reset animation
+
         e.target.classList.remove('animate');
 
         e.target.classList.add('animate');

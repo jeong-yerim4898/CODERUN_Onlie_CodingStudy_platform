@@ -15,7 +15,7 @@ import MainPage from './components/views/MainPage/MainPage';
 import MyPage from './components/views/MyPage/MyPage';
 import NavBar from './components/views/Navbar/NavBar';
 import VideoUploadPage from './components/views/VideoUpload/VideoUploadPage';
-import Playlist from './components/views/WatchPage/Playlist';
+
 import WatchPage from './components/views/WatchPage/WatchPage';
 import UserInfoUpdate from './components/views/UserInfoUpdatePage/UserInfoUpdate';
 import NotFoundPage from './components/views/NotFoundPage/NotFoundPage';

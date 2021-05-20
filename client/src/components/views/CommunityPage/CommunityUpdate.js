@@ -11,8 +11,6 @@ function CommunityUpdate(props) {
     const [Content, setContent] = useState('');
     useEffect(() => {
         detailArticle(props.match.params.id).then(res => {
-            console.log(res.data.data);
-            console.log(1);
             setTitle(res.data.data.title);
             setContent(res.data.data.content);
         });
@@ -26,8 +24,6 @@ function CommunityUpdate(props) {
     };
     const submitHandler = event => {
         event.preventDefault();
-        console.log(Title);
-        console.log(Content);
         if (!Title || !Content) {
             return alert('모든 값을 넣어 주셔야 합니다.');
         }
@@ -38,8 +34,6 @@ function CommunityUpdate(props) {
         };
         updateArticle(body)
             .then(res => {
-                console.log(res);
-                console.log('success');
                 props.history.push(`/community/detail/${props.match.params.id}`);
             })
             .catch(err => console.log(err));

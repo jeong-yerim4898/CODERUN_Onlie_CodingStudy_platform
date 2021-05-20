@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Space, Input, Card, Row, Col } from 'antd';
+import { Card, Row, Col } from 'antd';
 import './UploadedVideos.css';
 
 function UploadedVideos(props) {

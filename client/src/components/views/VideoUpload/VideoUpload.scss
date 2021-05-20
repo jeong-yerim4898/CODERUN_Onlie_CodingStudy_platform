@@ -5,12 +5,9 @@ $baby-blue: #f8faff;
 
 .videotag-container{
   font-size: 10px;
-  // font-family: 'Helvetica', 'Arial', sans-serif;
-  // text-align: center;
   background-color: $baby-blue;
 }
 .bubbly-button{
-  // font-family: 'Helvetica', 'Arial', sans-serif;
   white-space:nowrap;
   display: inline-block;
   font-size: 12px;
@@ -73,7 +70,6 @@ $baby-blue: #f8faff;
     radial-gradient(circle, $button-bg 20%, transparent 20%),
     radial-gradient(circle, $button-bg 20%, transparent 20%);
   background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 10% 10%, 20% 20%;
-  //background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%, 40% 90%, 55% 90%, 70% 90%;
   }
  
   &:active{
@@ -135,18 +131,10 @@ $baby-blue: #f8faff;
   0% { box-shadow: 0 0 0 0 var(--hover); }
 }
 
-// Stack multiple shadows, one from the left, the other from the right
-
-
-//=== Set button colors
-// If you wonder why use Sass vars or CSS custom properties...
-  // Make a map with the class names and matching colors
 $colors: (
   pulse: #fc8a15, 
 );
 
-// Sass variables compile to a static string; CSS variables are dynamic and inherited
-  // Loop through the map and set CSS custom properties using Sass variables
 @each $button, $color in $colors {
   .#{$button} {
     --color: #{$color};

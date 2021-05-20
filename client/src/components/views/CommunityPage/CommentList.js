@@ -91,18 +91,15 @@ function CommentList(props) {
         setupdateComment(event.currentTarget.value);
     };
     const renderComments = Comments.map((comment, index) => {
-        console.log(comment);
         return (
             <ListGroup.Item className="CommentBackground" key={index}>
-                {comment.BoardComment.select ? (
+                {comment.BoardComment?.select ? (
                     <Image
                         src={`${process.env.PUBLIC_URL}/img/winner.png`}
                         style={{ width: 30, height: 30 }}
                         roundedCircle
                     ></Image>
-                ) : (
-                    console.log()
-                )}
+                ) : null}
                 <Image
                     src={comment.profile + '?' + date}
                     style={{ width: 30, height: 30 }}
@@ -110,41 +107,34 @@ function CommentList(props) {
                 ></Image>
                 {comment.name}{' '}
                 {!Article.select && Article.user_id === user?.login?.user?.id ? (
-                    <CheckOutlined onClick={() => onselectHander(comment.BoardComment.id)} />
-                ) : (
-                    console.log()
-                )}{' '}
+                    <CheckOutlined onClick={() => onselectHander(comment.BoardComment?.id)} />
+                ) : null}{' '}
                 {UpdateNum !== comment.BoardComment.id &&
                 comment.BoardComment.user_id === user?.login?.user?.id ? (
-                    <EditOutlined onClick={() => onUpdateHander(comment.BoardComment.id)} />
-                ) : (
-                    console.log()
-                )}{' '}
-                {Article.user_id === user?.login?.user?.id ||
-                comment.BoardComment.user_id === user?.login?.user?.id ? (
-                    <CloseOutlined onClick={() => onDeleteHander(comment.BoardComment.id)} />
-                ) : (
-                    console.log()
-                )}
+                    <EditOutlined onClick={() => onUpdateHander(comment.BoardComment?.id)} />
+                ) : null}{' '}
+                {comment.BoardComment.user_id === user?.login?.user?.id ? (
+                    <CloseOutlined onClick={() => onDeleteHander(comment.BoardComment?.id)} />
+                ) : null}
                 <br />
                 <br />
-                {UpdateNum === comment.BoardComment.id ? (
+                {UpdateNum === comment.BoardComment?.id ? (
                     <Form.Group>
                         <Form.Control
                             size="md"
                             type="text"
                             onChange={onCommentChangehandler}
-                            defaultValue={comment.BoardComment.content}
+                            defaultValue={comment.BoardComment?.content}
                         />
                         <Button
                             variant="success"
-                            onClick={() => onUpdateCommentHander(comment.BoardComment.id)}
+                            onClick={() => onUpdateCommentHander(comment.BoardComment?.id)}
                         >
                             수정하기
                         </Button>
                     </Form.Group>
                 ) : (
-                    <p>{comment.BoardComment.content}</p>
+                    <p>{comment.BoardComment?.content}</p>
                 )}
             </ListGroup.Item>
         );

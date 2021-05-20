@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-
+// API
 import { fetchSearchedVideoList, fetchLoginedSearchedVideoList } from '_api/Video.js';
-
 import './NavBarSearch.css';
 import { Input } from 'antd';
 
@@ -17,23 +16,18 @@ function NavBarSearch(props) {
 
     const onChangeHandler = e => {
         setSearchTerm(e.currentTarget.value);
-        // props.refreshFunction(e.currentTarget.value);
     };
 
     const onSearchHandler = () => {
         if (user_id) {
-            console.log(1);
             fetchLoginedSearchedVideoList(user_id, SearchTerm, 1).then(res => {
-                console.log(res.data.data);
                 history.push({
                     pathname: '/class',
                     state: { playlist: res.data.data, search: SearchTerm },
                 });
             });
         } else {
-            console.log(2);
             fetchSearchedVideoList(SearchTerm, 1).then(res => {
-                console.log(res.data.data);
                 history.push({
                     pathname: '/class',
                     state: { playlist: res.data.data, cnt: res.data.page_cnt, search: SearchTerm },

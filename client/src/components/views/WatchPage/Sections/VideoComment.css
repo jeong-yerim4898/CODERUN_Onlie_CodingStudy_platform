@@ -9,9 +9,7 @@
 .comment-update-input:hover,.comment-input:hover{
   border-color: rgb(3, 165, 111);
 }
-/* .comment-update-input{
-  background-color: rgb(221, 238, 232);
-} */
+
 .comment-update-input:focus,.comment-input:focus{
   border-color: rgb(3, 165, 111);
   box-shadow: 0 0 0 2px rgb(3 165 111 / 20%);

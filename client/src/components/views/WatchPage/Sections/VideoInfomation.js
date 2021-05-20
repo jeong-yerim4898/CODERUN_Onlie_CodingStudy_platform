@@ -13,7 +13,6 @@ function VideoInfomation(props) {
     const [CommentContent, setCommentContent] = useState('');
 
     useEffect(() => {
-        console.log(props.VideoListId !== undefined, 11);
         setVideoComments(props.VideoComments);
     }, [props.VideoComments]);
 

@@ -7,9 +7,8 @@ import Footer from 'components/views/Footer/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as fasHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
-
 import { fetchCSTag, fetchAlgorithmTag, fetchLanguageTag } from '_api/Tag.js';
-
+// API
 import {
     fetchFilteredVideoList,
     fetchLoginedFilteredVideoList,
@@ -35,7 +34,6 @@ function ClassPage(props) {
     const [Algos, setAlgos] = useState([]);
     const [Css, setCss] = useState([]);
     const [languages, setlanguages] = useState([]);
-
     const [Algo, setAlgo] = useState(0);
     const [Cs, setCs] = useState(0);
     const [Language, setLanguage] = useState(0);
@@ -79,7 +77,6 @@ function ClassPage(props) {
         const count = 1;
         setPage(count);
         const algorithm_tag_id = num;
-        // const user_id = user?.login?.user?.id;
         if (user_id) {
             fetchLoginedAlgoFilteredVideoList(algorithm_tag_id, user_id, count).then(res => {
                 setCnts(res.data.page_cnt);
@@ -206,9 +203,7 @@ function ClassPage(props) {
         );
     });
     const onNextHandler = num => {
-        console.log(num);
         setPage(num);
-        // const user_id = user?.login?.user?.id;
         if (user_id) {
             if (Algo) {
                 if (Language) {
@@ -274,9 +269,7 @@ function ClassPage(props) {
     };
 
     const onPreviousHandler = num => {
-        console.log(num);
         setPage(num);
-        // const user_id = user?.login?.user?.id;
         if (user_id) {
             if (Algo) {
                 if (Language) {
@@ -284,7 +277,6 @@ function ClassPage(props) {
                         res => {
                             setCnts(res.data.page_cnt);
                             setClasses(res.data.data);
-                            console.log(Classes, 'asdasd');
                         },
                     );
                 } else {
@@ -310,7 +302,6 @@ function ClassPage(props) {
                     fetchAlgoLangFilteredVideoList(Algo, Language, num).then(res => {
                         setCnts(res.data.page_cnt);
                         setClasses(res.data.data);
-                        console.log(Classes, 'asdasd');
                     });
                 } else {
                     fetchAlgoFilteredVideoList(Algo, num).then(res => {
@@ -333,21 +324,17 @@ function ClassPage(props) {
         window.scrollTo(0, 0);
     };
     const onSearchHandler = event => {
-        // const user_id = user?.login?.user?.id;
-        console.log(event.currentTarget.value);
         setAlgo(0);
         setCs(0);
         setLanguage(0);
         setSearched(event.currentTarget.value);
         setPage(1);
         if (user_id) {
-            console.log(1);
             fetchLoginedSearchedVideoList(user_id, event.currentTarget.value, 1).then(res => {
                 setClasses(res.data.data);
                 setCnts(res.data.page_cnt);
             });
         } else {
-            console.log(2);
             fetchSearchedVideoList(event.currentTarget.value, 1).then(res => {
                 setClasses(res.data.data);
                 setCnts(res.data.page_cnt);

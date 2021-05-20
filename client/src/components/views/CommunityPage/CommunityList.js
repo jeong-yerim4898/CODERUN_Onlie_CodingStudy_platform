@@ -20,11 +20,9 @@ function CommunityList(props) {
     const [PageCount, setPageCount] = useState(1);
 
     useEffect(() => {
-        console.log(user);
         initialListArticle(PageCount)
             .then(res => {
                 setCnts(res.data.page_cnt);
-                console.log(res.data.page_cnt);
                 setListData(res.data.data);
             })
             .catch(err => {
@@ -42,14 +40,12 @@ function CommunityList(props) {
 
     const onNextHandler = num => {
         setPageCount(num);
-        console.log(num);
         if (SearchData) {
             listArticle(num, SearchData).then(res => {
                 setCnts(res.data.page_cnt);
                 setListData(res.data.data);
             });
         } else {
-            console.log(num);
             initialListArticle(num).then(res => {
                 setCnts(res.data.page_cnt);
                 setListData(res.data.data);
@@ -59,14 +55,13 @@ function CommunityList(props) {
     };
     const onPreviousHandler = num => {
         setPageCount(num);
-        console.log(num);
+
         if (SearchData) {
             listArticle(num, SearchData).then(res => {
                 setCnts(res.data.page_cnt);
                 setListData(res.data.data);
             });
         } else {
-            console.log(num);
             initialListArticle(num).then(res => {
                 setCnts(res.data.page_cnt);
                 setListData(res.data.data);
@@ -96,9 +91,7 @@ function CommunityList(props) {
                                 style={{ width: 30, height: 30 }}
                                 roundedCircle
                             ></Image>
-                        ) : (
-                            console.log()
-                        )}{' '}
+                        ) : null}{' '}
                         {data.Board.title}
                     </ListGroup.Item>
                 </ListGroup>
@@ -155,9 +148,7 @@ function CommunityList(props) {
                             <Link to="community/upload/">
                                 <Button variant="outline-success">글쓰기</Button>
                             </Link>
-                        ) : (
-                            console.log()
-                        )}
+                        ) : null}
                     </div>
                 </Col>
             </Row>

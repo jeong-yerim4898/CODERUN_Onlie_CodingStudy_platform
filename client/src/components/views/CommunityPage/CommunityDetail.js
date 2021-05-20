@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '_actions/user_actions';
 import { useSelector } from 'react-redux';
 import Footer from 'components/views/Footer/Footer';
 import { detailArticle, deleteArticle } from '_api/Board.js';
-import { Button, Col, Row, Image } from 'react-bootstrap';
+import { Col, Row, Image } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import CommentList from './CommentList';
@@ -10,18 +12,25 @@ import CommentList from './CommentList';
 import './CommunityDetail.css';
 
 function CommunityDetail(props) {
+    const dispatch = useDispatch();
     const date = new Date();
     const num = props.match.params.id;
     const [Article, setArticle] = useState({});
     const history = useHistory();
     let user = props.user;
-    // console.log(user.login.user);
-    console.log(Article.Board?.created_date);
-    console.log(Article.Board?.updated_date);
+
     useEffect(() => {
-        detailArticle(num).then(res => {
-            setArticle(res.data.data);
-        });
+        detailArticle(num)
+            .then(res => {
+                setArticle(res.data.data);
+            })
+            .catch(err => {
+                if (err.response.data.detail === 'Could not validate credentials') {
+                    window.localStorage.removeItem('token');
+                    dispatch(logoutUser());
+                    props.history.push('/account');
+                }
+            });
     }, []);
     const create_date = new Date(Article.Board?.created_date);
     const year = create_date.getFullYear();
@@ -58,9 +67,7 @@ function CommunityDetail(props) {
                                         >
                                             채택
                                         </span>
-                                    ) : (
-                                        console.log()
-                                    )}
+                                    ) : null}
                                 </h1>
                                 <Image
                                     src={Article.profile + '?' + date}
@@ -93,9 +100,7 @@ function CommunityDetail(props) {
                                                 onClick={deleteHandler}
                                             />
                                         </div>
-                                    ) : (
-                                        console.log()
-                                    )}
+                                    ) : null}
                                 </h2>
 
                                 <br></br>
@@ -112,6 +117,7 @@ function CommunityDetail(props) {
                     </Col>
                 </Row>
             </div>
+            <Footer></Footer>
         </div>
     );
 }

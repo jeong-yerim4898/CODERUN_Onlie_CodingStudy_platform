@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
 import { createPlaylist } from '_api/Playlist.js';
 
 function MyPlayListCreateForm(props) {
-    const history = useHistory();
     const [Title, setTitle] = useState('');
 
     const titleChangeHandler = e => {
@@ -13,7 +11,6 @@ function MyPlayListCreateForm(props) {
 
     const submitHandler = event => {
         event.preventDefault();
-        console.log(Title);
         if (!Title) {
             return alert('제목을 입력해 주셔야 합니다.');
         }
@@ -22,8 +19,6 @@ function MyPlayListCreateForm(props) {
         };
         createPlaylist(body)
             .then(res => {
-                console.log(res);
-                console.log('success');
                 props.history.push('/profile');
             })
             .catch(err => console.log(err));

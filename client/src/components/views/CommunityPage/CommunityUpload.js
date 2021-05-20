@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-import { detailArticle, createArticle } from '_api/Board.js';
+import { createArticle } from '_api/Board.js';
 import { useHistory } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import './CommunityUpload.css';

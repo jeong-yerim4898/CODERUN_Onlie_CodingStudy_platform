@@ -46,18 +46,11 @@ function VideoUpload(props) {
         return (
             <div>
                 <Col lg={4} md={8} xs={24} key={index}>
-                    <VideoTag
-                        tag={course}
-                        tag_id={index}
-                        handlerTag={tag => handlerCourseTag(tag)}
-                    />
+                    <VideoTag tag={course} tag_id={index} />
                 </Col>
             </div>
         );
     });
-    const handlerCourseTag = tag => {
-        console.log(tag);
-    };
 
     const clickCourse = event => {
         const lan = document.getElementsByClassName('lan-container');
@@ -169,7 +162,6 @@ function VideoUpload(props) {
     const postVideo = e => {
         const loaderContainer = document.getElementsByClassName('loader-container');
         loaderContainer[0].classList.remove('hidden');
-        console.log(loaderContainer);
         const body = {
             title: Title,
             content: Content,
@@ -187,12 +179,10 @@ function VideoUpload(props) {
                     .then(res => console.log(res))
                     .catch(err => console.log(err));
                 let formData2 = new FormData();
-                console.log(VideoArray);
                 formData2.append('file', VideoArray);
                 const file_extension = VideoArray.type.split('/')[1];
                 postVideoUpload(video_id, file_extension, formData2)
                     .then(res => {
-                        console.log(res.data.data);
                         if (res.data.data === 'success') {
                             props.history.push(`/profile/${props.user.login.user.id}`);
                         } else {
@@ -205,7 +195,6 @@ function VideoUpload(props) {
     };
 
     const dropHandler = file => {
-        console.log(file);
         setFileArray(file[0]);
         const reader = new FileReader();
         reader.onloadend = () => {
