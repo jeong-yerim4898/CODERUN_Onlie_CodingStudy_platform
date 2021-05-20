@@ -248,7 +248,7 @@ function LoginPage(props) {
                             <button onClick={postSignup}>Sign Up</button>
                         </form>
                     </div>
-                    <div class="form-container sign-in-container">
+                    <div className="form-container sign-in-container">
                         <form action="#">
                             <h1>Sign in</h1>
 
@@ -259,15 +259,15 @@ function LoginPage(props) {
                                 placeholder="Password"
                                 onChange={loginPassword}
                             />
-                            <p class="findPW-text" onClick={openPasswordModal}>
+                            <p className="findPW-text" onClick={openPasswordModal}>
                                 비밀번호 찾고 싶어?
                             </p>
                             <button onClick={postLogin}>Sign In</button>
                         </form>
                     </div>
-                    <div class="overlay-container">
-                        <div class="overlay">
-                            <div class="overlay-panel overlay-left">
+                    <div className="overlay-container">
+                        <div className="overlay">
+                            <div className="overlay-panel overlay-left">
                                 <h1>코드:RUN 입장</h1>
                                 <p>어서 로그인 해줭!</p>
                                 <button className="ghost" id="signIn" onClick={accountclick}>
@@ -275,7 +275,7 @@ function LoginPage(props) {
                                 </button>
                             </div>
 
-                            <div class="overlay-panel overlay-right">
+                            <div className="overlay-panel overlay-right">
                                 <h1>
                                     코드:RUN은<br></br>
                                     처음이지?

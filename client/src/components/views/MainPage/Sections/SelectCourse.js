@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import AlgoImage from './images/ALGO.png';
-import CSImage from './images/CS.png';
+import AlgoImage from '../images/ALGO.png';
+import CSImage from '../images/CS.png';
 import './SelectCourse.css';
 
 function SelectCourse(props) {

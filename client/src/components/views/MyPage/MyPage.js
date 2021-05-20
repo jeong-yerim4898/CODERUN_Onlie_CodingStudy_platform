@@ -5,8 +5,8 @@ import { logoutUser } from '_actions/user_actions';
 import Footer from 'components/views/Footer/Footer';
 import { Row, Col } from 'react-bootstrap';
 
-import UploadedVideos from './UploadedVideos.js';
-import MyPlayList from './MyPlayList.js';
+import UploadedVideos from './Sections/UploadedVideos.js';
+import MyPlayList from './Sections/MyPlayList.js';
 import Dropzone from 'react-dropzone';
 
 import {

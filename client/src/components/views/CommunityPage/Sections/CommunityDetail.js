@@ -63,7 +63,7 @@ function CommunityDetail(props) {
                                                 color: '#fc8a15',
                                                 float: 'right',
                                             }}
-                                            class="badge"
+                                            className="badge"
                                         >
                                             채택
                                         </span>
@@ -75,14 +75,14 @@ function CommunityDetail(props) {
                                     roundedCircle
                                 ></Image>
                                 {Article.name}
-                                <p style={{ color: 'grey' }}>
+                                <div style={{ color: 'grey' }}>
                                     {created_date}
                                     {Article.Board?.created_date === Article.Board?.updated_date ? (
                                         <div></div>
                                     ) : (
-                                        <p style={{ color: 'black', float: 'right' }}>수정됨</p>
+                                        <div style={{ color: 'black', float: 'right' }}>수정됨</div>
                                     )}
-                                </p>
+                                </div>
 
                                 <hr></hr>
                                 <h2>
