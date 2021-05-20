@@ -24,11 +24,14 @@ function VideoInfo(props) {
     const [ClassList, setClassList] = useState([]);
     const [Visible, setVisible] = useState(false);
     const [UpdateVisible, setUpdateVisible] = useState(false);
+    const [VideoId, setVideoId] = useState(props.video.id);
     const [VideoTitleUpdate, setVideoTitleUpdate] = useState('');
     const [VideoContentUpdate, setVideoContentUpdate] = useState('');
 
     useEffect(() => {
-        console.log(props);
+        console.log(props, 1);
+        console.log(props.video.id, 2);
+
         fetchPlaylist(props.VideoListId).then(res => {
             console.log(res.data.data);
             setClassList(res.data.data);
@@ -56,6 +59,7 @@ function VideoInfo(props) {
     const onPlayListHander = video => {
         setVideoTitle(video.title);
         setVideoContent(video.content);
+        setVideoId(video.id);
         history.push({
             pathname: '/watch/' + video.id,
             state: { playlistId: props.VideoListId },
@@ -65,63 +69,65 @@ function VideoInfo(props) {
     const renderList = () => {
         if (ClassList.length !== 0) {
             return (
-                <div
-                    style={{
-                        height: '200px',
-                        overflow: 'auto',
-                        display: 'flex',
-                        flexDirection: 'column',
-                    }}
-                >
+                <div>
                     <hr></hr>
                     <p>재생목록</p>
-                    <InfiniteScroll dataLength={ClassList.length}>
-                        {ClassList.map((data, idx) => (
-                            <div>
-                                {data.video_id === props.video.id ? (
-                                    <ListGroup
-                                        onClick={() => onPlayListHander(data.Video)}
-                                        className="classListItem"
-                                        horizontal={true}
-                                        key={idx}
-                                    >
-                                        <ListGroup.Item className="classListItem">
-                                            <Image
-                                                src={data.Video.thumbnail}
-                                                style={{ width: 60, height: 45 }}
-                                            ></Image>
-                                        </ListGroup.Item>
-
-                                        <ListGroup.Item className="classListItem">
-                                            {data.Video.title}
-                                        </ListGroup.Item>
-                                    </ListGroup>
-                                ) : (
-                                    <ListGroup
-                                        onClick={() => onPlayListHander(data.Video)}
-                                        style={{ cursor: 'pointer' }}
-                                        horizontal={true}
-                                        key={idx}
-                                    >
-                                        <ListGroup.Item className="articleItem">
-                                            <Image
-                                                src={data.Video.thumbnail}
-                                                style={{ width: 60, height: 45 }}
-                                            ></Image>
-                                        </ListGroup.Item>
-
-                                        <ListGroup.Item
-                                            style={{ textAlign: 'center' }}
-                                            className="articleItem"
+                    <div
+                        style={{
+                            height: '200px',
+                            overflow: 'auto',
+                            display: 'flex',
+                            flexDirection: 'column',
+                        }}
+                    >
+                        <InfiniteScroll dataLength={ClassList.length}>
+                            {ClassList.map((data, idx) => (
+                                <div>
+                                    {data.video_id === VideoId ? (
+                                        <ListGroup
+                                            onClick={() => onPlayListHander(data.Video)}
+                                            className="classListItem"
+                                            horizontal={true}
+                                            key={idx}
                                         >
-                                            {data.Video.title}
-                                        </ListGroup.Item>
-                                    </ListGroup>
-                                )}
-                            </div>
-                        ))}
-                    </InfiniteScroll>
-                    <hr></hr>
+                                            <ListGroup.Item className="classListItem">
+                                                <Image
+                                                    src={data.Video.thumbnail}
+                                                    style={{ width: 60, height: 45 }}
+                                                ></Image>
+                                            </ListGroup.Item>
+
+                                            <ListGroup.Item className="classListItem">
+                                                {data.Video.title}
+                                            </ListGroup.Item>
+                                        </ListGroup>
+                                    ) : (
+                                        <ListGroup
+                                            onClick={() => onPlayListHander(data.Video)}
+                                            style={{ cursor: 'pointer' }}
+                                            horizontal={true}
+                                            key={idx}
+                                        >
+                                            <ListGroup.Item className="classListNormalItem">
+                                                <Image
+                                                    src={data.Video.thumbnail}
+                                                    style={{ width: 60, height: 45 }}
+                                                ></Image>
+                                            </ListGroup.Item>
+
+                                            <ListGroup.Item
+                                                style={{ textAlign: 'center' }}
+                                                className="classListNormalItem"
+                                            >
+                                                {data.Video.title}
+                                            </ListGroup.Item>
+                                        </ListGroup>
+                                    )}
+                                </div>
+                            ))}
+                        </InfiniteScroll>
+                        <hr></hr>
+                    </div>
                 </div>
             );
         } else {

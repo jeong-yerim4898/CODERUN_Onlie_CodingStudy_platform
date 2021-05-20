@@ -52,6 +52,7 @@ function CommunityUpdate(props) {
                         <Form.Group controlId="exampleForm.ControlInput1">
                             <Form.Label>제목</Form.Label>
                             <Form.Control
+                                className="titleUpdateInput"
                                 as="textarea"
                                 defaultValue={Title}
                                 rows={1}
@@ -62,6 +63,7 @@ function CommunityUpdate(props) {
                         <Form.Group controlId="exampleForm.ControlTextarea1">
                             <Form.Label>내용</Form.Label>
                             <Form.Control
+                                className="contentUpdateInput"
                                 as="textarea"
                                 defaultValue={Content}
                                 rows={8}
@@ -70,7 +72,7 @@ function CommunityUpdate(props) {
                         </Form.Group>
                         <Button
                             className="uploadbutton"
-                            variant="primary"
+                            style={{ backgroundColor: '#009378', border: 'none' }}
                             type="submit"
                             onClick={submitHandler}
                         >

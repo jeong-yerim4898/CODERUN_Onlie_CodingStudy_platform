@@ -72,7 +72,7 @@ function CommentList(props) {
     const onUpdateHander = idx => {
         setUpdateNum(idx);
     };
-    const onUpdateCommentHander = event => {
+    const onUpdateCommentHander = num => {
         const board_comment_id = UpdateNum;
 
         const body = {
@@ -91,6 +91,7 @@ function CommentList(props) {
         setupdateComment(event.currentTarget.value);
     };
     const renderComments = Comments.map((comment, index) => {
+        console.log(comment);
         return (
             <ListGroup.Item className="CommentBackground" key={index}>
                 {comment.BoardComment.select ? (
@@ -115,7 +116,7 @@ function CommentList(props) {
                 )}{' '}
                 {UpdateNum !== comment.BoardComment.id &&
                 comment.BoardComment.user_id === user?.login?.user?.id ? (
-                    <EditOutlined onClick={() => onUpdateCommentHander(comment.BoardComment.id)} />
+                    <EditOutlined onClick={() => onUpdateHander(comment.BoardComment.id)} />
                 ) : (
                     console.log()
                 )}{' '}
