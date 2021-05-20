@@ -11,8 +11,8 @@ function CommunityUpdate(props) {
     const [Content, setContent] = useState('');
     useEffect(() => {
         detailArticle(props.match.params.id).then(res => {
-            setTitle(res.data.data.title);
-            setContent(res.data.data.content);
+            setTitle(res.data.data.Board.title);
+            setContent(res.data.data.Board.content);
         });
     }, []);
 

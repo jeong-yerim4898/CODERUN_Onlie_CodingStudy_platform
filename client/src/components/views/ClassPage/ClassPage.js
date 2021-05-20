@@ -140,7 +140,7 @@ function ClassPage(props) {
             <Menu.Item
                 className="classmenu"
                 onClick={() => onCsHandler(cs.id)}
-                key={index + Algos.length}
+                key={index + Algos?.length}
             >
                 {cs.subject_name}
             </Menu.Item>

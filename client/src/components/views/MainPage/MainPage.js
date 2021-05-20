@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './MainPage.css';
-import BestClasses from './BestClasses.js';
-import SelectCourse from './SelectCourse.js';
+import BestClasses from './Sections/BestClasses.js';
+import SelectCourse from './Sections/SelectCourse.js';
 import { UpCircleOutlined, DownCircleOutlined } from '@ant-design/icons';
 import BackImage from './images/back.png';
 // api
@@ -14,7 +14,7 @@ function MainPage(props) {
     const messages = [
         '인생은 "한강 뷰"아니면 "한강 물"이다.',
         '빨리 공부하러 안 가고 뭐하냐?',
-        '싸탈은 지능순',
+        '',
         '풀기 전에 생각했나요?',
     ];
 
