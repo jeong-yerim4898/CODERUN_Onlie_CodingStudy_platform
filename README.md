@@ -279,13 +279,37 @@
 
   * 두 번째
 
-    ![profile_second](README.assets/profile_second.png)
+    <img src="./docs/image/profile_second.png" width="500px" />
+  
+  * 세 번쨰 (**최종 선정된 프로필 기본이미지**)
+  
+    <img src="./docs/image/profile.png" width="500px" />
+  
+- 비디오 업로드 완료 이미지
 
+  - <img src="./docs/image/okay.png" width="500px" />
 
+- 마이 플레이리스트 카드 배경이미지
+
+  <img src="./docs/image/cardbackground.png" width="500px" />
+
+- 메인페이지 배경이미지
+
+  <img src="./docs/image/back.png" width="500px" />
+
+- 커뮤니티
+
+  - 채택된 댓글에 표시되는 아이콘
+
+    <img src="./docs/image/winner.png" width="500px" />
+
+- 클래스 썸네일 이미지
+
+  <img src="./docs/image/thumbnail.png" width="500px" />
 
 ### 동영상
 
-* <a href="#">동영상 링크</a>
+* <a href="https://youtu.be/L3Ybs6dHkFg">동영상 링크</a>
 
 ### 발표자료
 
