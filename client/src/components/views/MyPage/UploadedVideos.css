@@ -1,3 +1,11 @@
+
+@font-face {
+  font-family: 'Cafe24Danjunghae';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Danjunghae.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .uploadedvideo {
   text-align: center;
   justify-content: center;
@@ -23,6 +31,9 @@
 
 .mypage-card-title {
   display: inline-block;
+}
+.mypage-card-title h1{
+  font-family: 'Cafe24Danjunghae';
 }
 .mypage-card-title h1 {
   display: block;

@@ -98,7 +98,7 @@ function MyPage(props) {
                     <Col lg={6}>
                         <div
                             className="mypage-logo-container"
-                            style={{ display: 'flex', marginTop: '10%', marginLeft: '20%' }}
+                            style={{ display: 'flex', marginTop: '15%', marginLeft: '25%' }}
                         >
                             <h1 class="reveal-text">코드:런</h1>
                         </div>
