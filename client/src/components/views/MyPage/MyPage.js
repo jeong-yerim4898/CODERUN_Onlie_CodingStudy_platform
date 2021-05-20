@@ -29,15 +29,23 @@ function MyPage(props) {
     const [Playlists, setPlaylists] = useState([]);
 
     useEffect(() => {
-        const ProfileData = async () => {
-            const res1 = await profileStatistics(props.user.login.user.id);
-            setStatisticses(res1.data);
-            const res2 = await profileMyVideos(props.user.login.user.id);
-            setVideoArray(res2.data.data.video);
-            const res3 = await readPlaylist();
-            setPlaylists(res3.data.data);
-        };
-        ProfileData();
+        profileMyVideos(props.user.login.user.id)
+            .then(res2 => {
+                setVideoArray(res2.data.data.video);
+                profileStatistics(props.user.login.user.id)
+                    .then(res1 => setStatisticses(res1.data))
+                    .catch(err => console.log(err));
+                readPlaylist()
+                    .then(res3 => setPlaylists(res3.data.data))
+                    .catch(err => console.log(err));
+            })
+            .catch(err => {
+                if (err.response.data.detail === 'Could not validate credentials') {
+                    window.localStorage.removeItem('token');
+                    dispatch(logoutUser());
+                    props.history.push('/account');
+                }
+            });
     }, []);
 
     const renderImageUrl = () => {
@@ -118,7 +126,7 @@ function MyPage(props) {
                                         )}
                                     </Dropzone>
 
-                                    <a href={'/update/user/' + props.user.login.user.id}>
+                                    <a href={'/update/user/' + props?.user?.login?.user?.id}>
                                         <FontAwesomeIcon
                                             icon={faUserEdit}
                                             className="camera"
@@ -139,8 +147,8 @@ function MyPage(props) {
                                     />
                                 </div>
                                 <div class="profile-info">
-                                    <h1 class="second-name">{props.user.login.user.name}</h1>
-                                    <p>{props.user.login.user.email}</p>
+                                    <h1 class="second-name">{props?.user?.login?.user?.name}</h1>
+                                    <p>{props?.user?.login?.user?.email}</p>
                                     {/* 로그아웃 */}
                                     <a onClick={deleteToken}>
                                         <h2>LOG OUT</h2>
