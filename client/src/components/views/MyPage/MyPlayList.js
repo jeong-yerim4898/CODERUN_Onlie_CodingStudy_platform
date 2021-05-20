@@ -19,7 +19,7 @@ function MyPlayList(props) {
     const [PlaylistArray, setPlaylistArray] = useState(props.Playlists);
     const [PlaylistVideo, setPlaylistVideo] = useState([]);
     const [Playlist, setPlaylist] = useState('');
-    const [PlaylistNum, setPlaylistNum] = useState([]);
+    const [PlaylistNum, setPlaylistNum] = useState('');
     const [updatePlaylist, setupdatePlaylist] = useState('');
     const [UpdateNum, setUpdateNum] = useState(null);
     const video_list_id = UpdateNum;
@@ -27,8 +27,8 @@ function MyPlayList(props) {
     const date = new Date();
 
     useEffect(() => {
-        setPlaylistArray(props.playlists);
-    }, [PlaylistArray]);
+        setPlaylistArray(props.Playlists);
+    }, [props.Playlists]);
     const playlistHandler = e => {
         setPlaylist(e.currentTarget.value);
     };
@@ -96,7 +96,6 @@ function MyPlayList(props) {
 
         watchPlaylist(video_list_id)
             .then(res => {
-                // console.log(res.data.data[0].video_id);
                 history.push({
                     pathname: '/watch/' + res.data.data[0].video_id,
                     state: { playlistId: video_list_id },
@@ -108,95 +107,109 @@ function MyPlayList(props) {
             });
     };
 
-    // const renderPlaylists = PlaylistArray.map((playlist, idx) => {
-    //     console.log(playlist);
-    //     fetchPlaylist(playlist.id)
-    //         .then(res => {
-    //             console.log(res.data, 1);
-    //         })
-    //         .catch(err => {
-    //             console.err(err);
-    //         });
+    const renderPlaylists = PlaylistArray.map((playlist, idx) => {
+        return (
+            <div>
+                <Col span={5}>
+                    <Card
+                        className="shadow  classCard playlist-card"
+                        style={{
+                            width: '18rem',
+                        }}
+                        key={idx}
+                    >
+                        {' '}
+                        <Card.Img
+                            src={`${process.env.PUBLIC_URL}/img/cardbackground.png`}
+                            alt="Card image"
+                            style={{ opacity: '0.5', height: '200px' }}
+                        />
+                        <Card.ImgOverlay>
+                            <Card.Body
+                                style={{
+                                    paddingBottom: '0',
+                                }}
+                            >
+                                <Card.Title
+                                    className="playlist-title"
+                                    style={{ fontSize: '30px', textAlign: 'center' }}
+                                >
+                                    {playlist.title}
+                                </Card.Title>
+                                <Card.Text>
+                                    <Button
+                                        style={{
+                                            backgroundColor: '#009378',
+                                            borderColor: '#009378',
+                                        }}
+                                        onClick={() => gotoWatchpage(playlist.id)}
+                                    >
+                                        Go to Watch
+                                    </Button>
+                                </Card.Text>
+                            </Card.Body>
+                            <Card.Body>
+                                <div style={{ display: 'flex' }}>
+                                    {UpdateNum === playlist.id ? (
+                                        console.log('수정')
+                                    ) : (
+                                        <Button
+                                            variant="outline-dark"
+                                            onClick={() => onUpdateHander(playlist.id)}
+                                            style={{ fontWeight: 'bold' }}
+                                        >
+                                            수정
+                                        </Button>
+                                    )}
+                                    <div className={playlist.id + 'mypage-playlist-delete'}>
+                                        <Button
+                                            variant="outline-dark"
+                                            onClick={() => onDeleteHander(playlist.id)}
+                                            style={{ fontWeight: 'bold' }}
+                                        >
+                                            삭제
+                                        </Button>
+                                    </div>
+                                </div>
 
-    //     return (
-    //         <div>
-    //             <Col span={5}>
-    //                 <Card className="shadow classCard" style={{ width: '18rem' }} key={idx}>
-    //                     {/* <Card.Img
-    //                         variant="top"
-    //                         style={{ height: 200 }}
-    //                         src={`${SERVER}/image/thumbnail/${PlaylistNum[idx]}` + '?' + date}
-    //                     /> */}
-    //                     <Card.Body>
-    //                         <Card.Title>{playlist.title}</Card.Title>
-    //                         <Card.Text>
-    //                             <Button
-    //                                 style={{ backgroundColor: '#009378', borderColor: '#009378' }}
-    //                                 onClick={() => gotoWatchpage(playlist.id)}
-    //                             >
-    //                                 Go to Watch
-    //                             </Button>
-    //                         </Card.Text>
-    //                     </Card.Body>
-    //                     <Card.Body>
-    //                         <div style={{ display: 'flex' }}>
-    //                             {UpdateNum === playlist.id ? (
-    //                                 console.log('수정')
-    //                             ) : (
-    //                                 <Button
-    //                                     variant="outline-dark"
-    //                                     onClick={() => onUpdateHander(playlist.id)}
-    //                                 >
-    //                                     수정
-    //                                 </Button>
-    //                             )}
-    //                             <div className={playlist.id + 'mypage-playlist-delete'}>
-    //                                 <Button
-    //                                     variant="outline-dark"
-    //                                     onClick={() => onDeleteHander(playlist.id)}
-    //                                 >
-    //                                     삭제
-    //                                 </Button>
-    //                             </div>
-    //                         </div>
+                                {UpdateNum === playlist.id ? (
+                                    <Form.Group style={{ display: 'flex' }}>
+                                        <Form.Control
+                                            size="md"
+                                            type="text"
+                                            onChange={onPlaylistChangehandler}
+                                            defaultValue={playlist.title}
+                                        />
+                                        <div>
+                                            <Button
+                                                style={{ padding: '4px' }}
+                                                variant="outline-success"
+                                                onClick={() => onUpdatePlaylistHander(playlist.id)}
+                                            >
+                                                수정하기
+                                            </Button>
+                                        </div>
 
-    //                         {UpdateNum === playlist.id ? (
-    //                             <Form.Group style={{ display: 'flex' }}>
-    //                                 <Form.Control
-    //                                     size="md"
-    //                                     type="text"
-    //                                     onChange={onPlaylistChangehandler}
-    //                                     defaultValue={playlist.title}
-    //                                 />
-    //                                 <div>
-    //                                     <Button
-    //                                         style={{ padding: '4px' }}
-    //                                         variant="outline-success"
-    //                                         onClick={() => onUpdatePlaylistHander(playlist.id)}
-    //                                     >
-    //                                         수정하기
-    //                                     </Button>
-    //                                 </div>
-
-    //                                 <div className={playlist.id + 'mypage-playlist-delete'}>
-    //                                     <Button
-    //                                         style={{ padding: '4px' }}
-    //                                         variant="outline-success"
-    //                                         onClick={() => onCanclePlaylistHander(playlist.id)}
-    //                                     >
-    //                                         취소하기
-    //                                     </Button>
-    //                                 </div>
-    //                             </Form.Group>
-    //                         ) : (
-    //                             <p>{playlist.content}</p>
-    //                         )}
-    //                     </Card.Body>
-    //                 </Card>
-    //             </Col>
-    //         </div>
-    //     );
-    // });
+                                        <div className={playlist.id + 'mypage-playlist-delete'}>
+                                            <Button
+                                                style={{ padding: '4px' }}
+                                                variant="outline-success"
+                                                onClick={() => onCanclePlaylistHander(playlist.id)}
+                                            >
+                                                취소하기
+                                            </Button>
+                                        </div>
+                                    </Form.Group>
+                                ) : (
+                                    <p>{playlist.content}</p>
+                                )}
+                            </Card.Body>
+                        </Card.ImgOverlay>
+                    </Card>
+                </Col>
+            </div>
+        );
+    });
 
     return (
         <div style={{ width: '90%', margin: 'auto', marginTop: '2rem' }}>
@@ -223,9 +236,7 @@ function MyPlayList(props) {
                 </Form.Group>
             </Form>
             <Row>
-                <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                    {/* {PlaylistArray.length === 0 ? null : renderPlaylists} */}
-                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap' }}>{renderPlaylists}</div>
             </Row>
         </div>
     );
