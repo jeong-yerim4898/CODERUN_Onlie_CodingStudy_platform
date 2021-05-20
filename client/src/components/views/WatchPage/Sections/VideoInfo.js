@@ -25,21 +25,14 @@ function VideoInfo(props) {
     const [Visible, setVisible] = useState(false);
     const [UpdateVisible, setUpdateVisible] = useState(false);
     const [VideoId, setVideoId] = useState(props.video.id);
-    const [VideoTitleUpdate, setVideoTitleUpdate] = useState('');
-    const [VideoContentUpdate, setVideoContentUpdate] = useState('');
 
     useEffect(() => {
-        console.log(props, 1);
-        console.log(props.video.id, 2);
-
         fetchPlaylist(props.VideoListId).then(res => {
-            console.log(res.data.data);
             setClassList(res.data.data);
         });
     }, []);
 
     const clickHeart = e => {
-        console.log(Like);
         if (Like === false) {
             setLike(true);
             postVideoLike(props.video.id)
@@ -181,12 +174,10 @@ function VideoInfo(props) {
     const clickTextMore = () => {
         const contentbefore = document.getElementsByClassName('content-simple');
         const contentafter = document.getElementsByClassName('content-detail');
-        console.log((contentafter[0].style.display = 'flex'));
         const morebtn = document.getElementsByClassName('more-btn');
         contentbefore[0].classList.add('hidden');
         contentafter[0].style.display = 'flex';
         morebtn[0].classList.add('hidden');
-        console.log('더보기');
     };
 
     return (

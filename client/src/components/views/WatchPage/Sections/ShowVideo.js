@@ -3,7 +3,6 @@ import ReactHLS from 'react-hls';
 import './ShowVideo.css';
 import { VIDEO_SERVER } from 'Config.js';
 function ShowVideo(props) {
-    //props.match.params.id
     const classId = props.classId;
     console.log(props);
     return (

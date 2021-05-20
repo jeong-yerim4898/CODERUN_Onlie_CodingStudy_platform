@@ -1,30 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { SERVER } from 'Config.js';
 import { useHistory } from 'react-router-dom';
+// API
 import {
     createPlaylist,
     readPlaylist,
     editPlaylist,
     deletePlaylist,
     watchPlaylist,
-    fetchPlaylist,
 } from '_api/Playlist.js';
 import './MyPlayList.css';
-import { ListGroup, Button, Form, Card, Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Button, Form, Card, Col, Row } from 'react-bootstrap';
 
 function MyPlayList(props) {
-    console.log(props.Playlists, '플레이리스트 확인');
     const history = useHistory();
     const [PlaylistArray, setPlaylistArray] = useState(props.Playlists);
-    const [PlaylistVideo, setPlaylistVideo] = useState([]);
     const [Playlist, setPlaylist] = useState('');
-    const [PlaylistNum, setPlaylistNum] = useState('');
     const [updatePlaylist, setupdatePlaylist] = useState('');
     const [UpdateNum, setUpdateNum] = useState(null);
     const video_list_id = UpdateNum;
-
-    const date = new Date();
 
     useEffect(() => {
         setPlaylistArray(props.Playlists);
@@ -35,14 +28,12 @@ function MyPlayList(props) {
 
     const createPlaylistHandler = e => {
         e.preventDefault();
-        console.log(Playlist);
         if (!Playlist) {
             return alert('제목을 입력해 주셔야 합니다.');
         }
         const body = {
             title: Playlist,
         };
-        console.log(body);
         createPlaylist(body).then(res => {
             readPlaylist().then(res => {
                 setPlaylistArray(res.data.data);
@@ -72,7 +63,6 @@ function MyPlayList(props) {
             video_list_id: video_list_id,
             title: updatePlaylist,
         };
-        console.log(body);
         editPlaylist(body).then(res => {
             readPlaylist().then(res => {
                 setPlaylistArray(res.data.data);
@@ -102,7 +92,6 @@ function MyPlayList(props) {
                 });
             })
             .catch(err => {
-                console.log(err);
                 alert('재생목록에 동영상을 담아주세요');
             });
     };
@@ -150,9 +139,7 @@ function MyPlayList(props) {
                             </Card.Body>
                             <Card.Body>
                                 <div style={{ display: 'flex' }}>
-                                    {UpdateNum === playlist.id ? (
-                                        console.log('수정')
-                                    ) : (
+                                    {UpdateNum === playlist.id ? null : (
                                         <Button
                                             variant="outline-dark"
                                             onClick={() => onUpdateHander(playlist.id)}
@@ -219,12 +206,7 @@ function MyPlayList(props) {
             </div>
             <Form>
                 <Form.Group controlId="formBasicEmail" style={{ display: 'flex' }}>
-                    <Form.Control
-                        type="textarea"
-                        // placeholder="리스트 제목을 입력하세요."
-                        value={Playlist}
-                        onChange={playlistHandler}
-                    />
+                    <Form.Control type="textarea" value={Playlist} onChange={playlistHandler} />
                     <Button
                         variant="outline-success"
                         type="submit"

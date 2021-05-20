@@ -9,7 +9,7 @@ function AccountSuccess() {
                     position: 'relative',
                     top: '200px',
                     left: '25%',
-                    // transform: 'translate(-50%, -25%)',
+
                     zIndex: '100',
                 }}
             >

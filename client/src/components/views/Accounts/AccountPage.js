@@ -44,7 +44,6 @@ function LoginPage(props) {
     const OverlapEmail = event => {
         event.preventDefault();
         let regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-        console.log(Email, regExp.test(Email) === true);
         if (regExp.test(Email) === true) {
             checkEmail(Email)
                 .then(res => alert('사용가능한 Email 입니다.'))
@@ -94,7 +93,6 @@ function LoginPage(props) {
                     setModalText('이메일 인증이 안된거 같아요 ㅠㅠ');
                     setVisible(true);
                 } else {
-                    console.log(res.data);
                     window.localStorage.setItem('token', res.payload.token);
                     window.location.replace('/');
                 }
@@ -105,7 +103,6 @@ function LoginPage(props) {
     const ValidEmail = event => {
         const email = document.getElementById('email');
         let asValue = event.currentTarget.value;
-        console.log(asValue);
         let regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         if (regExp.test(asValue) === true) {
             email.style.backgroundColor = '#eee';
@@ -138,7 +135,6 @@ function LoginPage(props) {
     const handelFindEmail = () => {
         setVisible(false);
         const body = { email: FindEmail };
-        console.log(body);
         postTemporaryPassword(body)
             .then(res => console.log(res))
             .catch(err => console.log(err));
@@ -151,7 +147,6 @@ function LoginPage(props) {
     };
 
     const sendEmail = event => {
-        console.log(Email === '');
         if (Email === '') {
             redirectEmail(LoginEmail)
                 .then(res => console.log(res))

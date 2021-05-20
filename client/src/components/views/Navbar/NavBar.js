@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import { Avatar } from 'antd';
-
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -10,7 +8,6 @@ import './NavBar.css';
 import NavBarSearch from './NavBarSearch.js';
 
 //api
-
 import { SERVER } from 'Config.js';
 
 function NavBar(props) {

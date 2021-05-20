@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { PlusSquareOutlined } from '@ant-design/icons';
 import { Modal, Button } from 'react-bootstrap';
-import { readPlaylist, createPlaylistdata, deletePlaylistdata } from '_api/Playlist.js';
+// API
+import { readPlaylist, createPlaylistdata } from '_api/Playlist.js';
 import { Radio } from 'antd';
 
 function AddtoPlaylist(props) {
@@ -9,7 +10,7 @@ function AddtoPlaylist(props) {
     const [SelectPlaylist, setSelectPlaylist] = useState('');
     const [addtoPlaylist, setaddtoPlaylist] = useState('');
     const [UpdateNum, setUpdateNum] = useState(null);
-    // const video_list_id = UpdateNum;
+
     const video_id = props.videoId;
 
     const [show, setShow] = useState(false);
@@ -17,10 +18,7 @@ function AddtoPlaylist(props) {
     const handleShow = () => setShow(true);
 
     useEffect(() => {
-        console.log(video_id);
         readPlaylist().then(res => {
-            console.log(res.data.data);
-            console.log('play list!!');
             setPlaylists(res.data.data);
         });
     }, []);
