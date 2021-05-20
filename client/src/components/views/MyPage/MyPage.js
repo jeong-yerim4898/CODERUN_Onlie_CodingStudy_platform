@@ -18,6 +18,7 @@ import {
     profileStatistics,
     profileMyVideos,
 } from '_api/Profile.js';
+import { readPlaylist } from '_api/Playlist.js';
 // import MyPlayListCreateForm from './MyPlayListCreateForm.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserEdit } from '@fortawesome/free-solid-svg-icons';
@@ -32,6 +33,7 @@ function MyPage(props) {
     const [ImageUrl, setImageUrl] = useState('');
     const [Statisticses, setStatisticses] = useState({});
     const [VideoArray, setVideoArray] = useState([]);
+    const [Playlists, setPlaylists] = useState([]);
 
     useEffect(() => {
         const ProfileData = async () => {
@@ -39,6 +41,8 @@ function MyPage(props) {
             setStatisticses(res1.data);
             const res2 = await profileMyVideos(props.user.login.user.id);
             setVideoArray(res2.data.data.video);
+            const res3 = await readPlaylist();
+            setPlaylists(res3.data.data);
         };
         ProfileData();
     }, []);
@@ -58,7 +62,8 @@ function MyPage(props) {
         deleteProfileImage(id).then(res => {
             console.log(res.data);
             console.log('good');
-            setPreviewUrl(`${SERVER}/image/profile/${props.user.login.user.id}`);
+            // setPreviewUrl(`${SERVER}/image/profile/${props.user.login.user.id}`);
+            window.location.reload();
         });
     };
 
@@ -181,7 +186,7 @@ function MyPage(props) {
                     </Col>
                 </Row>
 
-                <MyPlayList />
+                <MyPlayList Playlists={Playlists} />
 
                 {/* 내가 올린 동영상들 */}
                 <UploadedVideos VideoArray={VideoArray} />

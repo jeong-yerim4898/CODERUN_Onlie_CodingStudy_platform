@@ -8,6 +8,13 @@
   border: none !important;
 }
 
+.classListNormalItem {
+  cursor: 'pointer';
+  background-color: white !important;
+  border: none !important;
+  float: left;
+}
+
 
 .card-content {
   width: 100%;
@@ -53,4 +60,6 @@
 
 .hidden {
   display: none;
+
 }
+

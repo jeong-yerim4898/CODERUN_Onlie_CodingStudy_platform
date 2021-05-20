@@ -40,16 +40,26 @@ function CommunityUpload(props) {
                     <Form className="uploadform">
                         <Form.Group controlId="exampleForm.ControlInput1">
                             <Form.Label>제목</Form.Label>
-                            <Form.Control as="textarea" rows={1} onChange={titleHandler} />
+                            <Form.Control
+                                className="titleInput"
+                                as="textarea"
+                                rows={1}
+                                onChange={titleHandler}
+                            />
                         </Form.Group>
 
                         <Form.Group controlId="exampleForm.ControlTextarea1">
                             <Form.Label>내용</Form.Label>
-                            <Form.Control as="textarea" rows={8} onChange={contentHandler} />
+                            <Form.Control
+                                className="contentInput"
+                                as="textarea"
+                                rows={8}
+                                onChange={contentHandler}
+                            />
                         </Form.Group>
                         <Button
                             className="uploadbutton"
-                            variant="primary"
+                            style={{ backgroundColor: '#009378', border: 'none' }}
                             type="submit"
                             onClick={submitHandler}
                         >
