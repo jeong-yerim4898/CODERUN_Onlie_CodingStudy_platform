@@ -1,15 +1,14 @@
 ![image-20210520215951684](README.assets/image-20210520215951684.png)
 
-<div>
+<div style="text-align: center;">
     <h3 style="text-align: center;">
         코딩 스터디 동영상 공유 플랫폼
     </h3>
-    <a href="./exec/deploy.md" style="">
-        <h5 style="text-align: center; cursor: pointer;">
-            배포방법
-        </h5>
+    <a href="./exec/deploy.md" style="text-align: center;">
+        배포방법
     </a>
 </div>
+
 
 
 
