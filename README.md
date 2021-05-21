@@ -1,4 +1,4 @@
-![image-20210520215951684](README.assets/image-20210520215951684.png)
+<img src="./README.assets/image-20210520215951684.png" width="500px" style="text-align: center;">
 
 <div style="text-align: center;">
     <h3 style="text-align: center;">
