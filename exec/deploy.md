@@ -4,11 +4,16 @@
 
 <ul>
     <li><a href="#사전준비">사전준비</a></li>
-    <li><a href="#준비하기">준비하기</a></li>
-    <li><a href="#실행하기">실행하기</a></li>
-    <li><a href="#배포하기">배포하기</a></li>
+    <li><a href="#디펜던시">디펜던시</a></li>
+    <li>
+        <a href="#배포하기">배포하기</a>
+        <ul>
+            <li><a href="#도메인">도메인</a></li>
+    		<li><a href="#AWS">AWS</a></li>
+            <li><a href="#GCP">GCP</a></li>
+        </ul>
+    </li>
 </ul>
-
 
 
 
@@ -276,5 +281,316 @@ cat /var/jenkins_home/secrets/initialAdminPassword
   * 도커 이미지 삭제
     * `sudo docker rmi <image_id>`
 
+
+
 ### GCP
+
+#### 클러스터 설치
+
+1. 구글 클라우드 가입 - 무료 크레딧을 300 줍니다.
+
+2. 클러스터로 들어갑니다.
+
+   ![image-20210505232448403](deploy.assets/image-20210505232448403.png)
+
+3. 만들기를 누르면 표준모드와 Autopilot 모드 설정 가능 - 표준모드 선택
+
+4. 오른쪽에 설정가이드를 보면서 선택 - 더 가용성 높게 설정가능
+
+   * 주의사항 : 영역이나 이름은 우리가 설정해야되므로 설정하면 됩니다.
+   * 다만 영역은 asia-northeast3-a,b,c 3개 중 하나 추천
+   * 찾아보니까 asia-northeast3가 한국지역
+   * 클러스터 설정 - node 1개 - cpu 4코어 / 메모리 16기가
+
+5. 윈도우용 sdk 설치 - https://cloud.google.com/sdk/docs/quickstart-windows
+
+6. 설치 쭉 ~~ next / 설치완료 후
+
+7. 계정 / 프로젝트 / 서버지역 선택하는 것이 나옴 - 우리가 했던 설정을 기입해야 됩니다.
+
+   * 계정은 내 계정하면되고
+   * 프로젝트가 어떤 프로젝트일지 모르기때문에 GCP 웹에 들어갑니다.
+   * 위에 프로젝트를 선택하면 창이 나옵니다.
+
+   ![image-20210505233201268](deploy.assets/image-20210505233201268.png)
+   * 여기서 내 클러스터 프로젝트의 ID를 보고 그 ID를 선택하면 됩니다.
+
+     ![image-20210505233345803](deploy.assets/image-20210505233345803.png)
+
+   * 서버지역은 52번이 asia-northeast3와 똑같습니다.
+
+8. 명령어창에서 명령어 입력
+
+   ```sh
+   # gcloud 업데이트
+   gcloud components update
+   # 확인
+   gcloud components install kubectl # 치면 All components are up to date 나올 겁니다.
+   ```
+
+9. 내 클러스터와 연결
+
+   * GCP의 클러스터에서 연결을 누르기.
+
+     ![image-20210505233930764](deploy.assets/image-20210505233930764.png)
+
+   * 이거 복사해서 붙여넣기
+
+     ![image-20210505234041997](deploy.assets/image-20210505234041997.png)
+
+   * 노드 확인 `kubectl get nodes`
+
+10. 대쉬보드 설치
+
+    * 해당 url로 들어가서 맞는 버전확인 - https://github.com/kubernetes/dashboard/releases
+
+    * 1.18버전은 대쉬보드 v2.0.3과 호환
+
+      ```sh
+      # 대쉬보드 설치
+      kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.3/aio/deploy/recommended.yaml
+      # 프록시 띄우기
+      kubectl proxy
+      ```
+
+    * 이젠 url로 접속가능
+
+      http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+11. 사용자 권한 설정
+
+    * 여기서 사용자 권한을 설정 필수.
+
+    * 권한 프리 - **2버전 부터 사라짐**
+
+      * `kubectl -n kube-system edit deployments.apps kubernetes-dashboard`
+      * 여기서 스킵하면되지만 2버전 안됩니다!!
+
+    * 권한 설정
+
+    * service-account.yml 작성
+
+      ```yml
+      apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: admin-user
+        namespace: kube-system
+      ```
+
+    * cluster-role-binding.yml 작성
+
+      ```yml
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: admin-user
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: cluster-admin
+      subjects:
+        - kind: ServiceAccount
+          name: admin-user
+          namespace: kube-system
+      ```
+
+    * 명령어 입력
+
+      ```cmd
+      # 생성 및 권한 부여
+      kubectl create -f service-account.yml
+      kubectl create -f cluster-role-binding.yml
+      # 유저 확인
+      kubectl get sa -n kube-system
+      # 계정 토큰 조회 / 해당 경로에서 bash로 켜야 작동함
+      kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+      ```
+
+    * 이제 토큰으로 대쉬보드 접근하면 됩니다.
+
+#### 프로젝트 잘못 설정시, 프로젝트 변경
+
+```bash
+# 프로젝트 리스트 확인
+gcloud projects list
+
+# 프로젝트로 변경
+gcloud config set project [PROJECT_ID]
+
+# 프로젝트 앱 확인 가능
+gcloud app describe
+```
+
+#### 도커 허브에 이미지 생성
+
+1. 도커 허브 회원가입
+
+2. 도커 허브 레파지토리 생성
+
+3. 도커 허브에 이미지 올리기
+
+   ```
+   docker tag videotest:latest fksk94/video:latest
+   docker push fksk94/video:latest
+   ```
+
+#### 이미 생성된 이미지로 진행
+
+1. 위의 proxy url로 들어가서 대쉬보드로 진행
+
+2. 파드나 서비스, 컨트롤러 등을 만들 때 여길 누른다.
+
+   ![image-20210512205417262](deploy.assets/image-20210512205417262.png)
+
+3. 구축 전 hostpath로 폴더 생성
+
+   ```yaml
+   apiVersion: v1
+   kind: Pod
+   metadata:
+     name: pod-volume-init
+   spec:
+     nodeSelector:
+       kubernetes.io/hostname: [노드이름]
+     containers:
+     - name: container
+       image: fksk94/video
+       volumeMounts:
+       - name: host-path
+         mountPath: /mount
+     volumes:
+     - name : host-path
+       hostPath:
+         path: /var/videos
+         type: DirectoryOrCreate
+   ```
+
+4. 파드 지우기
+
+5. 퍼시던트 볼륨 01~06 / 총 6개 구축
+
+   ```yaml
+   apiVersion: v1
+   kind: PersistentVolume
+   metadata:
+     name: pv-01
+   spec:
+     capacity:
+       storage: 30G
+     accessModes:
+     - ReadWriteOnce
+     local:
+       path: /var/videos
+     nodeAffinity:
+       required:
+         nodeSelectorTerms:
+         - matchExpressions:
+           - {key: kubernetes.io/hostname, operator: In, values: [노드이름]}
+   ```
+
+6. 퍼시던트 볼륨 클레임 01~06 / 총 6개 구축
+
+   ```yaml
+   apiVersion: v1
+   kind: PersistentVolumeClaim
+   metadata:
+     name: pvc-01
+   spec:
+     accessModes:
+     - ReadWriteOnce
+     resources:
+       requests:
+         storage: 30G
+     storageClassName: ""
+   ```
+
+7. 파즈 생성 1~6 / 총 6개 구축
+
+   ```yaml
+   apiVersion: v1
+   kind: Pod
+   metadata:
+     name: video-server-1
+     labels:
+       app: video
+   spec:
+     containers:
+     - name: container
+       image: fksk94/video
+       volumeMounts:
+       - name: pvc-pv
+         mountPath: /videos
+     volumes:
+     - name : pvc-pv
+       persistentVolumeClaim:
+         claimName: pvc-01
+   ```
+
+8. 서비스 생성 - 로드 밸런서
+
+   ```yaml
+   apiVersion: v1
+   kind: Service
+   metadata:
+     name: svc
+   spec:
+     selector:
+       app: video
+     ports:
+     - name: http
+       protocol: TCP
+       port: 80
+       targetPort: 80
+     - name: https
+       protocol: TCP
+       port: 443
+       targetPort: 443
+     type: LoadBalancer
+   ```
+
+#### HTTPS 설정
+
+1. 일단 서비스 주소 확인 - 대시보드에서 로드밸런서의 외부아이피를 보면 나온다.
+
+   ```
+   status:
+     loadBalancer:
+       ingress:
+         - ip: 34.64.217.188
+   ```
+
+2. 인증서 받기 - 도메인 설정할 때 위의 외부 아이피를 넣고 해당 도메인으로 ssl인증
+
+   ```
+   #letsencrypt로 받는데 이런게 뜰 수 있다.
+   challenge ~~~~~ 
+   http://www.coderun.shop/.well-known/acme-challenge/fWcK2kE4GJyuHLznSYLIpckbtuUa7EDyuXPCpU--EuA
+   
+   # 그럼 이렇게 명령어를 치고
+   certbot certonly -d www.coderun.shop --manual --preferred-challenges dns
+   # 이런 텍스트가 나오면 복사하면된다.
+   nz3OwrF1lWJNx4O_5Oxy_av638WE8XcXxUHd1aPye38
+   # 밑처럼 설정 (가비아)
+   ```
+
+   ![image-20210518105351397](deploy.assets/image-20210518105351397.png)
+
+
+
+4. 확인
+
+   ```
+   # 다른 배쉬창에서
+   nslookup -q=TXT _acme-challenge.www.coderun.shop
+   # 확인 후, 진행 창에서 진행
+   ```
+
+   ```
+   그러면 풀체인과 프라이빗키가 생긴다 이걸 쓰면 SSL 인증이 가능하다.
+   ```
+
+5. 이걸 인증할 때 새로운 도메인을 쓰게 된다면, 풀체인키와 프라이빗키로 비디오 서버를 도커허브에 새로 올려야한다. 새로 올릴 때 ssl 키와 동봉된 .env파일을 추가 후, 위의 사항을 진행하면 새로운 도메인으로도 가능하다.
+6. ※제일 중요※ nginx와 fastapi 컨테이너를 합쳐서 대시보드에서 각 파즈에서 `service nginx restart`라고 한번씩 쳐주면 된다.
+7. 합치지 않을 거라면, GKE 자체의 nginx설정을 쓰거나 각각 컨테이너를 따로해서 파즈를 생성하면 된다.
 
