@@ -5,11 +5,12 @@ import uvicorn
 
 # 로컬 라이브러리
 from database import database, models
+from routers.board import router as board_router
+from routers.develop import router as develop_router
 from routers.user import router as user_router
 from routers.video import router as video_router
 from routers.videolist import router as videolist_router
-from routers.board import router as board_router
-from routers.checkdb import router as checkdb_router
+from routers.tag import router as tag_router
 
 models.Base.metadata.create_all(bind=database.engine)
 app = FastAPI()
@@ -24,10 +25,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(checkdb_router)
+app.include_router(develop_router)
 app.include_router(user_router)
 app.include_router(video_router)
 app.include_router(videolist_router)
+app.include_router(tag_router)
 app.include_router(board_router)
 
 if __name__ == "__main__":

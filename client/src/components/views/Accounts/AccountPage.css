@@ -56,6 +56,19 @@
 	transition: transform 80ms ease-in;
 }
 
+.modal_button {
+	border-radius: 20px;
+	border: 1px solid #009378;
+	background-color: #009378;
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+}
+
 #check-btn {
 	width: 95px;
 	height: 80%;
@@ -232,13 +245,7 @@
 	margin: 20px 0;
 }
 
-.social-container a {
-	border: 1px solid #DDDDDD;
-	border-radius: 50%;
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	margin: 0 5px;
-	height: 40px;
-	width: 40px;
+
+.findPW-text {
+	cursor: pointer;
 }
